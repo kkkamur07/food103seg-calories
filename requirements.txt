@@ -1,0 +1,40 @@
+# Core MLOps & Workflow
+celery==5.5.2                # Distributed task queue for workflow orchestration :cite[6]
+dvc==3.59.2                   # Data version control for datasets and models
+dvc-data==3.16.10             # DVC data management backend
+dvc-task==0.40.2              # Task execution framework for DVC
+
+# Experiment Tracking & Model Registry
+wandb==0.19.11                # Experiment tracking and visualization
+gto==1.7.2                    # Git-based model registry and versioning
+dvc-studio-client==0.20.0     # Integration for DVC Studio
+
+# Model Serving & APIs
+fastapi==0.115.12             # API framework for model serving
+uvicorn==0.34.2               # ASGI server for FastAPI
+google-cloud-storage==3.1.0   # Cloud storage for model artifacts :cite[3]:cite[6]
+
+# Data Handling & Cloud Integration
+gcsfs==2025.5.1               # GCP file system interface
+gdown==5.2.0                  # Google Drive downloader
+opencv-python==4.11.0.86      # Image data processing
+pillow==11.2.1                # Image manipulation
+
+# ML Frameworks & Math
+torch==2.7.0                  # Deep learning framework
+torchvision==0.22.0           # Vision datasets/models for PyTorch
+scikit-learn==1.6.1           # Traditional ML algorithms
+numpy==2.2.6                  # Numerical operations
+scipy==1.15.3                 # Scientific computing
+
+# Configuration & Typing
+hydra-core==1.3.2             # Hierarchical configuration management
+omegaconf==2.3.0              # Configuration system
+annotated-types==0.7.0        # Type constraints for validation :cite[7]
+
+# Code Quality & Logging
+ruff==0.11.13                 # Blazing-fast linter and formatter :cite[2]
+loguru==0.7.3                 # Simplified logging with rich features :cite[1]
+pytest==8.4.0                 # Testing framework
+
+
