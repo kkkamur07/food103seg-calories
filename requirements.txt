@@ -1,13 +1,13 @@
 # Core MLOps & Workflow
 celery==5.5.2                # Distributed task queue for workflow orchestration :cite[6]
-dvc==3.59.2                   # Data version control for datasets and models
+dvc==3.59.1                   # Data version control for datasets and models
 dvc-data==3.16.10             # DVC data management backend
 dvc-task==0.40.2              # Task execution framework for DVC
 
 # Experiment Tracking & Model Registry
 wandb==0.19.11                # Experiment tracking and visualization
 gto==1.7.2                    # Git-based model registry and versioning
-dvc-studio-client==0.20.0     # Integration for DVC Studio
+dvc-studio-client>=0.21.0     # Integration for DVC Studio
 
 # Model Serving & APIs
 fastapi==0.115.12             # API framework for model serving
@@ -16,9 +16,7 @@ google-cloud-storage==3.1.0   # Cloud storage for model artifacts :cite[3]:cite[
 
 # Data Handling & Cloud Integration
 gcsfs==2025.5.1               # GCP file system interface
-gdown==5.2.0                  # Google Drive downloader
-opencv-python==4.11.0.86      # Image data processing
-pillow==11.2.1                # Image manipulation
+gdown==5.2.0                  # Google Drive downloader                  
 
 # ML Frameworks & Math
 torch==2.7.0                  # Deep learning framework
