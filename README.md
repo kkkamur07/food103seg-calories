@@ -8,14 +8,14 @@ Detect human behavior using time-series sensor data from the [CMI Kaggle competi
 
 ### Week 1
 
-* [ ] GitHub repo with team write access (M5)
-* [ ] Virtual environment + `requirements.txt` & `requirements_dev.txt` (M2)
-* [ ] Project structure via `cookiecutter` (M6)
-* [ ] `data.py` for download & preprocessing (M6)
-* [ ] `model.py` + `train.py` initial version (M6)
-* [ ] PEP8 compliant code + docs + typing (M7)
-* [ ] Data versioning setup (e.g. DVC) (M8)
-* [ ] CLI support (e.g. argparse / typer) (M9)
+* [✅] GitHub repo with team write access (M5)
+* [✅] Virtual environment + `requirements.txt` & `requirements_dev.txt` (M2)
+* [✅] Project structure via `cookiecutter` (M6)
+* [✅] `data.py` for download & preprocessing (M6)
+* [✅] `model.py` + `train.py` initial version (M6)
+* [✅] PEP8 compliant code + docs + typing (M7)
+* [✅] Data versioning setup (e.g. DVC) (M8)
+* [✅] CLI support (e.g. argparse / typer) (M9)
 * [ ] Dockerfile(s) created and working (M10)
 * [ ] Hydra config files added (M11)
 * [ ] Hyperparameter control via Hydra (M11)
