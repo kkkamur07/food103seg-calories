@@ -1,39 +1,6 @@
 outs:
-- hash: md5
+- md5: 3e25859fb263905b7d53fba9111a1b59.dir
+  size: 1121752142
+  nfiles: 4
+  hash: md5
   path: data
-  files:
-  - relpath: .DS_Store
-    md5: 2ada55ed2089fd52a760634ff8958fa0
-    size: 6148
-    cloud:
-      gcp_storage:
-        etag: 089bf0add0f1f88d031001
-        version_id: '1750178135242779'
-  - relpath: test.csv
-    md5: ecbbdfd2ffa6e183a249b6f6e211bda7
-    size: 203098
-    cloud:
-      gcp_storage:
-        etag: 08f3efb1d0f1f88d031001
-        version_id: '1750178135308275'
-  - relpath: test_demographics.csv
-    md5: 59f6934b5295f6247a4e3a9eabba047a
-    size: 158
-    cloud:
-      gcp_storage:
-        etag: 0897f1a0d0f1f88d031001
-        version_id: '1750178135029911'
-  - relpath: train.csv
-    md5: 72937e5532c5c685afc07b93ce55ac80
-    size: 1121545963
-    cloud:
-      gcp_storage:
-        etag: 08f6b899e2f1f88d031001
-        version_id: '1750178172656758'
-  - relpath: train_demographics.csv
-    md5: 6c3a641ab9f43f1d3b4cf68c7b5e9139
-    size: 2923
-    cloud:
-      gcp_storage:
-        etag: 0884b0a6d0f1f88d031001
-        version_id: '1750178135119876'
