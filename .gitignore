@@ -181,3 +181,9 @@ cython_debug/
 sensor-proj/
 data/
 sensor-behaviour/
+
+.dvc/
+# DVC cache
+.cache/
+# DVC config
+.dvc/config
