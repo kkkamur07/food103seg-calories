@@ -1,24 +1,6 @@
 outs:
-- hash: md5
+- md5: 3e25859fb263905b7d53fba9111a1b59.dir
+  size: 1121752142
+  nfiles: 4
+  hash: md5
   path: data
-  files:
-  - relpath: test.csv
-    md5: ecbbdfd2ffa6e183a249b6f6e211bda7
-    cloud:
-      sensor-data:
-        checksum: W/"684abc9e-5943"
-  - relpath: test_demographics.csv
-    md5: 59f6934b5295f6247a4e3a9eabba047a
-    cloud:
-      sensor-data:
-        checksum: W/"684abc9e-5943"
-  - relpath: train.csv
-    md5: 72937e5532c5c685afc07b93ce55ac80
-    cloud:
-      sensor-data:
-        checksum: W/"684abc9e-5943"
-  - relpath: train_demographics.csv
-    md5: 6c3a641ab9f43f1d3b4cf68c7b5e9139
-    cloud:
-      sensor-data:
-        checksum: W/"684abc9e-5943"
