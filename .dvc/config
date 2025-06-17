@@ -1,1 +1,5 @@
-
+[core]
+    remote = gcp_storage
+['remote "gcp_storage"']
+    url = gs://dvc-kaggle-sensor/
+    version_aware = true
