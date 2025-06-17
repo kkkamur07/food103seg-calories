@@ -82,8 +82,8 @@
 ### 🎯 **Krrish's Tasks** (14 tasks)
 
 #### Week 1 Remaining
-- [ ] **M8** - Data versioning setup (e.g. DVC)
-- [ ] **M9** - CLI support (e.g. argparse / typer)
+- [✅] **M8** - Data versioning setup (e.g. DVC)
+- [✅] **M9** - CLI support (e.g. argparse / typer)
 - [ ] **M14** - W&B sweeps for hyperparameter tuning
 
 #### Week 2

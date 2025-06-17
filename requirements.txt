@@ -2,7 +2,8 @@
 celery==5.5.2                # Distributed task queue for workflow orchestration :cite[6]
 dvc==3.59.1                   # Data version control for datasets and models
 dvc-data==3.16.10             # DVC data management backend
-dvc-task==0.40.2              # Task execution framework for DVC
+dvc-task==0.40.2            # DVC task management for pipelines
+dvc-gs==3.0.2           # DVC integration with Google Cloud Storage
 
 # Experiment Tracking & Model Registry
 wandb==0.19.11                # Experiment tracking and visualization
