@@ -23,6 +23,8 @@ __pycache__/
 # C extensions
 *.so
 
+/saved/model/
+
 # Distribution / packaging
 .Python
 build/
@@ -188,3 +190,7 @@ sensor-behaviour/
 # DVC config
 .dvc/config
 mlops-sensor-behaviour-de620a49f449.json
+
+saved/
+# DVC lock files
+.dvc.lock
