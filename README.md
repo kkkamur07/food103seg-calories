@@ -19,7 +19,7 @@
 #### Week 2
 - [ ] **M16** - Unit tests: data loading
 - [ ] **M19** - Data-change triggered workflow
-- [ ] **M21** - GCP bucket + DVC integration
+- [✅] **M21** - GCP bucket + DVC integration
 - [ ] **M22** - FastAPI inference app
 - [ ] **M25** - ONNX / BentoML export API
 
