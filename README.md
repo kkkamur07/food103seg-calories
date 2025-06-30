@@ -1,4 +1,4 @@
-# 🧠 CMI Project Task Assignment (Random Distribution)
+# 🌯 Multi Class Food Segmentation & Calories Estimation
 
 ## 👥 Team Members
 - **Astha**
