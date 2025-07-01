@@ -1,0 +1,3 @@
+# filepath: conf/model/default.yaml
+name: "FoodSegmentation"
+# Add any model-specific parameters here
