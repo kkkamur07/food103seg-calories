@@ -32,7 +32,7 @@ class FoodSegmentation(nn.Module):
         self.model = UnetPlus(n_classes=n_classes).to(
             "cuda" if torch.cuda.is_available() else "cpu"
         )
-        
+
         # self.model = MobileNetV3DeepLabV3Plus().to(
         #     "cuda" if torch.cuda.is_available() else "cpu"
         # )
@@ -58,13 +58,15 @@ class FoodSegmentation(nn.Module):
         )
 
         self.loss = loss_module.CombinedLoss()
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=1e-4)
-        
+        self.optimizer = optim.Adam(
+            self.model.parameters(), lr=self.lr, weight_decay=1e-4
+        )
+
         # Training History
         self.train_losses = []
         self.val_losses = []
         self.val_ious = []
-        
+
         self.best_iou = 0.0
 
         logger.info(f"Model initialized with {self.parameters} trainable parameters.")
@@ -115,13 +117,12 @@ class FoodSegmentation(nn.Module):
 
             outputs = self.forward(image)
             loss = self.loss(outputs, mask)
-            
+
             # Calculate IoU
             outputs = torch.argmax(outputs, dim=1)
             iou = loss_module.calculate_iou(outputs, mask, num_classes=self.n_classes)
-            
+
         return loss.item(), iou
-    
 
     def train(self):
         for epoch in range(self.epochs):
@@ -140,11 +141,11 @@ class FoodSegmentation(nn.Module):
 
             val_loss = 0.0
             all_ious = []
-            
+
             for images, masks in self.val_loader:
                 loss, iou = self.eval_step(images, masks)
                 val_loss += loss
-                
+
                 all_ious.extend(iou[~np.isnan(iou)])
 
             val_loss /= len(self.val_loader)
@@ -155,11 +156,11 @@ class FoodSegmentation(nn.Module):
             )
             wandb.log({"Train Loss": running_loss, "epoch": epoch + 1})
 
-        # Save the model 
+        # Save the model
         if val_iou > self.best_iou:
             self.best_iou = val_iou
             torch.save(self.model.state_dict(), "best_model.pth")
             logger.info(f"Model saved with IoU: {self.best_iou:.4f}")
-            
+
         wandb.finish()
         logger.info("Training complete.")

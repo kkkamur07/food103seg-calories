@@ -52,12 +52,11 @@ def hydra_main(cfg: DictConfig):
     console.print("[bold green]Training complete!")
 
 
-
-def main(base_dir : str = "/home/krrish/home/desktop/sensor-behaviour/"):
+def main(base_dir: str = "/home/krrish/home/desktop/sensor-behaviour/"):
 
     # Change the working directory to base directory
     base_dir = Path(base_dir).resolve()
-    
+
     os.chdir(base_dir)
     print(f"Changed working directory to {os.getcwd()}")
 
