@@ -5,6 +5,7 @@ from rich.console import Console
 from rich.table import Table
 import os
 from loguru import logger
+from pathlib import Path
 
 # Custom Module Imports
 from src.train import FoodSegmentation
@@ -14,7 +15,7 @@ app = typer.Typer()
 console = Console()
 
 
-@hydra.main(config_path="../conf", config_name="config")
+@hydra.main(config_path="../configs", config_name="config")
 def hydra_main(cfg: DictConfig):
     """
     Main function to initialize and run the food segmentation model.
@@ -51,21 +52,18 @@ def hydra_main(cfg: DictConfig):
     console.print("[bold green]Training complete!")
 
 
-@app.command()
-def main(
-    base_dir: str = typer.Option(
-        "/home/krrish/home/desktop/sensor-behaviour/data",
-        "--base-dir",
-        "-b",
-        help="Base directory for the dataset.",
-    )
-):
+
+def main(base_dir : str = "/home/krrish/home/desktop/sensor-behaviour/"):
 
     # Change the working directory to base directory
-    os.environ["BASE_DIR"] = base_dir
+    base_dir = Path(base_dir).resolve()
+    
     os.chdir(base_dir)
+    print(f"Changed working directory to {os.getcwd()}")
 
     logger.info(f"Changed working directory to {base_dir}")
+
+    hydra_main()
 
 
 if __name__ == "__main__":

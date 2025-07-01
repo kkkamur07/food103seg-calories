@@ -1,6 +1,9 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import segmentation_models_pytorch as smp
+from torchvision.models import mobilenet_v3_large, mobilenet_v3_small
+
 
 
 class ConvBlock(nn.Module):
@@ -189,3 +192,23 @@ class UnetPlus(nn.Module):
         out = self.final(x0_4)
         out = F.softmax(out, dim=1)
         return out
+
+class MobileNetV3DeepLabV3Plus(nn.Module):
+    """MobileNetV3 + DeepLabV3+ for FoodSeg-103"""
+    
+    def __init__(self, classes=104, backbone='mobilenet_v3_large', pretrained=True):
+        super().__init__()
+        
+        # Use segmentation_models_pytorch for easy implementation
+        self.model = smp.DeepLabV3Plus(
+            encoder_name="mobilenet_v2",  # Close alternative to MobileNetV3
+            encoder_weights="imagenet" if pretrained else None,
+            in_channels=3,
+            classes=classes,
+            activation=None  # Will apply softmax in loss function
+        )
+    
+    def forward(self, x):
+        return self.model(x)
+    
+    

@@ -1,8 +1,7 @@
 defaults:
+  - _self_
   - model: default
   - dataset: default
-  - override hydra/job_logging: colorlog
-  - override hydra/output: default
 
 hydra:
   run:
@@ -13,6 +12,7 @@ hydra:
 
 n_classes: 104
 lr: 1.0e-4
-epochs: 10
-batch_size: 16
+epochs: 5
+batch_size: 8
 validation_split: 0.1
+base_dir: /home/krrish/home/desktop/sensor-behaviour/
