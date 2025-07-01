@@ -1,8 +1,6 @@
 import hydra
-from hydra.utils import instantiate
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import DictConfig
 import typer
-from rich import print
 from rich.console import Console
 from rich.table import Table
 import os

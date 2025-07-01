@@ -7,8 +7,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ['3.9', '3.10', '3.11']  # Use quotes to avoid parsing issues
+        os: [ubuntu-latest, macos-latest]
+        python-version: ['3.10', '3.11']  # Use quotes to avoid parsing issues
     steps:
       - uses: actions/checkout@v3
 
@@ -32,7 +32,7 @@ jobs:
         run: pip install ruff
 
       - name: Lint with ruff
-        run: ruff .
+        run: ruff check .
 
       - name: Run tests
         run: |

@@ -2,7 +2,6 @@ import torch
 import torchvision.transforms as transforms
 import PIL
 import os
-import torch
 from loguru import logger
 
 # Logging into the files

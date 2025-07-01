@@ -1,4 +1,3 @@
-import os
 import shutil
 import torch
 from PIL import Image
