@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import segmentation_models_pytorch as smp
-from torchvision.models import mobilenet_v3_large, mobilenet_v3_small
 
 
 class ConvBlock(nn.Module):

@@ -6,7 +6,6 @@ import numpy as np
 from src.data import data_loaders
 from loguru import logger
 import wandb
-from src.model import MobileNetV3DeepLabV3Plus
 from src.model import UnetPlus
 import src.loss as loss_module
 
