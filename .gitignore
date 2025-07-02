@@ -194,3 +194,5 @@ mlops-sensor-behaviour-de620a49f449.json
 saved/
 # DVC lock files
 .dvc.lock
+mlops-sensor-behaviour-8e9b5b0fdf8a.json
+foodenv/
