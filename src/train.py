@@ -6,7 +6,7 @@ import numpy as np
 from src.data import data_loaders
 from loguru import logger
 import wandb
-from src.model import UnetPlus
+from src.model import MiniUnet
 import src.loss as loss_module
 
 
@@ -28,7 +28,7 @@ class FoodSegmentation(nn.Module):
         super().__init__()
 
         self.n_classes = n_classes
-        self.model = UnetPlus(n_classes=n_classes).to(
+        self.model = MiniUnet(n_classes=n_classes).to(
             "cuda" if torch.cuda.is_available() else "cpu"
         )
 
