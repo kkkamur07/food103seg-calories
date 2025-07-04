@@ -1,10 +1,14 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import os
+import numpy as np
 from src.data import data_loaders
 from loguru import logger
 import wandb
 from src.model import UnetPlus
+import src.loss as loss_module
+
 
 # Logging into the files
 logger.add("saved/logs/model_training.log", rotation="1 day")
@@ -15,7 +19,7 @@ class FoodSegmentation(nn.Module):
         self,
         n_classes=104,
         lr=1e-4,
-        base_dir="/home/krrish/home/desktop/sensor-behaviour/data",
+        base_dir="/home/krrish/home/desktop/sensor-behaviour/",
         epochs=10,
         batch_size=16,
         validation_split=0.1,
@@ -28,6 +32,10 @@ class FoodSegmentation(nn.Module):
             "cuda" if torch.cuda.is_available() else "cpu"
         )
 
+        # self.model = MobileNetV3DeepLabV3Plus().to(
+        #     "cuda" if torch.cuda.is_available() else "cpu"
+        # )
+
         self.parameters = sum(
             p.numel() for p in self.model.parameters() if p.requires_grad
         )
@@ -39,7 +47,7 @@ class FoodSegmentation(nn.Module):
         self.validation_split = validation_split
 
         # Base Directory
-        self.base_dir = base_dir
+        self.base_dir = os.path.join(base_dir, "data")
 
         # Data Loaders
         self.train_loader, self.val_loader, self.test_loader = data_loaders(
@@ -48,8 +56,17 @@ class FoodSegmentation(nn.Module):
             batch_size=self.batch_size,
         )
 
-        self.loss = nn.CrossEntropyLoss()
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
+        self.loss = loss_module.CombinedLoss()
+        self.optimizer = optim.Adam(
+            self.model.parameters(), lr=self.lr, weight_decay=1e-4
+        )
+
+        # Training History
+        self.train_losses = []
+        self.val_losses = []
+        self.val_ious = []
+
+        self.best_iou = 0.0
 
         logger.info(f"Model initialized with {self.parameters} trainable parameters.")
 
@@ -100,32 +117,49 @@ class FoodSegmentation(nn.Module):
             outputs = self.forward(image)
             loss = self.loss(outputs, mask)
 
-        return loss.item()
+            # Calculate IoU
+            outputs = torch.argmax(outputs, dim=1)
+            iou = loss_module.calculate_iou(outputs, mask, num_classes=self.n_classes)
+
+        return loss.item(), iou
 
     def train(self):
         for epoch in range(self.epochs):
 
-            train_loss = 0.0
+            running_loss = 0.0
             for images, masks in self.train_loader:
                 loss = self.train_step(images, masks)
-                train_loss += loss
+                running_loss += loss
 
-            train_loss /= len(self.train_loader)
+            running_loss /= len(self.train_loader)
             logger.info(
-                f"Epoch [{epoch+1}/{self.epochs}], Train Loss: {train_loss:.4f}"
+                f"Epoch [{epoch+1}/{self.epochs}], Train Loss: {running_loss:.4f}"
             )
-            wandb.log({"Train Loss": train_loss, "epoch": epoch + 1})
+            wandb.log({"Train Loss": running_loss, "epoch": epoch + 1})
+            self.train_losses.append(running_loss)
 
             val_loss = 0.0
+            all_ious = []
+
             for images, masks in self.val_loader:
-                loss = self.eval_step(images, masks)
+                loss, iou = self.eval_step(images, masks)
                 val_loss += loss
 
+                all_ious.extend(iou[~np.isnan(iou)])
+
             val_loss /= len(self.val_loader)
+            val_iou = np.mean(all_ious) if all_ious else 0.0
+
             logger.info(
-                f"Epoch [{epoch+1}/{self.epochs}], Validation Loss: {val_loss:.4f}"
+                f"Epoch [{epoch+1}/{self.epochs}], Validation Loss: {val_loss:.4f}, Validation IoU: {val_iou:.4f}"
             )
-            wandb.log({"Train Loss": train_loss, "epoch": epoch + 1})
+            wandb.log({"Train Loss": running_loss, "epoch": epoch + 1})
+
+        # Save the model
+        if val_iou > self.best_iou:
+            self.best_iou = val_iou
+            torch.save(self.model.state_dict(), "best_model.pth")
+            logger.info(f"Model saved with IoU: {self.best_iou:.4f}")
 
         wandb.finish()
         logger.info("Training complete.")

@@ -16,7 +16,7 @@ app = typer.Typer()
 console = Console()
 
 
-@hydra.main(config_path="../conf", config_name="config")
+@hydra.main(config_path="../configs", config_name="config")
 def hydra_main(cfg: DictConfig):
     """
     Main function to initialize and run the food segmentation model.
@@ -53,19 +53,13 @@ def hydra_main(cfg: DictConfig):
     console.print("[bold green]Training complete!")
 
 
-@app.command()
-def main(
-    base_dir: str = typer.Option(
-        "/home/krrish/home/desktop/sensor-behaviour/data",
-        "--base-dir",
-        "-b",
-        help="Base directory for the dataset.",
-    )
-):
+def main(base_dir: str = "/home/krrish/home/desktop/sensor-behaviour/"):
 
     # Change the working directory to base directory
-    os.environ["BASE_DIR"] = base_dir
+    base_dir = Path(base_dir).resolve()
+
     os.chdir(base_dir)
+    print(f"Changed working directory to {os.getcwd()}")
 
     load_dotenv()  # loads .env
     wandb_key = os.getenv("WANDB_API_KEY")
@@ -76,6 +70,8 @@ def main(
         logger.warning("WANDB_API_KEY not found in .env file. WandB will not be used.")
 
     logger.info(f"Changed working directory to {base_dir}")
+
+    hydra_main()
 
 
 if __name__ == "__main__":
