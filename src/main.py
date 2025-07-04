@@ -5,6 +5,8 @@ from rich.console import Console
 from rich.table import Table
 import os
 from loguru import logger
+from dotenv import load_dotenv
+import wandb
 
 # Custom Module Imports
 from src.train import FoodSegmentation
@@ -64,6 +66,14 @@ def main(
     # Change the working directory to base directory
     os.environ["BASE_DIR"] = base_dir
     os.chdir(base_dir)
+
+    load_dotenv()  # loads .env
+    wandb_key = os.getenv("WANDB_API_KEY")
+
+    if wandb_key:
+        wandb.login(key=wandb_key)
+    else:
+        logger.warning("WANDB_API_KEY not found in .env file. WandB will not be used.")
 
     logger.info(f"Changed working directory to {base_dir}")
 
