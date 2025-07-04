@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 
 
-class FoodSegmentation(nn.Module):
+class MiniUNet(nn.Module):
     def __init__(self):
-        super(FoodSegmentation, self).__init__()
+        super(MiniUNet, self).__init__()
 
         # Using Sequential for conv blocks to make code cleaner
         def conv_block(

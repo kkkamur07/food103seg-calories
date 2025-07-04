@@ -1,0 +1,14 @@
+model:
+  hyperparameters:
+    n_classes: 104
+    lr: 0.0001
+    epochs: 1
+    batch_size: 70
+  name: FoodSegmentation
+base_dir: /home/krrish/home/desktop/sarengeyo/food103seg-calories/data/
+model_path: ${base_dir}saved/models/best_model.pth
+segments_path: ${base_dir}reports/predictions
+loss_path: ${base_dir}reports/losses
+filter_path: ${base_dir}reports/filtered_predictions
+dataset:
+  name: MyFoodDataset

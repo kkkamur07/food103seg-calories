@@ -196,3 +196,4 @@ saved/
 .dvc.lock
 mlops-sensor-behaviour-8e9b5b0fdf8a.json
 foodenv/
+food103seg-calories/configs/outputs/
