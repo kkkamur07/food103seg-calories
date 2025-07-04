@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import segmentation_models_pytorch as smp
+
+# import segmentation_models_pytorch as smp
 
 
 class ConvBlock(nn.Module):
