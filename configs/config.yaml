@@ -1,3 +1,5 @@
+#config.yaml
+
 defaults:
   - _self_
   - model: default
@@ -10,9 +12,13 @@ hydra:
     dir: ./configs/multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
     subdir: ${hydra.job.num}
 
-n_classes: 104
-lr: 1.0e-4
-epochs: 5
-batch_size: 8
-validation_split: 0.1
+# model hyperparametrs
+model:
+  hyperparameters:
+    n_classes: 104
+    lr: 1.0e-4
+    epochs: 20
+    batch_size: 70
+
+# experiment tracking
 base_dir: /home/krrish/home/desktop/sarengeyo/food103seg-calories/
