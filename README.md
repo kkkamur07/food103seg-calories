@@ -2,7 +2,7 @@
 
 ## 👥 Team Members
 - **Astha**
-- **Alisha** 
+- **Alisha**
 - **Akshata**
 - **Krrish**
 
@@ -114,4 +114,3 @@
 - **Krrish**: 14 tasks (8 specific + 6 cross-cutting coordination tasks)
 
 **Total**: 47 tasks distributed randomly across all team members with diverse skill areas for each person.
-

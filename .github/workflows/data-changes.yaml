@@ -1,0 +1,20 @@
+name: Data Changes
+
+on:
+  push:
+    paths:
+      - 'data.dvc'
+      - 'params.yaml'
+      - 'dvc.lock'
+
+jobs:
+  data-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run data validation or processing (without pulling data)
+        run: |
+          echo "Detected data metadata change."
+          # Run your validation or light checks that don't need data access
+          # e.g. check dvc files, params, configs, or run dry-run scripts

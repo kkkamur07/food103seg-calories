@@ -23,6 +23,9 @@ gdown==5.2.0                  # Google Drive downloader
 torch==2.7.0                  # Deep learning framework
 torchvision==0.22.0           # Vision datasets/models for PyTorch
 scikit-learn==1.6.1           # Traditional ML algorithms
+numpy==2.2.6                  # Numerical operations
+scipy==1.15.3                 # Scientific computing
+
 # Configuration & Typing
 hydra-core==1.3.2             # Hierarchical configuration management
 omegaconf==2.3.0              # Configuration system
