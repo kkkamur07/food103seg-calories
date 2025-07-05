@@ -18,3 +18,9 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly" 
+
+  #Pre-commit hook dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
