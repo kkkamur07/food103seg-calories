@@ -1,164 +1,110 @@
-import os
-import pandas as pd
-import requests
 import streamlit as st
-# from google.cloud import run_v2 # Commented out as it's not needed in mock mode
+from PIL import Image
+import numpy as np
+import io
 
-# --- Configuration for Mock Backend ---
-# Set this to True to run the frontend with dummy data, without a real backend.
-# Set to False when you have a backend running (locally or in the cloud).
-MOCK_BACKEND = True
+# --- Configuration ---
+st.set_page_config(
+    page_title="Food Segmentation App",
+    page_icon="🍽️",
+    layout="centered",
+    initial_sidebar_state="expanded"
+)
 
-# Define a local backend URL for testing when MOCK_BACKEND is False
-# If your backend runs locally, it's typically http://localhost:8000
-LOCAL_BACKEND_URL = "http://localhost:8000"
-# --- End Configuration ---
+# --- Helper Functions ---
 
-
-def get_backend_url():
+# Placeholder for your actual food segmentation model.
+# In a real application, you would load your trained model here
+# and perform the segmentation.
+def perform_segmentation(image: Image.Image) -> Image.Image:
     """
-    Get the URL of the backend service.
-    In mock mode, returns a dummy URL.
+    This function simulates a food segmentation process.
+    Replace this with your actual model inference logic.
+
+    Args:
+        image (PIL.Image.Image): The input food image.
+
+    Returns:
+        PIL.Image.Image: A dummy segmented image (e.g., a simple mask).
     """
-    if MOCK_BACKEND:
-        return "http://mock-backend-url.com" # Just a placeholder URL
-    else:
-        # Original logic to get Cloud Run URL
-        # from google.cloud import run_v2 # Import here to avoid error if not installed
-        # client = run_v2.ServicesClient()
-        # parent = "projects/my-personal-mlops-project/locations/europe-west1"
-        # services = client.list_services(parent=parent)
-        # for service in services:
-        #     if service.name.split("/")[-1] == "production-model":
-        #         return service.uri
-        # return os.environ.get("BACKEND", None) # Fallback to environment variable
+    st.info("Performing segmentation... (This is a placeholder function)")
+    # For demonstration, let's create a dummy mask.
+    # In reality, this would be the output of your segmentation model.
+    img_array = np.array(image)
+    # Create a simple red overlay for demonstration purposes
+    dummy_mask = np.zeros_like(img_array, dtype=np.uint8)
+    # Let's say we "segment" the top-left quarter of the image as red
+    dummy_mask[:img_array.shape[0]//2, :img_array.shape[1]//2] = [255, 0, 0] # Red color
 
-        # For local testing, you might return a local URL here
-        return LOCAL_BACKEND_URL
+    # Blend the original image with the dummy mask
+    # You'll likely get a binary mask or a segmented image from your model.
+    # This is just to show *something* as a result.
+    segmented_array = cv2.addWeighted(img_array, 0.7, dummy_mask, 0.3, 0)
+    return Image.fromarray(segmented_array)
+
+# Try to import OpenCV for image processing, if not available, provide a fallback
+try:
+    import cv2
+except ImportError:
+    st.warning("OpenCV (cv2) not found. Using a simpler dummy segmentation. "
+               "For better visualization of the dummy mask, please install OpenCV: `pip install opencv-python`")
+    def perform_segmentation(image: Image.Image) -> Image.Image:
+        """
+        Fallback function for segmentation if OpenCV is not installed.
+        Creates a simple black and white mask.
+        """
+        st.info("Performing segmentation... (OpenCV not found, using basic placeholder)")
+        img_array = np.array(image.convert("L")) # Convert to grayscale for simple mask
+        # Create a simple binary mask: top-left quarter is white, rest is black
+        dummy_mask_array = np.zeros_like(img_array, dtype=np.uint8)
+        dummy_mask_array[:img_array.shape[0]//2, :img_array.shape[1]//2] = 255
+        return Image.fromarray(dummy_mask_array)
 
 
-def classify_image(image, backend):
+# --- Streamlit App Layout ---
+
+st.title("🍽️ Food Segmentation Web App")
+st.markdown(
     """
-    Send the image to the backend for classification.
-    Returns dummy data if MOCK_BACKEND is True.
+    Upload an image of food, and our model will attempt to segment different food items within it.
+    This is a demonstration application.
     """
-    if MOCK_BACKEND:
-        # --- MOCKING BACKEND RESPONSE ---
-        st.info("Running in MOCK BACKEND mode. Returning dummy data.")
-        # You can add more sophisticated mocking logic here based on image content
-        # For example, if "dog" is in the filename, return "dog" prediction
-        dummy_prediction = "Dummy Class"
-        dummy_probabilities = [0.1, 0.2, 0.7] # Example probabilities (sum to 1)
+)
 
-        # To make it slightly dynamic based on image size or type
-        if image:
-            try:
-                from PIL import Image # Import PIL here to avoid error if not used
-                import io
-                img_bytes = io.BytesIO(image)
-                img = Image.open(img_bytes)
-                if img.width > 500:
-                    dummy_prediction = "Large Image Class"
-                else:
-                    dummy_prediction = "Small Image Class"
-                dummy_probabilities = [0.5, 0.3, 0.2] # Different dummy probabilities
-            except Exception:
-                pass # Fallback if image parsing fails
+# --- Image Uploader ---
+st.header("Upload Your Food Image")
+uploaded_file = st.file_uploader(
+    "Choose an image...",
+    type=["jpg", "jpeg", "png"],
+    help="Upload an image file (JPG, JPEG, PNG) to perform food segmentation."
+)
 
-        return {
-            "prediction": dummy_prediction,
-            "probabilities": dummy_probabilities
-        }
-    else:
-        # --- REAL BACKEND CALL ---
-        predict_url = f"{backend}/classify/" # Assuming backend has /classify endpoint
-        try:
-            # requests.post expects a file-like object or bytes for 'files'
-            # For Streamlit's uploaded_file.read(), it's already bytes.
-            response = requests.post(predict_url, files={"file": image}, timeout=30) # Increased timeout
-            response.raise_for_status() # Raise HTTPError for bad responses (4xx or 5xx)
-            return response.json()
-        except requests.exceptions.ConnectionError:
-            st.error(f"Could not connect to the backend at {predict_url}. Is it running?")
-            return None
-        except requests.exceptions.Timeout:
-            st.error(f"Backend request timed out after 30 seconds to {predict_url}.")
-            return None
-        except requests.exceptions.RequestException as e:
-            st.error(f"Error from backend: {e}")
-            return None
+if uploaded_file is not None:
+    # Read the image
+    image = Image.open(uploaded_file)
+
+    st.subheader("Original Image")
+    st.image(image, caption="Uploaded Image", use_column_width=True)
+
+    st.markdown("---")
+
+    # --- Perform Segmentation (using placeholder) ---
+    st.subheader("Segmentation Results")
+    with st.spinner("Processing image and performing segmentation..."):
+        # Call your actual segmentation model here
+        segmented_image = perform_segmentation(image.copy()) # Pass a copy to avoid modifying original
+
+    st.image(segmented_image, caption="Segmented Image", use_column_width=True)
+
+    st.success("Segmentation complete!")
+
+    st.markdown("---")
+    st.subheader("About This App")
+    
+else:
+    st.info("Please upload an image to get started.")
+
+# --- Footer ---
+st.markdown("---")
 
 
-def main() -> None:
-    """Main function of the Streamlit frontend."""
-    st.set_page_config(
-        page_title="Image Classification Frontend",
-        page_icon="🖼️",
-        layout="centered", # or "wide"
-        initial_sidebar_state="auto"
-    )
-
-    st.title("Image Classification")
-
-    # --- Toggle for Mock Backend in Sidebar ---
-    global MOCK_BACKEND # Allow changing the global variable
-    MOCK_BACKEND = st.sidebar.checkbox("Use Mock Backend (for UI testing)", value=MOCK_BACKEND)
-    st.sidebar.markdown("---")
-    st.sidebar.info(
-        "Toggle 'Use Mock Backend' to switch between dummy data "
-        "and attempting to connect to a real backend. "
-        "When Mock is OFF, ensure your backend is running locally or deployed."
-    )
-    # --- End Toggle ---
-
-    backend = get_backend_url()
-    if backend is None:
-        st.error("Backend service URL not found. Please ensure it's deployed or set up correctly.")
-        st.stop() # Stop Streamlit execution if no backend URL
-
-    st.write(f"Backend URL: {backend} (Mode: {'Mock' if MOCK_BACKEND else 'Real'})")
-
-    uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
-
-    if uploaded_file is not None:
-        # Display the uploaded image
-        st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
-        st.write("") # Add a little space
-
-        # Read the image bytes once
-        image_bytes = uploaded_file.read()
-
-        # Classify the image
-        with st.spinner("Classifying image..."):
-            result = classify_image(image_bytes, backend=backend)
-
-        if result is not None:
-            prediction = result["prediction"]
-            probabilities = result["probabilities"]
-
-            st.subheader("Classification Result:")
-            st.success(f"Prediction: **{prediction}**")
-
-            # Make a nice bar chart for probabilities
-            # Ensure probabilities list matches the number of classes for the chart
-            num_classes = len(probabilities)
-            if num_classes > 0:
-                # Create class labels dynamically if they are not part of the result
-                class_labels = [f"Class {i}" for i in range(num_classes)]
-                # If your backend returns actual class names, use them:
-                # class_labels = result.get("class_names", [f"Class {i}" for i in range(num_classes)])
-
-                data = {"Class": class_labels, "Probability": probabilities}
-                df = pd.DataFrame(data)
-                df.set_index("Class", inplace=True)
-                st.bar_chart(df, y="Probability")
-            else:
-                st.warning("No probabilities returned or probabilities list is empty.")
-        else:
-            st.error("Failed to get prediction from backend.")
-    else:
-        st.info("Upload an image to see classification results.")
-
-
-if __name__ == "__main__":
-    main()
