@@ -1,19 +1,24 @@
 
 version: 2
 updates:
-  #python dependencies
+  #python dependencies from requirements.txt
   - package-ecosystem: "pip" #covers packages: dvc-data,wandb,fastapi,torch,scikit-learn,hydra-core,ruff,pytest..
-    directory: "/"
+    directory: "/src"
+    schedule:
+      interval: "weekly"
+  #python frontend dependencies
+  - package-ecosystem: "pip"
+    directory: "/frontend"
     schedule:
       interval: "weekly"
 
   #Docker dependencies
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/src"
     schedule:
       interval: "weekly"
   
-  #Github actions dependencies(CI/CD workflows)
+  #Github actions dependencies(CI/CD workflows from .github/workflows/)
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -21,6 +26,6 @@ updates:
 
   #Pre-commit dependencies
   - package-ecosystem: "pip"
-    directory: "/"
+    directory: "/src"
     schedule:
       interval: "weekly"
