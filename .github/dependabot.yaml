@@ -12,3 +12,9 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+  
+  #Github actions dependencies(CI/CD workflows)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly" 
