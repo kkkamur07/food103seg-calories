@@ -1,8 +1,14 @@
-#python dependencies
+
 version: 2
 updates:
+  #python dependencies
   - package-ecosystem: "pip" #covers packages: dvc-data,wandb,fastapi,torch,scikit-learn,hydra-core,ruff,pytest..
     directory: "/"
     schedule:
       interval: "weekly"
 
+  #Docker dependencies
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
