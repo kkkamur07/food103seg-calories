@@ -9,7 +9,6 @@ runner = bentoml.models.get("food_segmentation_model:latest").to_runner()
 
 svc = Service(name="Food_Segmentation", runners=[runner])
 
-
 @svc.api(input=Image(), output=Image())
 async def segmenting_food(image: PILImage.Image) -> PILImage.Image:
     # Preprocessing the image
