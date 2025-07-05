@@ -56,7 +56,7 @@ def visualize_predictions(model, test_loader, num_images, predictions_path=None)
         # Save or show
         if predictions_path:
             plt.savefig(
-                os.path.join(predictions_path, f"prediction.png"),
+                os.path.join(predictions_path, f"prediction_{i}.png"),
                 dpi=300,
                 bbox_inches="tight",
             )

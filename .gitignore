@@ -182,6 +182,7 @@ cython_debug/
 sensor-proj/
 data/
 sensor-behaviour/
+vision/
 
 .dvc/
 # DVC cache
