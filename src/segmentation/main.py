@@ -7,11 +7,6 @@ from loguru import logger
 from pathlib import Path
 import sys
 
-# Add project root to Python path
-current_file = Path(__file__).resolve()
-project_root = current_file.parent.parent.parent
-sys.path.insert(0, str(project_root))
-
 # Custom Module Imports
 from src.segmentation.train import train_model
 from src.segmentation.visualize import (
@@ -21,6 +16,12 @@ from src.segmentation.visualize import (
 )
 from src.segmentation.data import data_loaders
 from src.segmentation.model import MiniUNet
+
+# Add project root to Python path
+current_file = Path(__file__).resolve()
+project_root = current_file.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
 
 console = Console()
 
