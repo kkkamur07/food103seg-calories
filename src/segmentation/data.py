@@ -8,10 +8,11 @@ from torch.utils.data import Dataset
 class FoodSegDataset(Dataset):
     def __init__(self, base_dir, mode="train", transforms=None, ann_transform=None):
         self.base_dir = base_dir
+        self.data_dir = os.path.join(base_dir, "data")
         self.mode = mode  # 'train' or 'test'
 
-        self.img_dir = os.path.join(base_dir, "Images", "img_dir", mode)
-        self.ann_dir = os.path.join(base_dir, "Images", "ann_dir", mode)
+        self.img_dir = os.path.join(self.data_dir, "Images", "img_dir", mode)
+        self.ann_dir = os.path.join(self.data_dir, "Images", "ann_dir", mode)
 
         self.transforms = transforms
         self.ann_transform = ann_transform
@@ -23,9 +24,7 @@ class FoodSegDataset(Dataset):
 
     def __getitem__(self, idx):
         img_name = os.path.join(self.img_dir, self.images[idx])
-        ann_name = os.path.join(
-            self.ann_dir, self.images[idx].replace(".jpg", ".png")
-        )  # ensure extension matches
+        ann_name = os.path.join(self.ann_dir, self.images[idx].replace(".jpg", ".png"))
 
         # Load image
         image = Image.open(img_name).convert("RGB")
