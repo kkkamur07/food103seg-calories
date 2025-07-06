@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from torchvision import transforms
 
-from src.data import FoodSegDataset, data_loaders
+from src.segmentation.data import FoodSegDataset, data_loaders
 
 
 def create_dummy_data(base_dir, mode="train", num=5):
