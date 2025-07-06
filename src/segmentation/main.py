@@ -4,8 +4,12 @@ from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
+
+project_root = Path(__file__).parent.parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
 
 # Custom Module Imports
 from src.segmentation.train import Trainer
@@ -14,6 +18,7 @@ from src.segmentation.data import data_loaders
 console = Console()
 os.environ["WANDB_SILENT"] = "true"  # Suppress WandB output
 os.environ["WANDB_QUIET"] = "true"
+os.environ["WANDB_CONSOLE"] = "off"
 
 
 def print_hyperparameters_table(cfg: DictConfig):
@@ -40,17 +45,19 @@ def print_hyperparameters_table(cfg: DictConfig):
 def main(cfg: DictConfig):
     """Simple training and visualization pipeline"""
 
-    # Display configuration
-    console.print(
-        Panel.fit("🍕 Food Segmentation Training Pipeline", style="bold green")
-    )
-    print_hyperparameters_table(cfg)
-
-    # Extract parameters
     epochs = cfg.model.hyperparameters.epochs
     batch_size = cfg.model.hyperparameters.batch_size
     learning_rate = cfg.model.hyperparameters.lr
     base_dir = cfg.paths.base_dir
+
+    # Now print config and create trainer with overridden params
+    print_hyperparameters_table(cfg)
+
+    # Display configuration
+    console.print(
+        Panel.fit("🍕 Food Segmentation Training Pipeline", style="bold green")
+    )
+    console.print()
 
     # Load data
     console.print("[yellow]📊 Loading data...")
@@ -83,13 +90,5 @@ def main(cfg: DictConfig):
     )
 
 
-def setup_project_path():
-    """Setup project path for imports"""
-    current_file = Path(__file__).resolve()
-    project_root = current_file.parent.parent.parent
-    sys.path.insert(0, str(project_root))
-
-
 if __name__ == "__main__":
-    setup_project_path()
     main()
