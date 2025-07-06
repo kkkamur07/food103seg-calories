@@ -52,7 +52,7 @@ class Trainer:
         self.lr = lr
         self.batch_size = batch_size
 
-        # Base Directory
+        # Directories
         self.base_dir = base_dir
         self.saved_dir = os.path.join(self.base_dir, "saved")
         self.model_path = os.path.join(self.saved_dir, "models", "model.pth")
@@ -128,10 +128,11 @@ class Trainer:
                 masks = masks.to(device).long()
 
                 self.optimizer.zero_grad()
+
                 outputs = self.forward(images)
-                loss = self.loss(
-                    outputs, masks
-                )  # cross entropy return the average loss across batches
+
+                # Using CrossEntropyLoss
+                loss = self.loss(outputs, masks)
                 loss.backward()
                 self.optimizer.step()
 
@@ -140,9 +141,8 @@ class Trainer:
                     pred_classes = torch.argmax(outputs, dim=1)
                 else:
                     pred_classes = torch.argmax(outputs, dim=0)
-                train_accuracy = torch.mean(
-                    (pred_classes == masks).float()
-                )  # for each image
+
+                train_accuracy = torch.mean((pred_classes == masks).float())
 
                 # Accumulate loss and accuracy
                 # We multiply by images.size(0) to get the total loss for the batch
@@ -356,6 +356,7 @@ class Trainer:
 
                 # Store first image from each batch
                 image = images[0].cpu()
+
                 if image.max() > 1.0:
                     image = image / 255.0
 
