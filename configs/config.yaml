@@ -1,3 +1,5 @@
+#config.yaml
+
 defaults:
   - _self_
   - model: default
@@ -10,9 +12,20 @@ hydra:
     dir: ./configs/multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
     subdir: ${hydra.job.num}
 
-n_classes: 104
-lr: 1.0e-4
-epochs: 5
-batch_size: 8
-validation_split: 0.1
-base_dir: /home/krrish/home/desktop/sensor-behaviour/
+# model hyperparameters
+model:
+  hyperparameters:
+    lr: 0.0015
+    epochs: 50
+    batch_size: 32
+
+# experiment paths
+paths:
+  base_dir: /home/krrish/home/desktop/sarengeyo/food103seg-calories/
+
+
+# configs/multirun/2025-07-06/14-30-15/
+# ├── 0/.hydra/config.yaml         # lr=0.001 config
+# ├── 1/.hydra/config.yaml         # lr=0.01 config
+# ├── 2/.hydra/config.yaml         # lr=0.1 config
+# └── multirun.yaml                # Summary of all runs

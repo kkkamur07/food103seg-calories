@@ -23,7 +23,6 @@ __pycache__/
 # C extensions
 *.so
 
-/saved/model/
 
 # Distribution / packaging
 .Python
@@ -192,8 +191,16 @@ vision/
 .dvc/config
 mlops-sensor-behaviour-de620a49f449.json
 
-saved/
+
 # DVC lock files
 .dvc.lock
-foodenv/
 mlops-sensor-behaviour-8e9b5b0fdf8a.json
+foodenv/
+food103seg-calories/configs/outputs/
+wandb/
+.env/
+api-key.json
+configs/outputs/
+wandb/
+.ruff_cache/
+saved/predictions/
