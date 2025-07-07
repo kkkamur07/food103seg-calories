@@ -194,3 +194,10 @@ mlops-sensor-behaviour-de620a49f449.json
 
 # DVC lock files
 .dvc.lock
+wandb/
+.env/
+api-key.json
+configs/outputs/
+wandb/
+.ruff_cache/
+saved/predictions/
