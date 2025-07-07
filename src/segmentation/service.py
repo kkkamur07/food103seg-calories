@@ -1,38 +1,45 @@
 import bentoml
-from bentoml import Service
-from bentoml.io import Image
 import torch
 import numpy as np
 from PIL import Image as PILImage
+from torchvision import transforms
+import matplotlib.pyplot as plt
 
-runner = bentoml.models.get("food_segmentation_model:latest").to_runner()
+@bentoml.service(
+    name="FoodSegmentationService",
+    resources={"gpu": 1} if torch.cuda.is_available() else {"cpu": 2},
+    traffic={"timeout": 60},
+)
 
-svc = Service(name="Food_Segmentation", runners=[runner])
+#Defining our BentoML Services 
+class FoodSegmentationService:
+    def __init__(self):
+        # Check if GPU is available
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        #Initialize the service with the model
+        self.model = bentoml.models.BentoModel("food_segmentation_model:latest")
+     
+    # Creating a service to handle the segmentation of food items
+    @bentoml.api()
+    async def segment(self, image: PILImage.Image) -> PILImage.Image:
+        """Segment food items and return visualization"""
+        # Preprocess
+        img_tensor = await self.preprocess_image(image)
+        img_tensor = img_tensor.to(self.device)
 
-@svc.api(input=Image(), output=Image())
-async def segmenting_food(image: PILImage.Image) -> PILImage.Image:
-    # Preprocessing the image
-    img_tensor = preprocessing_image(image)
+        return self.postprocess_output(img_tensor)
 
-    # Run inference
-    with torch.no_grad():
-        output = await runner.async_run([img_tensor])
+    async def preprocess_image(self, image: PILImage.Image) -> torch.Tensor:
+        """Convert PIL Image to normalized tensor"""
+        image = image.convert("RGB")
+        img_resize = image.resize((256, 256))  # Changing the size according to the model's input size
+        img_tensor = transforms.ToTensor()(img_resize)
+        return img_tensor.unsqueeze(0) 
 
-    # Postprocess the output
-    segmented_image = postprocessing_output(output)
+    def postprocess_output(self, output: torch.Tensor) -> PILImage.Image:
+        """Convert model output to PIL Image"""
+        output = torch.argmax(output, dim=1).squeeze(0).cpu().numpy()
+        colored_mask = plt.cm.tab20(output % 20)[..., :3]  # Drop alpha channel. As we only want to extract the RGB channels
+        colored_mask = (colored_mask * 255).astype(np.uint8) 
+        return PILImage.fromarray(colored_mask)
 
-    return segmented_image
-
-
-def preprocessing_image(image: PILImage.Image) -> torch.Tensor:
-    image = image.convert("RGB")
-    image = image.resize((224, 224))
-    img_array = np.array(image)
-    img_tensor = torch.from_numpy(img_array).permute(2, 0, 1).float() / 255.0
-    return img_tensor.unsqueeze(0)
-
-
-def postprocessing_output(output: torch.Tensor) -> PILImage.Image:
-    output_image = output.squeeze(0).permute(1, 2, 0).numpy()
-    output_image = (output_image * 255).astype(np.uint8)
-    return PILImage.fromarray(output_image)
