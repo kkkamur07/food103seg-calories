@@ -18,10 +18,10 @@ st.markdown("""
 <style>
     /* Adjust button height to roughly match file uploader's browse button */
     div.stButton > button {
-        height: 4.95em; /* Adjust as needed, approx height of browse button */
-        margin-top: 0.7em; /* Push button down to align with file uploader's main area */
-        font-size: 1em; /* Keep font size consistent */
-        width: 100%; /* Ensure button fills its column */
+        height: 4.95em; 
+        margin-top: 0.7em; 
+        font-size: 1em; 
+        width: 100%; 
     }
     
 </style>
