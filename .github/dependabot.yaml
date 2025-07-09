@@ -17,12 +17,12 @@ updates:
     directory: "/src"
     schedule:
       interval: "weekly"
-  
+
   #Github actions dependencies(CI/CD workflows from .github/workflows/)
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly" 
+      interval: "weekly"
 
   #Pre-commit dependencies
   - package-ecosystem: "pip"
