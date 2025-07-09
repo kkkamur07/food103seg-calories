@@ -2,9 +2,9 @@ name: Deploy Food Segmentation Model
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'saved/models.dvc'  # Only trigger on DVC file changes
+      - 'saved/models.dvc'
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -18,62 +18,63 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v2
-      with:
-        credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
-    - name: Configure Docker for Artifact Registry
-      run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
-    - name: Download model from GCS bucket
-      run: |
-        echo "📁 Downloading model from GCS bucket..."
-        gsutil cp gs://${{ env.GCP_BUCKET }}/models/model.pth saved/models/model.pth
-        ls -la saved/models/
-        echo "✅ Model ready for Docker build"
+      - name: Download model from GCS bucket
+        run: |
+          echo "📁 Downloading model from GCS bucket..."
+          gsutil cp gs://${{ env.GCP_BUCKET }}/models/model.pth saved/models/model.pth
+          ls -la saved/models/
+          echo "✅ Model ready for Docker build"
 
-    - name: Build Docker image
-      run: |
-        docker build \
-          -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app:${{ github.sha }} \
-          -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app:latest \
-          .
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app:${{ github.sha }} \
+            -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app:latest \
+            .
 
-    - name: Push Docker image
-      run: |
-        docker push --all-tags ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app:${{ github.sha }}
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app:latest
 
-    - name: Deploy to Cloud Run
-      run: |
-        gcloud run deploy ${{ env.SERVICE_NAME }} \
-          --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app:${{ github.sha }} \
-          --region ${{ env.REGION }} \
-          --platform managed \
-          --port 8080 \
-          --memory 4Gi \
-          --cpu 2 \
-          --timeout 300 \
-          --allow-unauthenticated \
-          --set-env-vars MODEL_VERSION=${{ github.sha }},BUILD_SHA=${{ github.sha }}
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app:${{ github.sha }} \
+            --region ${{ env.REGION }} \
+            --platform managed \
+            --port 8080 \
+            --memory 4Gi \
+            --cpu 2 \
+            --timeout 300 \
+            --allow-unauthenticated \
+            --set-env-vars MODEL_VERSION=${{ github.sha }},BUILD_SHA=${{ github.sha }}
 
-    - name: Verify deployment
-      run: |
-        echo "⏳ Waiting for deployment to stabilize..."
-        sleep 30
+      - name: Verify deployment
+        run: |
+          echo "⏳ Waiting for deployment to stabilize..."
+          sleep 30
 
-        SERVICE_URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} \
-          --region=${{ env.REGION }} \
-          --format="value(status.url)")
+          SERVICE_URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} \
+            --region=${{ env.REGION }} \
+            --format="value(status.url)")
 
-        echo "🚀 Application deployed at: $SERVICE_URL"
+          echo "🚀 Application deployed at: $SERVICE_URL"
 
-        # Test health endpoint
-        curl -f $SERVICE_URL/healthz || exit 1
-        echo "✅ Deployment successful and healthy!"
+          echo "🔍 Checking health endpoint..."
+          curl -f "$SERVICE_URL/healthz" || exit 1
+          echo "✅ Deployment successful and healthy!"
