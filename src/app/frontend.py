@@ -3,6 +3,7 @@ from PIL import Image as PILImage
 import io
 import requests
 import time
+import os
 
 # Configuration
 st.set_page_config(
@@ -28,7 +29,10 @@ st.markdown(
 )
 
 # FastAPI service configuration
-FASTAPI_SERVICE_URL = "http://localhost:3000"
+import os
+
+# For cloud compatibility.
+FASTAPI_SERVICE_URL = os.getenv("FASTAPI_SERVICE_URL", "http://localhost:8080")
 SEGMENT_ENDPOINT = f"{FASTAPI_SERVICE_URL}/segment"
 HEALTH_ENDPOINT = f"{FASTAPI_SERVICE_URL}/healthz"
 
