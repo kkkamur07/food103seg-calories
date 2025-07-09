@@ -38,3 +38,4 @@ pre_commit==4.2.0
 invoke==2.2.0
 tqdm==4.67.1
 streamlit>=1.46.1
+bentoml>=1.4.17
