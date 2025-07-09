@@ -2,7 +2,7 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies (no DVC needed)
 RUN apt-get update && apt-get install -y \
     supervisor \
     curl \
@@ -11,18 +11,24 @@ RUN apt-get update && apt-get install -y \
 # Install UV
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
-# Copy and install dependencies first (better caching)
-COPY pyproject.toml ./
+# Copy project files
+COPY pyproject.toml README.md uv.lock ./
 RUN uv pip install --system -e ".[docker]"
 
 # Copy application code
 COPY src/ ./src/
-COPY saved/ ./saved/
 
-# Create supervisor configuration directory
+# Create models directory (model will be copied by Cloud Build)
+RUN mkdir -p saved/models/
+
+# Copy model file (this will be provided by Cloud Build)
+COPY saved/models/model.pth ./saved/models/
+
+# Verify model was copied
+RUN ls -la saved/models/ && echo "✅ Model file ready for inference"
+
+# Create supervisor configuration
 RUN mkdir -p /etc/supervisor/conf.d/
-
-# Create supervisor configuration with your working ports
 RUN echo '[supervisord]\n\
 nodaemon=true\n\
 \n\
@@ -35,7 +41,7 @@ stdout_logfile=/var/log/fastapi.log\n\
 stderr_logfile=/var/log/fastapi.log\n\
 \n\
 [program:streamlit]\n\
-command=uv run streamlit run src/app/frontend.py --server.port=8503 --server.address=0.0.0.0\n\
+command=uv run streamlit run src/app/frontend.py --server.port=8501 --server.address=0.0.0.0\n\
 directory=/app\n\
 autostart=true\n\
 autorestart=true\n\
@@ -43,11 +49,8 @@ stdout_logfile=/var/log/streamlit.log\n\
 stderr_logfile=/var/log/streamlit.log\n\
 ' > /etc/supervisor/conf.d/supervisord.conf
 
-# Add health check for FastAPI service
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8080/healthz || exit 1
 
-# Expose both ports
-EXPOSE 3000 8503
-
+EXPOSE 8080 8501
 CMD ["supervisord"]
