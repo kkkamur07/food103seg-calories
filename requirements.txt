@@ -37,3 +37,5 @@ pre_commit==4.2.0
 #command line interface
 invoke==2.2.0
 tqdm==4.67.1
+streamlit>=1.46.1
+matplotlib

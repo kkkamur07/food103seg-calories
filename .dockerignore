@@ -1,5 +1,10 @@
-__pycache__/
+.git
+__pycache__
 *.pyc
+.env
+README.md
+.pytest_cache
+.coverage
 *.log
-.git/
-.gitignore
+.DS_Store
+sensor-proj/

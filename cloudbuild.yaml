@@ -1,0 +1,64 @@
+# cloudbuild.yaml - GCP-native model download
+steps:
+  # Step 1: Download model from GCS bucket
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: [
+      'cp',
+      'gs://${_GCP_BUCKET}/models/model.pth',
+      'saved/models/model.pth'
+    ]
+
+  # Step 2: Verify model download
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "📁 Verifying model download..."
+        ls -la saved/models/
+        echo "✅ Model ready for Docker build"
+
+  # Step 3: Build Docker image with downloaded model
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/food-segmentation-app:${SHORT_SHA}',
+      '-t', '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/food-segmentation-app:latest',
+      '.'
+    ]
+
+  # Step 4: Push image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      '--all-tags',
+      '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/food-segmentation-app'
+    ]
+
+  # Step 5: Deploy to Cloud Run automatically
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [
+      'run', 'deploy', '${_SERVICE_NAME}',
+      '--image', '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/food-segmentation-app:${SHORT_SHA}',
+      '--region', '${_LOCATION}',
+      '--platform', 'managed',
+      '--port', '8080',
+      '--memory', '4Gi',
+      '--cpu', '2',
+      '--timeout', '300',
+      '--allow-unauthenticated',
+      '--set-env-vars', 'MODEL_VERSION=${SHORT_SHA},BUILD_SHA=${SHORT_SHA}'
+    ]
+
+# Configuration variables
+substitutions:
+  _LOCATION: 'europe-west10'
+  _REPOSITORY: 'food-segmentation-repo'
+  _SERVICE_NAME: 'food-segmentation-service'
+  _GCP_BUCKET: 'food-segmentation-models'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'N2_Standard_2'
+  timeout: '1200s'  # 20 minutes
