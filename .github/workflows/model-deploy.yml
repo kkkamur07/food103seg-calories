@@ -8,7 +8,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  REGION: europe-west10
+  REGION: us-central1
   SERVICE_NAME: food-segmentation-service
   REPOSITORY: food-segmentation-repo
   GCP_BUCKET: food-segmentation-models
