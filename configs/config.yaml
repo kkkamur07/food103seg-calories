@@ -15,13 +15,13 @@ hydra:
 # model hyperparameters
 model:
   hyperparameters:
-    lr: 0.001
-    epochs: 1
-    batch_size: 65
+    lr: 0.0015
+    epochs: 25
+    batch_size: 32
 
 # experiment paths
 paths:
-  base_dir: /home/krrish/home/desktop/sarengeyo/food103seg-calories/
+  base_dir: /home/krrish/home/desktop/sensor-behaviour
 
 
 # configs/multirun/2025-07-06/14-30-15/
