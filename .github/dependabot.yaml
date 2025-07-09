@@ -1,31 +1,22 @@
-
 version: 2
 updates:
-  #python dependencies from requirements.txt
-  - package-ecosystem: "pip" #covers packages: dvc-data,wandb,fastapi,torch,scikit-learn,hydra-core,ruff,pytest..
-    directory: "/src"
-    schedule:
-      interval: "weekly"
-  #python frontend dependencies
+  # Python dependencies (main project with pyproject.toml)
   - package-ecosystem: "pip"
-    directory: "/frontend"
+    directory: "/"  # Root directory where pyproject.toml is located
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 10
 
-  #Docker dependencies
+  # Docker dependencies
   - package-ecosystem: "docker"
-    directory: "/src"
+    directory: "/"  # Root directory where Dockerfile is located
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 5
 
-  #Github actions dependencies(CI/CD workflows from .github/workflows/)
+  # GitHub Actions dependencies
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-
-  #Pre-commit dependencies
-  - package-ecosystem: "pip"
-    directory: "/src"
-    schedule:
-      interval: "weekly"
+    open-pull-requests-limit: 5
