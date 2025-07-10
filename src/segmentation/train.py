@@ -78,6 +78,8 @@ class Trainer:
         self.test_losses = []
         self.train_accs = []
         self.test_accs = []
+        self.train_ious = []
+        self.test_ious = []
         self.best_test_loss = float("inf")
 
         logger.info(f"Model initialized with {self.parameters} trainable parameters.")
@@ -116,6 +118,7 @@ class Trainer:
 
             running_loss = 0.0
             running_accuracy = 0.0
+            running_iou = 0.0
 
             train_bar = tqdm(
                 self.train_loader,
@@ -137,32 +140,38 @@ class Trainer:
                 self.optimizer.step()
 
                 # Calculate accuracy for current batch
-                if len(outputs.shape) == 4:
-                    pred_classes = torch.argmax(outputs, dim=1)
-                else:
-                    pred_classes = torch.argmax(outputs, dim=0)
 
+                pred_classes = torch.argmax(outputs, dim=1)
                 train_accuracy = torch.mean((pred_classes == masks).float())
+                train_iou = self.calculate_iou(pred_classes, masks)
 
                 # Accumulate loss and accuracy
-                # We multiply by images.size(0) to get the total loss for the batch
-                # This ensures we accumulate the total loss across all samples
                 running_accuracy += train_accuracy.item() * images.size(0)
-                running_loss += loss.item() * images.size(0)
+                running_loss += loss.item() * images.size(
+                    0
+                )  # We multiply by images.size(0) to get the total loss for the batch
+                running_iou += train_iou * images.size(
+                    0
+                )  # This ensures we accumulate the total IoU across all samples
+
                 # Update progress bar
                 train_bar.set_postfix(loss=loss.item())
 
             # Training metrics
             train_loss = running_loss / len(self.train_loader.dataset)
             train_acc = running_accuracy / len(self.train_loader.dataset)
+            train_iou = running_iou / len(self.train_loader.dataset)
             self.train_losses.append(train_loss)
             self.train_accs.append(train_acc)
+            self.train_ious.append(train_iou)
 
             # Testing
             self.model.eval()
             running_loss = 0.0
             running_accuracy = 0.0
+            running_iou = 0.0
 
+            # tqdm progress bar for testing
             test_bar = tqdm(
                 self.test_loader,
                 desc=f"Epoch {epoch+1}/{self.epochs} [Test]",
@@ -180,24 +189,30 @@ class Trainer:
                     # Calculate accuracy
                     pred_classes = torch.argmax(outputs, dim=1)
                     test_accuracy = torch.mean((pred_classes == masks).float())
-
+                    test_iou = self.calculate_iou(pred_classes, masks)
                     # accumulate accuracy and loss
                     running_accuracy += test_accuracy.item() * images.size(0)
                     running_loss += loss.item() * images.size(0)
-
+                    running_iou += test_iou * images.size(0)  # Accumulate IoU
                     # Update progress bar
                     test_bar.set_postfix(test_loss=loss.item())
 
             # Testing metrics
             test_loss = running_loss / len(self.test_loader.dataset)
             test_acc = running_accuracy / len(self.test_loader.dataset)
+            test_iou = running_iou / len(self.test_loader.dataset)
 
             self.test_losses.append(test_loss)
             self.test_accs.append(test_acc)
+            self.test_ious.append(test_iou)
 
             print(f"Epoch [{epoch+1}/{self.epochs}]:")
-            print(f"  Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.4f}")
-            print(f"  Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.4f}")
+            print(
+                f"  Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.4f}, Train IoU: {train_iou:.4f}"
+            )
+            print(
+                f"  Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.4f}, Test IoU: {test_iou:.4f}"
+            )
 
             # Log to wandb
             wandb.log(
@@ -207,6 +222,8 @@ class Trainer:
                     "Test Loss": test_loss,
                     "Test Accuracy": test_acc,
                     "epoch": epoch + 1,
+                    "Train IoU": train_iou,
+                    "Test IoU": test_iou,
                 }
             )
 
@@ -256,6 +273,8 @@ class Trainer:
         test_losses = self.test_losses
         train_accs = self.train_accs
         test_accs = self.test_accs
+        train_ious = self.train_ious
+        test_ious = self.test_ious
 
         # Check if data exists
         if not train_losses or not test_losses:
@@ -270,8 +289,8 @@ class Trainer:
             logger.warning("No plots path provided. Plot not saved.")
             return
 
-        # Create figure with 2 subplots side by side
-        _, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
+        # Create figure with 3 subplots side by side
+        _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(20, 6))
 
         epochs = range(1, len(train_losses) + 1)
 
@@ -321,7 +340,33 @@ class Trainer:
         ax2.legend()
         ax2.grid(True)
 
-        plt.suptitle("Training and Testing Metrics")
+        # Graph 3: Training vs Testing IoU
+        ax3.plot(
+            epochs,
+            train_ious,
+            label="Training IoU",
+            color="purple",
+            marker="o",
+            linewidth=2,
+        )
+        ax3.plot(
+            epochs,
+            test_ious,
+            label="Testing IoU",
+            color="brown",
+            marker="s",
+            linewidth=2,
+        )
+        ax3.set_title("IoU Comparison")
+        ax3.set_xlabel("Epochs")
+        ax3.set_ylabel("IoU")
+        ax3.legend()
+        ax3.grid(True)
+
+        # Adjust layout and save the plot
+        plt.tight_layout()
+        plt.subplots_adjust(top=0.85)  # Adjust top to make space for the title
+        plt.suptitle("Training and Testing Metrics", fontsize=20)
         plt.savefig(self.plots_path, dpi=300)  # Save the plot with high resolution
         logger.info(f"Training metrics plot saved: {self.plots_path}")
         plt.tight_layout()
@@ -387,3 +432,24 @@ class Trainer:
         logger.info(f"Prediction grid saved: {self.predictions}")
         plt.show()
         plt.close()
+
+    def calculate_iou(self, pred_mask, true_mask, num_classes=104):
+        """Simple IoU calculation"""
+        ious = []
+        pred_mask = pred_mask.view(-1)
+        true_mask = true_mask.view(-1)
+
+        for cls in range(num_classes):
+            pred_inds = pred_mask == cls
+            target_inds = true_mask == cls
+
+            intersection = (pred_inds & target_inds).long().sum().item()
+            union = (pred_inds | target_inds).long().sum().item()
+
+            if union == 0:
+                continue  # Skip if no pixels for this class
+
+            iou = intersection / union
+            ious.append(iou)
+
+        return np.mean(ious) if ious else 0.0
