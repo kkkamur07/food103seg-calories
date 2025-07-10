@@ -135,6 +135,7 @@ if is_connected:
                 segmented_image = call_fastapi_segmentation(image_bytes, image_format)
 
             if segmented_image:
+                segmented_image=segmented_image.resize(original_image.size)
                 st.success("✅ Segmentation complete!")
 
                 col1, col2 = st.columns(2)
