@@ -6,7 +6,7 @@ import numpy as np
 from unittest.mock import MagicMock, patch, mock_open
 from PIL import Image
 
-from segmentation.data import FoodSegDataset,data_loaders
+from src.segmentation.data import FoodSegDataset,data_loaders
 
 @pytest.fixture()
 #Set up temporary directory with dummy image and annotation files.
