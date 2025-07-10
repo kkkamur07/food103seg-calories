@@ -475,25 +475,7 @@ class Trainer:
         return np.mean(ious) if ious else 0.0
 
 
-# import torch
-# import torch.nn as nn
-# import torch.optim as optim
-# import os
-# import numpy as np
-# from tqdm import tqdm
-# from loguru import logger
-# import wandb
-# from src.segmentation.model import MiniUNet
-# from src.segmentation.data import data_loaders
-# from matplotlib import pyplot as plt
-
-
-# # Logging into the files
-# logger.remove()
-# logger.add(
-#     "saved/logs/model_training.log",
-#     rotation="1 day",
-#     level="INFO",
+# (Commented-out legacy code removed for readability and maintainability.)
 #     format="{time} {level} {message}",
 # )
 # logger.add(
