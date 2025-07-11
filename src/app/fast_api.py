@@ -47,7 +47,7 @@ app = FastAPI(
 def preprocess_image(image: Image.Image):
     """Convert PIL Image to normalized tensor"""
     image = image.convert("RGB")
-    img_resize = image.resize((256, 256))
+    img_resize = image.resize((224, 224))
     img_tensor = transforms.ToTensor()(img_resize)
     return img_tensor.unsqueeze(0)
 
@@ -84,11 +84,8 @@ async def segment_image(file: UploadFile = File(...)):
         img_tensor = preprocess_image(image)
         img_tensor = img_tensor.to(device)
 
-        with torch.no_grad():
-            model_output = model(img_tensor)
-
         # Postprocess the model output
-        result = postprocess_output(model_output)
+        result = postprocess_output(img_tensor)
 
         # Convert result to bytes for response
         buf = io.BytesIO()
