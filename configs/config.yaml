@@ -15,17 +15,17 @@ hydra:
 # model hyperparameters
 model:
   hyperparameters:
-    lr: 0.0015
+
+    lr: 0.001
     epochs: 25
     batch_size: 32
+
 
 # experiment paths
 paths:
   base_dir: /home/krrish/home/desktop/sensor-behaviour
 
-
-# configs/multirun/2025-07-06/14-30-15/
-# ├── 0/.hydra/config.yaml         # lr=0.001 config
-# ├── 1/.hydra/config.yaml         # lr=0.01 config
-# ├── 2/.hydra/config.yaml         # lr=0.1 config
-# └── multirun.yaml                # Summary of all runs
+# simple profiling
+profiling:
+  enabled: false
+  log_dir: ./profiler_logs
