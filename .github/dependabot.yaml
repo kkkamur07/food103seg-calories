@@ -1,0 +1,22 @@
+version: 2
+updates:
+  # Python dependencies (main project with pyproject.toml)
+  - package-ecosystem: "pip"
+    directory: "/"  # Root directory where pyproject.toml is located
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # Docker dependencies
+  - package-ecosystem: "docker"
+    directory: "/"  # Root directory where Dockerfile is located
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5

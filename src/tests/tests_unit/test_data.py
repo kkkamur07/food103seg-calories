@@ -5,12 +5,12 @@ from pathlib import Path
 import pytest
 from torchvision import transforms
 
-from src.data import FoodSegDataset, data_loaders
+from src.segmentation.data import FoodSegDataset, data_loaders
 
 
 def create_dummy_data(base_dir, mode="train", num=5):
-    img_dir = Path(base_dir) / "Images" / "img_dir" / mode
-    ann_dir = Path(base_dir) / "Images" / "ann_dir" / mode
+    img_dir = Path(base_dir) / "data" / "Images" / "img_dir" / mode
+    ann_dir = Path(base_dir) / "data" / "Images" / "ann_dir" / mode
     img_dir.mkdir(parents=True, exist_ok=True)
     ann_dir.mkdir(parents=True, exist_ok=True)
 

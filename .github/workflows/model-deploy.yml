@@ -1,0 +1,53 @@
+name: Deploy Food Segmentation Model
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'saved/models.dvc'
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: europe-west10
+  SERVICE_NAME: food-segmentation-service
+  REPOSITORY: food-segmentation-repo
+  GCP_BUCKET: food-segmentation-models
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Download model from GCS bucket
+        run: |
+          mkdir -p saved/models/
+          gsutil cp gs://${{ env.GCP_BUCKET }}/models/model.pth saved/models/model.pth
+          ls -la saved/models/
+
+      - name: Build and deploy with Cloud Build
+        run: |
+          gcloud builds submit \
+            --region=${{ env.REGION }} \
+            --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app:${{ github.sha }} \
+            .
+
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app:${{ github.sha }} \
+            --region ${{ env.REGION }} \
+            --platform managed \
+            --port 8080 \
+            --memory 4Gi \
+            --cpu 2 \
+            --timeout 300 \
+            --allow-unauthenticated

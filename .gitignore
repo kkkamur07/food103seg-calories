@@ -194,9 +194,6 @@ mlops-sensor-behaviour-de620a49f449.json
 
 # DVC lock files
 .dvc.lock
-mlops-sensor-behaviour-8e9b5b0fdf8a.json
-foodenv/
-food103seg-calories/configs/outputs/
 wandb/
 .env/
 api-key.json
@@ -204,5 +201,9 @@ configs/outputs/
 wandb/
 .ruff_cache/
 saved/predictions/
+
 profiler_logs/
 project_structure.txt
+
+github-actions-key.json
+

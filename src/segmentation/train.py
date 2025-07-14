@@ -265,7 +265,7 @@ class Trainer:
                 logger.info(f"Best model saved with test_loss: {test_loss:.4f}")
 
                 artifact = wandb.Artifact(
-                    "best_model",
+                    "model",
                     type="model",
                     description="Best model based on test loss",
                 )

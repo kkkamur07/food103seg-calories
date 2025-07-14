@@ -5,16 +5,43 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "segmentation"
 version = "0.1.0"
-authors = [{name = "XYZ", email = "me@em.com"}]
-description = "A Python package for food segmentation tasks"
-requires-python = ">=3.8"
+description = "Food segmentation application with FastAPI and Streamlit"
+requires-python = ">=3.11"
 dynamic = ["dependencies"]
-
-[tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools]
 packages = ["src.segmentation"]
 
 [project.scripts]
 train = "src.segmentation.main:main"
+
+[tool.setuptools.dynamic]
+dependencies = [
+    # Your existing dependencies
+    "torch==2.7.0",
+    "torchvision==0.22.0",
+    "numpy>=1.24.0",
+    "pillow>=10.0.0",
+    "tqdm==4.67.1",
+    "loguru==0.7.3",
+    "omegaconf==2.3.0",
+    "fastapi==0.115.12",
+    "uvicorn==0.34.2",
+    "streamlit>=1.46.1",
+    "python-multipart>=0.0.20",
+    "requests>=2.31.0",
+    "matplotlib>=3.7.0",
+]
+
+[project.optional-dependencies]
+training = [
+    # Your training dependencies
+]
+dev = [
+    # Your dev dependencies
+]
+docker = [
+    "supervisor>=4.2.0",
+]
+
+
