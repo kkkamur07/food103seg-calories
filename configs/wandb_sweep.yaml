@@ -11,11 +11,11 @@ parameters:
   batch_size:
     values: [16, 32, 64]
   epochs:
-    values: [5]
+    values: [2]
 
 project: Food-Segmentation
 run_cap: 20
 
 early_terminate:
   type: hyperband
-  min_iter: 1
+  min_iter: 2

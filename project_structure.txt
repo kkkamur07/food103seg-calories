@@ -1,0 +1,57 @@
+# project structure
+
+
+├── .github/                # Github actions and dependabot
+│   ├── dependabot.yaml
+│   └── workflows/
+│       └── tests.yaml
+├── configs/                # Configuration files
+├── data/                   # Data directory
+│   ├── processed
+│   └── raw
+├── dockerfiles/            # Dockerfiles
+│   ├── api.Dockerfile
+│   └── train.Dockerfile
+├── docs/                   # Documentation
+│   ├── mkdocs.yml
+│   └── source/
+│       └── index.md
+├── models/                 # Trained models
+├── notebooks/              # Jupyter notebooks
+├── reports/                # Reports
+│   └── figures/
+├── src/                    # Source code
+│   └── project_name/
+│       ├── __init__.py
+│       ├── api.py
+│       ├── data.py
+│       ├── evaluate.py
+│       ├── models.py
+│       ├── train.py
+│       └── visualize.py
+├── tests/                  # Tests
+│   ├── __init__.py
+│   ├── test_api.py
+│   ├── test_data.py
+│   └── test_model.py
+├── .gitignore
+├── .pre-commit-config.yaml
+├── LICENSE
+├── pyproject.toml          # Python project file
+├── README.md               # Project README
+├── requirements.txt        # Project requirements
+├── requirements_dev.txt    # Development requirements
+└── tasks.py                # Project tasks
+
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

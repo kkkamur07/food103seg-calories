@@ -201,4 +201,9 @@ configs/outputs/
 wandb/
 .ruff_cache/
 saved/predictions/
+
+profiler_logs/
+project_structure.txt
+
 github-actions-key.json
+
