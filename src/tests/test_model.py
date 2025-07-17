@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from unittest.mock import patch,MagicMock
 
-from segmentation.model import MiniUNet
+from src.segmentation.model import MiniUNet
 
 @pytest.fixture
 def mini_unet_instance():
