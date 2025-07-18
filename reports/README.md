@@ -116,6 +116,8 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 > krrish.agarwalla@campus.lmu.de
+>
+> Alisha.Al@campus.lmu.de
 
 >
 
@@ -124,8 +126,9 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 > Krrish Agarwalla : 12934480
+>
+> Alisha : 13023958
 
---- question 2 fill here ---
 
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
@@ -506,6 +509,15 @@ This RTX 4090 machine was provided by our university, enabling us to achieve our
 >
 > Answer:
 
+Yes, we successfully wrote an API for our model using both FastAPI and BentoML. The main API, built with FastAPI, serves a food segmentation model (MiniUNet) with endpoints for health checks and image segmentation. Users can upload images and receive segmented outputs. We implemented preprocessing and postprocessing steps around model inference and enabled GPU support when available.
+
+We added a /metrics endpoint using a custom Prometheus registry to monitor API usage, latency, and errors. Additionally, we integrated a favicon for a more polished browser experience, and served static files where needed.
+
+To ensure robustness, we wrote unit tests using pytest, performed load testing using Locust, and deployed the final API to Google Cloud Run for scalability and ease of access.
+
+Overall, the API is production-ready, well-monitored, and easy to use, with a focus on performance, observability, and user experience.
+
+
 --- question 23 fill here ---
 
 ### Question 24
@@ -627,7 +639,8 @@ These extra steps improved collaboration, reproducibility, and accessibility for
 >
 > Answer:
 
---- question 29 fill here ---
+![Model Architechture](figures/Architecture.jpeg)
+
 
 ### Question 30
 
@@ -644,6 +657,10 @@ These extra steps improved collaboration, reproducibility, and accessibility for
 *Krrish *: The biggest struggle in our project was getting the CI/CD pipelines to work reliably. The process was much more difficult than we expected—if a single task or dependency failed in the GitHub Actions workflow, the whole pipeline would stop, leaving us to sift through logs and test different fixes. This resulted in a lot of trial and error and took up a significant amount of our time. We also had to constantly monitor how many build minutes we were using, spending around $20 of our GitHub Actions credits and always worrying about going over budget.
 Another challenge was with Docker containerization—setting up and connecting the backend and frontend services, especially with cloud deployments, was not straightforward. Even small mistakes in configuration could result in services not communicating properly.
 To overcome these issues, we broke tasks down into smaller steps, relied heavily on documentation, and worked closely together as a team to isolate and solve problems quickly. Careful resource management and frequent small tests were key to making progress without running into excessive costs or major delays.
+
+*Alisha* : One of the biggest challenges I faced during the project was deploying the API I created using BentoML. Although BentoML is designed to simplify model serving, I ran into persistent issues when trying to build the Docker container. The container consistently failed due to missing dependencies—especially PyTorch, which is essential for running the segmentation model.
+I attempted several fixes: manually installing torch inside the container, adding it explicitly to bento.yaml and requirements.txt, and tweaking the Docker setup. Despite all these efforts, the container kept failing, and the model could not be served reliably through BentoML in the cloud environment.
+After spending significant time troubleshooting, I decided to pivot and deploy the API using FastAPI instead. FastAPI was already implemented as part of the project, and it provided a much smoother deployment experience. I deployed the FastAPI-based service to Google Cloud Run, where it ran without any issues. The deployment was fast, dependencies were resolved correctly, and the service scaled well.
 
 ### Question 31
 
@@ -662,3 +679,7 @@ To overcome these issues, we broke tasks down into smaller steps, relied heavily
 > Answer:
 
 *Krrish :* CI pipelines, DVC, pre-commits, cloud build, Dockerization, project structure, documentation, and GitHub workflows with active part in model development and minor edits to everything.
+
+*Alisha :* Designed and implemented the API using both FastAPI and BentoML, integrated unit tests for the API endpoints using pytest, and performed load testing with Locust, deployed the API to Cloud Run. Created the main README, and contributed to documentation and project structure.
+
+

@@ -132,14 +132,18 @@ Full API and usage documentation available at: [Documentation](https://kkkamur07
 
 ## 🛂 Project Architecture
 
-![Model Architecture](Architecture.jpeg)
+![Model Architecture](reports/figures/Architecture.jpeg)
 
 This architecture represents the full pipeline:
 
 * **Local Side**: Code versioning (Git), data/model tracking (DVC), PyTorch app orchestration via Hydra & Typer, debugging/profiling, and W\&B logging.
+
 * **Cloud Side**: CI/CD via GitHub Actions → GCP Build → Docker artifact → Cloud Run hosting.
+
 * **API & Load Test**: FastAPI app is hosted on Cloud Run, exposed to the end-user. Locust performs load testing.
+
 * **Monitoring**: GCP Logging tracks logs, errors, and performance.
+
 * **Prediction Flow**: End-user hits API → Prediction → Stored in GCP Bucket.
 
 ---
