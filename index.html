@@ -768,7 +768,7 @@
 <h2 id="live-demo">🚀 Live Demo</h2>
 <p><strong>Try the application now!</strong> Our Streamlit app is live at: <a href="https://segmentation-frontend-289925381630.us-central1.run.app/"><strong>the link</strong></a></p>
 <h2 id="overview">Overview</h2>
-<p>This project uses computer vision to identify different food items in images by segmenting them. We have Built this with PyTorch and by using a simplified MiniUNet architecture, it can segment 104 different food categories with moderate accuracy. We trained the MiniUNet architecture on <em>RTX</em> 4090 for about 20 Minutes and the hyperparameter configuration were determined by the hyperparameter sweep of wandb. </p>
+<p>This project uses computer vision to identify different food items in images by segmenting them. We have Built this with PyTorch and by using a simplified MiniUNet architecture, it can segment 104 different food categories with moderate accuracy. We trained the MiniUNet architecture on <em>RTX</em> 4090 for about 20 Minutes and the hyperparameter configuration were determined by the hyperparameter sweep of wandb.</p>
 <h2 id="features">Features</h2>
 <ul>
 <li><strong>🍕 Food Segmentation</strong>: Identifies and segments different food items in images</li>
@@ -788,7 +788,7 @@ cd food103seg-calories
 uv venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-# Install the dependencies 
+# Install the dependencies
 uv pip install -r requirements.txt
 
 # Train the model
@@ -826,9 +826,9 @@ cookiecutter https://github.com/kkkamur07/cookie-cutter --directory=mlops
 ├── notebooks/                # Jupyter notebooks for experiments
 └── docs/                     # Documentation
 </code></pre>
-<p>We have also used <code>bentoML</code> for optimized API for ML models specially, this can be found in. </p>
+<p>We have also used <code>bentoML</code> for optimized API for ML models specially, this can be found in.</p>
 <pre><code>├── src/
-    ├── segmentation/ 
+    ├── segmentation/
         ├── bentoml.py        # For BentoML
         ├── bentoml_setup.py  # For setting up BentoML
 
@@ -836,9 +836,8 @@ cookiecutter https://github.com/kkkamur07/cookie-cutter --directory=mlops
 <h2 id="getting-started">Getting Started</h2>
 <ol>
 <li><strong><a href="installation/">Installation</a></strong> - Set up the project</li>
-<li><strong><a href="quickstart.md">Quick Start</a></strong> - Get running quickly</li>
-<li><strong><a href="api/data.md">API Reference</a></strong> - Explore the code</li>
-<li><strong><a href="guide/training.md">Training Guide</a></strong> - Train your own models</li>
+<li><strong><a href="source/data/">API Reference</a></strong> - Explore the code</li>
+<li><strong><a href="source/training/">Training Guide</a></strong> - Train your own models</li>
 </ol>
 <h2 id="model-performance">Model Performance</h2>
 <ul>

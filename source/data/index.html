@@ -533,6 +533,30 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.segmentation.loss" class="md-nav__link">
+    <span class="md-ellipsis">
+      loss
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="loss">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.segmentation.loss.iou" class="md-nav__link">
+    <span class="md-ellipsis">
+      iou
+    </span>
+  </a>
+  
+</li>
+        
           <li class="md-nav__item">
   <a href="#best-practices" class="md-nav__link">
     <span class="md-ellipsis">
@@ -782,6 +806,30 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.segmentation.loss" class="md-nav__link">
+    <span class="md-ellipsis">
+      loss
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="loss">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.segmentation.loss.iou" class="md-nav__link">
+    <span class="md-ellipsis">
+      iou
+    </span>
+  </a>
+  
+</li>
+        
           <li class="md-nav__item">
   <a href="#best-practices" class="md-nav__link">
     <span class="md-ellipsis">
@@ -890,9 +938,282 @@ dvc fetch --all-commits
 <li>Extract and place in <code>data/</code> directory</li>
 </ol>
 <h3 id="data-module-integration">Data Module Integration</h3>
-<pre><code class="language-python">:::src.segmentation.data
-</code></pre>
-<p>The data module integrates with DVC by:
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="src.segmentation.loss" class="doc doc-heading">
+            <code>src.segmentation.loss</code>
+
+
+</h2>
+
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.segmentation.loss.iou" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">iou</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Calculate Intersection over Union (IoU) for semantic segmentation.</p>
+<p>Memory efficient version optimized for very large images/batches.
+Only processes classes that are present in the current batch to save computation.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>pred</code>
+            </td>
+            <td>
+                  <code><span title="torch.Tensor">Tensor</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Predicted segmentation masks. Can be either:
+- 4D tensor (B, C, H, W) with class probabilities/logits
+- 3D tensor (B, H, W) with class indices</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>target</code>
+            </td>
+            <td>
+                  <code><span title="torch.Tensor">Tensor</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Ground truth segmentation masks with class indices.
+Shape: (B, H, W) where each value is a class index.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>numpy.ndarray: IoU scores for each class (shape: [104,]).
+Classes not present in the batch will have NaN values.
+Only classes present in pred or target will have computed IoU scores.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="note" open>
+  <summary>Note</summary>
+  <ul>
+<li>Assumes 104 total classes (food segmentation classes)</li>
+<li>Automatically handles conversion from logits to class predictions</li>
+<li>Memory efficient by only computing IoU for classes present in batch</li>
+<li>Returns results on CPU as numpy array for compatibility</li>
+</ul>
+</details>
+
+<details class="example" open>
+  <summary>Example</summary>
+  <blockquote>
+<blockquote>
+<blockquote>
+<p>pred = torch.rand(2, 104, 224, 224)  # Batch of 2, 104 classes
+target = torch.randint(0, 104, (2, 224, 224))  # Ground truth
+iou_scores = iou(pred, target)
+print(f"Mean IoU: {np.nanmean(iou_scores):.3f}")</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</details>
+
+            <details class="quote">
+              <summary>Source code in <code>src/segmentation/loss.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">iou</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate Intersection over Union (IoU) for semantic segmentation.</span>
+
+<span class="sd">    Memory efficient version optimized for very large images/batches.</span>
+<span class="sd">    Only processes classes that are present in the current batch to save computation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pred (torch.Tensor): Predicted segmentation masks. Can be either:</span>
+<span class="sd">            - 4D tensor (B, C, H, W) with class probabilities/logits</span>
+<span class="sd">            - 3D tensor (B, H, W) with class indices</span>
+<span class="sd">        target (torch.Tensor): Ground truth segmentation masks with class indices.</span>
+<span class="sd">            Shape: (B, H, W) where each value is a class index.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy.ndarray: IoU scores for each class (shape: [104,]).</span>
+<span class="sd">            Classes not present in the batch will have NaN values.</span>
+<span class="sd">            Only classes present in pred or target will have computed IoU scores.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        - Assumes 104 total classes (food segmentation classes)</span>
+<span class="sd">        - Automatically handles conversion from logits to class predictions</span>
+<span class="sd">        - Memory efficient by only computing IoU for classes present in batch</span>
+<span class="sd">        - Returns results on CPU as numpy array for compatibility</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; pred = torch.rand(2, 104, 224, 224)  # Batch of 2, 104 classes</span>
+<span class="sd">        &gt;&gt;&gt; target = torch.randint(0, 104, (2, 224, 224))  # Ground truth</span>
+<span class="sd">        &gt;&gt;&gt; iou_scores = iou(pred, target)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Mean IoU: {np.nanmean(iou_scores):.3f}&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_classes</span> <span class="o">=</span> <span class="mi">104</span>
+
+    <span class="k">if</span> <span class="n">pred</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># max class value along each pixel</span>
+
+    <span class="n">pred_flat</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">target_flat</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Find unique classes present in this batch</span>
+    <span class="n">unique_classes</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">pred_flat</span><span class="p">,</span> <span class="n">target_flat</span><span class="p">]))</span>
+    <span class="n">unique_classes</span> <span class="o">=</span> <span class="n">unique_classes</span><span class="p">[</span><span class="n">unique_classes</span> <span class="o">&lt;</span> <span class="n">num_classes</span><span class="p">]</span>
+
+    <span class="c1"># Initialize full IoU array with NaN</span>
+    <span class="n">iou_results</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">num_classes</span><span class="p">,),</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="n">pred</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="c1"># Only calculate IoU for classes present in batch</span>
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">unique_classes</span><span class="p">:</span>
+        <span class="n">pred_cls</span> <span class="o">=</span> <span class="n">pred_flat</span> <span class="o">==</span> <span class="bp">cls</span>
+        <span class="n">target_cls</span> <span class="o">=</span> <span class="n">target_flat</span> <span class="o">==</span> <span class="bp">cls</span>
+
+        <span class="n">intersection</span> <span class="o">=</span> <span class="p">(</span><span class="n">pred_cls</span> <span class="o">&amp;</span> <span class="n">target_cls</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+        <span class="n">union</span> <span class="o">=</span> <span class="p">(</span><span class="n">pred_cls</span> <span class="o">|</span> <span class="n">target_cls</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">union</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">iou_results</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span> <span class="o">=</span> <span class="n">intersection</span> <span class="o">/</span> <span class="n">union</span>
+
+    <span class="k">return</span> <span class="n">iou_results</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><p>The data module integrates with DVC by:
 - Automatically checking for DVC-tracked files
 - Handling both local and remote data sources
 - Providing fallback mechanisms when DVC is unavailable
