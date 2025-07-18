@@ -1,6 +1,6 @@
 # 🌟 Food Segmentation Model
 
-![Food Banner](https://images.unsplash.com/photo-1606788075761-7791f05dc442?auto=format\&fit=crop\&w=1350\&q=80)
+![Food Banner]()
 
 > **Delicious pixels, smartly segmented!** Welcome to the lively repository of our Food Segmentation project! This end-to-end machine learning project segments food items from images with precision, offers an interactive API, and a gorgeous frontend to boot.
 
@@ -15,96 +15,34 @@ This project is a production-ready, MLOps-enabled food segmentation model built 
 * Serves predictions on a Streamlit-powered frontend
 * Has fully auto-generated documentation with MkDocs
 
-![Segmentation Sample](https://user-images.githubusercontent.com/12345678/food-segmentation-example.png)
+![Segmentted Image](https://segmentation-frontend-289925381630.us-central1.run.app/#segmentation-results)
 
 ---
 
-## 📅 Project Structure
+##  Project Structure
 
 ```
-kkkamur07-food103seg-calories/
-├── README.md                           # Project overview and instructions
-├── cloudbuild.yaml                    # Google Cloud Build config
-├── data.dvc                           # DVC-tracked data file
-├── docker-compose.yml                 # Orchestration of backend + frontend
-├── Dockerfile.backend                 # Dockerfile for backend service
-├── Dockerfile.frontend                # Dockerfile for frontend app
-├── project_structure.txt              # Describes the project structure
-├── pyproject.toml                     # Python project metadata + build system
-├── requirements.txt                   # Production dependencies
-├── requirements_dev.txt              # Dev dependencies (linting, testing)
-├── tasks.py                           # Automation scripts (e.g. via `invoke`)
-├── uv.lock                            # Dependency lock file for uv tool
-├── wandb_runner.py                    # W&B experiment runner
-├── .dockerignore                      # Ignore rules for Docker builds
-├── .dvcignore                         # Ignore rules for DVC
-├── .pre-commit-config.yaml           # Pre-commit hooks config
-├── configs/                           # All project configs
-│   ├── config.yaml                    # Main config file (training, paths)
-│   ├── wandb_sweep.yaml              # W&B sweep configuration
-│   ├── dataset/
-│   │   └── default.yaml              # Dataset-specific config
-│   ├── model/
-│   │   └── default.yaml              # Model-specific config
-│   └── outputs/                      # Experiment outputs
-│       ├── 2025-07-02/
-│       │   └── 22-43-00/
-│       │       ├── wandb/           # W&B run logs
-│       │       └── .hydra/          # Hydra config snapshots
-│       │           ├── config.yaml
-│       │           └── hydra.yaml
-│       └── 2025-07-04/
-│           └── 21-10-21/
-│               └── .hydra/
-│                   └── hydra.yaml
-├── notebooks/
-│   └── experiment.ipynb              # Jupyter notebook for experiments
-├── saved/
-│   └── models.dvc                    # Tracked model file(s) with DVC
-├── src/                              # Source code
-│   ├── app/                          # Application code (serving)
-│   │   ├── bentoml.py               # BentoML service definition
-│   │   ├── bentoml_setup.py        # BentoML setup utility
-│   │   ├── frontend.py             # Streamlit or Gradio frontend
-│   │   ├── frontend_requirements.txt
-│   │   └── service.py              # Service logic
-│   ├── segmentation/                # Core ML logic
-│   │   ├── __init__.py
-│   │   ├── data.py                 # Dataset loading, transforms
-│   │   ├── loss.py                 # Custom loss functions
-│   │   ├── main.py                 # Entrypoint script
-│   │   ├── model.py                # Model architectures
-│   │   └── train.py                # Training loop
-│   └── tests/                       # Tests
-│       ├── test_data1.py
-│       ├── test_model.py
-│       ├── test_training.py
-│       ├── tests_integration/      # Integration-level tests
-│       │   ├── api_testing.py
-│       │   └── locustfile.py       # Load testing with Locust
-│       └── tests_unit/             # Unit-level tests
-│           ├── test_data.py
-│           └── test_train.py
-├── report/                           # Exam report folder
-│   ├── README.md                     # Exam answers
-│   ├── figures/                      # Images for report
-│   └── report.py                     # Report generation script
-├── favicon.py                        # API favicon
-├── static/                           # Static files
-│   └── favicon.ico                   
-└── .github/                          # GitHub CI/CD config
-    ├── dependabot.yaml              # Dependency update config
-    └── workflows/                   # GitHub Actions workflows
-        ├── ci.yml                   # Main CI pipeline
-        ├── data-changes.yaml       # DVC-based data CI triggers
-        └── model-deploy.yml        # Model deployment pipeline
-```
-
+k-kamur07-food103seg-calories/
+├── configs/               # Configs for models, datasets, sweeps
+├── src/
+│   ├── app/              # FastAPI, BentoML, Streamlit
+│   ├── segmentation/     # Core training logic
+│   └── tests/            # Unit & integration tests
+├── saved/                # DVC-tracked model weights
+├── notebooks/            # Jupyter notebooks
+├── report/               # Report, figures, results
+├── .github/              # CI/CD pipelines (GitHub Actions)
+├── Dockerfile.*, docker-compose.yml  # Containerization
+├── data.dvc              # Data tracking
+├── wandb_runner.py       # W&B experiment runner
+├── tasks.py              # Automation CLI (Invoke)
+├── requirements*.txt     # Dependencies
+└── README.md             # You're here
 ---
 
 ## 🌐 Live Demo
 
-> Try out the live app: [Streamlit App 🔗](https://your-streamlit-app-url)
+> Try out the live app: [Streamlit App 🔗](https://segmentation-frontend-289925381630.us-central1.run.app/)
 
 Upload your favorite food pic and see it segmented live!
 
@@ -179,7 +117,7 @@ mkdocs serve
 
 ## 📑 Documentation
 
-Full API and usage documentation available at: [https://your-docs-site](https://your-docs-site)
+Full API and usage documentation available at: [https://kkkamur07.github.io/food103seg-calories/](https://your-docs-site)
 
 ---
 
@@ -207,24 +145,3 @@ Full API and usage documentation available at: [https://your-docs-site](https://
 ## 🛂 Project Architecture
 
 *To be added soon: a visual overview of our backend, API, model, and frontend interaction.*
-
----
-
-## 🚀 Future Enhancements
-
-* [ ] Multi-class segmentation (more food categories)
-* [ ] Nutrition prediction integration
-* [ ] Mobile app deployment
-* [ ] Labeling tool integration
-
----
-
-## 🙏 Credits
-
-Thanks to the open-source community, [cookie-cutter MLOps](https://github.com/kkkamur07/cookie-cutter), and dataset contributors.
-
----
-
-## 🚫 License
-
-[MIT](LICENSE)
