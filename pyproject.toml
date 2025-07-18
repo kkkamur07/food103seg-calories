@@ -10,6 +10,7 @@ requires-python = ">=3.11"
 dependencies = [
     "numpy>=1.24.0",
     "pillow>=10.0.0",
+    "prometheus-client>=0.22.1",
     "tqdm==4.67.1",
 ]
 
@@ -40,6 +41,7 @@ backend = [
     "google-cloud-storage==3.1.0",
     "gcsfs==2025.5.1",
     "gdown==5.2.0",
+    "prometheus-client>=0.22.1",
 ]
 
 frontend = [

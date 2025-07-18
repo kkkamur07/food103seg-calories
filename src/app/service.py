@@ -10,10 +10,43 @@ import torch
 from contextlib import asynccontextmanager
 from loguru import logger
 import os
+import time
+
+# Prometheus monitoring imports
+from prometheus_client import (
+    Counter,
+    Histogram,
+    Summary,
+    make_asgi_app,
+    CollectorRegistry,
+)
 
 # Global variables for model
 model = None
 device = None
+
+# Custom Prometheus registry
+MY_REGISTRY = CollectorRegistry()
+
+# Prometheus metrics with custom registry
+error_counter = Counter(
+    "api_errors_total",
+    "Total number of errors encountered by the API",
+    registry=MY_REGISTRY,
+)
+request_counter = Counter(
+    "api_requests_total",
+    "Total number of requests received by the API",
+    registry=MY_REGISTRY,
+)
+classification_time_histogram = Histogram(
+    "classification_duration_seconds",
+    "Time taken to classify a review",
+    registry=MY_REGISTRY,
+)
+review_size_summary = Summary(
+    "review_size_bytes", "Size of the reviews classified in bytes", registry=MY_REGISTRY
+)
 
 
 @asynccontextmanager
@@ -42,6 +75,10 @@ app = FastAPI(
     description="A FastAPI service for segmenting food items in images using a MiniUNet model.",
     version="1.0.0",
 )
+
+# Mount Prometheus metrics endpoint with custom registry
+metrics_app = make_asgi_app(registry=MY_REGISTRY)
+app.mount("/metrics", metrics_app)
 
 
 def preprocess_image(image: Image.Image):
@@ -75,9 +112,24 @@ async def health_check():
 @app.post("/segment")
 async def segment_image(file: UploadFile = File(...)):
     """Segment food items in uploaded image"""
+    # Increment request counter
+    request_counter.inc()
+
+    # Start timing the classification
+    start_time = time.time()
+
     try:
         # Read and process the uploaded image
         contents = await file.read()
+
+        # Measure file size for summary metric
+        file_size = len(contents)
+        review_size_summary.observe(file_size)
+
+        # Add validation to trigger error for testing
+        if file_size > 100 * 1024 * 1024:  # 100MB limit
+            raise ValueError("File size too large - maximum 100MB allowed")
+
         image = Image.open(io.BytesIO(contents))
 
         # Preprocess the image
@@ -95,8 +147,19 @@ async def segment_image(file: UploadFile = File(...)):
         result.save(buf, format="PNG")
         buf.seek(0)
 
+        # Record classification time
+        classification_duration = time.time() - start_time
+        classification_time_histogram.observe(classification_duration)
+
         return StreamingResponse(buf, media_type="image/png")
 
     except Exception as e:
+        # Increment error counter when an error occurs
+        error_counter.inc()
+
+        # Still record the classification time even if it failed
+        classification_duration = time.time() - start_time
+        classification_time_histogram.observe(classification_duration)
+
         logger.error(f"Processing failed: {str(e)}")
         return {"error": f"Processing failed: {str(e)}"}
