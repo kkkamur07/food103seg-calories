@@ -62,6 +62,13 @@ kkkamur07-food103seg-calories/
 │       └── tests_unit/             # Unit-level tests
 │           ├── test_data.py
 │           └── test_train.py
+│── report/                           # Exam report folder
+│   ├── README.md                     # Exam answers
+│   ├── figures/                      # Images for report
+│   └── report.py                     # Report generation script
+├── favicon.py                        # API favicon
+├── static/                           # Static files
+│   ├── favicon.ico                   
 └── .github/                          # GitHub CI/CD config
     ├── dependabot.yaml              # Dependency update config
     └── workflows/                   # GitHub Actions workflows
