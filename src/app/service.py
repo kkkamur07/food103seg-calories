@@ -51,6 +51,11 @@ review_size_summary = Summary(
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """
+    Lifespan event handler for FastAPI app
+    This function initializes the model and device on startup and cleans up on shutdown.
+
+    """
     # Startup: Load model
     global model, device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -82,7 +87,12 @@ app.mount("/metrics", metrics_app)
 
 
 def preprocess_image(image: Image.Image):
-    """Convert PIL Image to normalized tensor"""
+    """Convert PIL Image to normalized tensor
+    Args:
+        image (PIL.Image): Input image to preprocess.
+    Returns:
+        torch.Tensor: Preprocessed image tensor.
+    """
     image = image.convert("RGB")
     img_resize = image.resize((256, 256))
     img_tensor = transforms.ToTensor()(img_resize)
@@ -90,7 +100,12 @@ def preprocess_image(image: Image.Image):
 
 
 def postprocess_output(output: torch.Tensor):
-    """Convert model output to PIL Image"""
+    """Convert model output to PIL Image
+    Args:
+        output (torch.Tensor): Model output tensor.
+    Returns:
+        PIL.Image: Postprocessed image.
+    """
     output = torch.argmax(output, dim=1).squeeze(0).cpu().numpy()
     colored_mask = plt.cm.tab20(output % 20)[..., :3]
     colored_mask = (colored_mask * 255).astype(np.uint8)
@@ -99,19 +114,30 @@ def postprocess_output(output: torch.Tensor):
 
 @app.get("/")
 async def root():
-    """Root endpoint"""
+    """Root endpoint
+    Returns:
+        dict: A simple message indicating the API is running.
+    """
     return {"message": "Food Segmentation API is running"}
 
 
 @app.get("/status")
 async def health_check():
-    """Health check endpoint for Streamlit frontend"""
+    """Health check endpoint for Streamlit frontend
+    Returns:
+        dict: Health status of the API and model.
+    """
     return {"status": "healthy", "model_loaded": model is not None}
 
 
 @app.post("/segment")
 async def segment_image(file: UploadFile = File(...)):
-    """Segment food items in uploaded image"""
+    """Segment food items in uploaded image
+    Args:
+        file (UploadFile): The uploaded image file.
+    Returns:
+        StreamingResponse: The segmented image.
+    """
     # Increment request counter
     request_counter.inc()
 

@@ -23,7 +23,14 @@ class FoodSegmentationService:
     # Creating a service to handle the segmentation of food items
     @bentoml.api()
     async def segment(self, image: PILImage.Image) -> PILImage.Image:
-        """Segment food items and return visualization"""
+        """
+        Segment food items and return visualization
+
+        Args:
+            image (PILImage.Image): Input image to segment.
+        Returns:
+            PILImage.Image: Segmented image with food items highlighted.
+        """
         # Preprocess
         img_tensor = await self.preprocess_image(image)
         img_tensor = img_tensor.to(self.device)
@@ -31,7 +38,13 @@ class FoodSegmentationService:
         return self.postprocess_output(img_tensor)
 
     async def preprocess_image(self, image: PILImage.Image) -> torch.Tensor:
-        """Convert PIL Image to normalized tensor"""
+        """Convert PIL Image to normalized tensor
+        Args:
+            image (PILImage.Image): Input image to preprocess.
+        Returns:
+            torch.Tensor: Preprocessed image tensor.
+
+        """
         image = image.convert("RGB")
         img_resize = image.resize(
             (256, 256)
@@ -40,7 +53,13 @@ class FoodSegmentationService:
         return img_tensor.unsqueeze(0)
 
     def postprocess_output(self, output: torch.Tensor) -> PILImage.Image:
-        """Convert model output to PIL Image"""
+        """Convert model output to PIL Image
+        Args:
+            output (torch.Tensor): Model output tensor.
+
+        Returns:
+            PILImage.Image: Postprocessed image.
+        """
         output = torch.argmax(output, dim=1).squeeze(0).cpu().numpy()
         colored_mask = plt.cm.tab20(output % 20)[
             ..., :3

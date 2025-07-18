@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "Food segmentation application with FastAPI and Streamlit"
 requires-python = ">=3.11"
 dependencies = [
+    "mkdocs>=1.6.1",
     "numpy>=1.24.0",
     "pillow>=10.0.0",
     "prometheus-client>=0.22.1",
