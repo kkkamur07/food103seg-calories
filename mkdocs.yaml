@@ -35,3 +35,14 @@ plugins:
             show_root_heading: true
             show_root_toc_entry: true
             merge_init_into_class: true
+
+extra:
+  authors:
+    - name: Krrish Agarwalla
+      url: https://github.com/kkkamur07
+    - name: Astha Gupta
+      url: https://github.com/Asthag29
+    - name: Alisha Saifi
+      url: https://github.com/Alisha026
+    - name: Akshata Lokhande
+      url: https://github.com/Akshata-Lokhande

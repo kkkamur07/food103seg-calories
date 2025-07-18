@@ -1,8 +1,5 @@
 # Installation Guide
 
-## 🚀 Live Demo
-
-**Try the application now!** Our Streamlit app is live at: **the link**
 
 ## Prerequisites
 
@@ -24,54 +21,52 @@ Before installing the Food103Seg Calories project, ensure you have the following
 
 ## Installation Steps
 
+## Setup Instructions Using uv
+
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repo-url>
-cd kkkamur07-food103seg-calories
+git clone https://github.com/kkkamur07/food103seg-calories
+cd food103seg-calories
 ```
 
-### 2. Create Virtual Environment (Recommended)
+### 2. Create Virtual Environment and Install Dependencies
 
-Using **venv**:
+Using **uv** (recommended for fastest setup):
+
 ```bash
-python -m venv food-seg-env
-source food-seg-env/bin/activate  # On Windows: food-seg-env\Scripts\activate
+# Create virtual environment
+uv venv
+
+# Activate virtual environment
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install production dependencies
+uv pip install -r requirements.txt
+
+# Install development dependencies (optional)
+uv pip install -r requirements_dev.txt
+
+# Install project in development mode
+uv pip install -e .
 ```
 
-Using **conda**:
+**Alternative one-liner approach:**
 ```bash
-conda create -n food-seg-env python=3.9
-conda activate food-seg-env
+# Create environment and install dependencies in one step
+uv venv && source .venv/bin/activate && uv pip install -r requirements.txt
 ```
 
-### 3. Install Dependencies
+### 3. GPU Setup (Optional but Recommended)
 
-#### Production Installation
-```bash
-pip install -r requirements.txt
-```
-
-#### Development Installation
-```bash
-pip install -r requirements_dev.txt
-```
-
-#### Install Project in Development Mode
-```bash
-pip install -e .
-```
-
-### 4. GPU Setup (Optional but Recommended)
-
-For CUDA support, install PyTorch with CUDA:
+For CUDA support, install PyTorch with CUDA using uv:
 
 ```bash
 # For CUDA 11.8
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 # For CUDA 12.1
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
 
 Verify GPU installation:
@@ -79,18 +74,94 @@ Verify GPU installation:
 python -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}')"
 ```
 
+### About the Requirements Files
+
+This project provides two dependency files for different use cases[1][2]:
+
+- **`requirements.txt`** - Contains production dependencies needed to run the application
+- **`requirements_dev.txt`** - Contains additional development dependencies for testing, linting, and development tools[3]
+
+The uv package manager provides significant speed improvements over traditional pip installations[4][2], making it ideal for projects with multiple dependencies. You can install from either file using `uv pip install -r <filename>`[5].
+
+
 ## Data Setup
 
-### 1. Download Dataset
+## 1. Download Dataset
 
-Download the Food103 segmentation dataset and place it in the `data/` directory:
+### Data Storage and Versioning with DVC
+
+This project uses **DVC (Data Version Control)** with Google Cloud Storage for data versioning and management. The data and models are stored in two separate GCS buckets:
+
+- **Data storage**: `gs://dvc-storage-sensor/`
+- **Model storage**: `gs://food-segmentation-models/`
+
+### Setting Up DVC with Google Cloud Storage
 
 ```bash
+# Create data directory
 mkdir -p data
-# Download your dataset here
+
+# Install required tools
+pip install dvc-gs
+
+# List available GCS buckets
+gsutil ls
+
+# Add remote storage (replace <output-from-gsutils> with actual bucket path)
+dvc remote add -d remote_storage gs://dvc-storage-sensor/
+
+# Configure version-aware storage
+dvc remote modify remote_storage version_aware true
+
+# List configured remotes
+dvc remote list
+
+# Pull data from remote storage
+dvc pull
 ```
 
-### 2. Expected Directory Structure
+### DVC Management Commands
+
+```bash
+# Remove a remote if needed
+dvc remote remove gcp_storage
+
+# Set default remote
+dvc remote default remote_storage
+
+# Push data (note: --no-cache may have issues)
+dvc push --no-cache
+```
+
+### Known Issues with DVC Setup
+
+During development, several challenges were encountered with the DVC workflow, particularly with the `dvc push --no-cache` command. While DVC provides excellent data versioning capabilities, the setup proved complex for this project's requirements.
+
+### Alternative: Direct Dataset Download
+
+If you prefer to bypass the DVC setup or encounter issues, you can download the **Food103 segmentation dataset** directly from:
+
+**Dataset source**: https://paperswithcode.com/dataset/foodseg103
+
+```bash
+# Create data directory
+mkdir -p data
+
+# Download dataset manually from Papers with Code
+# Extract and place in data/ directory
+```
+
+### Recommended Approach
+
+For this project, you can choose either approach:
+
+1. **DVC approach** - Use the GCS buckets with DVC for version control
+2. **Direct download** - Download the Food103 dataset directly from Papers with Code
+
+The DVC setup provides better data versioning and collaboration features, while the direct download approach is simpler for getting started quickly.
+
+
+### 2. Expected Data Directory Structure
 
 Ensure your data follows this structure:
 
@@ -119,22 +190,21 @@ data/
 
 ## Configuration Setup
 
-### 1. Create Required Directories
-
+## Copy the Template
 ```bash
-mkdir -p saved/{logs,models,reports,predictions}
-mkdir -p configs/outputs
+# Install cookiecutter
+pip install cookiecutter
+
+# Generate project using our template
+cookiecutter https://github.com/kkkamur07/cookie-cutter --directory=mlops
 ```
 
-### 2. Environment Variables (Optional)
-
-Create a `.env` file in the project root:
-
-```bash
-# .env
-WANDB_PROJECT=Food-Segmentation
-CUDA_VISIBLE_DEVICES=0
+Find the complete template and installation guide at:
 ```
+https://github.com/kkkamur07/cookie-cutter --directory=mlops
+```
+
+Sources
 
 ## Verification
 
@@ -168,15 +238,26 @@ python src/segmentation/main.py model.hyperparameters.epochs=1
 streamlit run src/app/frontend.py
 ```
 
-### 2. **Training Pipeline**
+### 2. **API Server (FastAPI with Uvicorn)**
+```bash
+uvicorn src.app.api:app --host 0.0.0.0 --port 8000 --reload
+```
+
+### 3. **Training Pipeline**
 ```bash
 python src/segmentation/main.py
 ```
 
-### 3. **Custom Training**
+### 4. **Custom Training**
 ```bash
 python src/segmentation/main.py model.hyperparameters.epochs=50 model.hyperparameters.lr=0.001
 ```
+
+### Access Points
+- **Web App**: `http://localhost:8501`
+- **API**: `http://localhost:8000`
+- **API Docs**: `http://localhost:8000/docs`
+
 
 ## Troubleshooting
 
@@ -184,7 +265,6 @@ python src/segmentation/main.py model.hyperparameters.epochs=50 model.hyperparam
 
 #### **CUDA Out of Memory**
 - Reduce batch size in config: `model.hyperparameters.batch_size=16`
-- Use CPU training: `CUDA_VISIBLE_DEVICES="" python src/segmentation/main.py`
 
 #### **Missing Dependencies**
 ```bash
@@ -240,19 +320,8 @@ pre-commit install
 # Jupyter for notebooks
 pip install jupyter
 jupyter notebook notebooks/
+
 ```
-
-## Performance Optimization
-
-### For Training
-- Use **mixed precision**: Add `--mixed-precision` flag
-- **Increase batch size** if you have enough GPU memory
-- **Use multiple GPUs** with `CUDA_VISIBLE_DEVICES=0,1`
-
-### For Inference
-- Use **TorchScript** for faster inference
-- **Batch processing** for multiple images
-- **CPU inference** for deployment scenarios
 
 ## Next Steps
 
@@ -265,5 +334,3 @@ After successful installation:
 5. **Set up monitoring** with Weights & Biases
 
 You're now ready to start training your food segmentation model and estimating calories! 🍕📊
-
-Sources

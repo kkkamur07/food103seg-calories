@@ -86,14 +86,17 @@ app = FastAPI(
 # Mount static directory
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+
 # Serve favicon
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
     return FileResponse("static/favicon.ico")
 
+
 # Mount Prometheus metrics endpoint with custom registry
 metrics_app = make_asgi_app(registry=MY_REGISTRY)
 app.mount("/metrics", metrics_app)
+
 
 def preprocess_image(image: Image.Image):
     """Convert PIL Image to normalized tensor
