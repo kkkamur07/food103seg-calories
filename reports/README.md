@@ -81,7 +81,7 @@ will check the repositories and the code to verify your answers.
 * [✅] Add a continues workflow that triggers when changes to the model registry is made (M19)
 * [✅] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
 * [✅] Create a trigger workflow for automatically building your docker images (M21)
-* [✅] Get your model training in GCP using either the Engine or Vertex AI (M21)
+* [] Get your model training in GCP using either the Engine or Vertex AI (M21) $\to$ Not enough credits for the same.
 * [✅] Create a FastAPI application that can do inference using your model (M22)
 * [✅] Deploy your model in GCP using either Functions or Run as the backend (M23)
 * [✅] Write API tests for your application and setup continues integration for these (M24)
@@ -103,7 +103,7 @@ will check the repositories and the code to verify your answers.
 ### Extra
 
 * [✅] Write some documentation for your application (M32)
-* [✅] Publish the documentation to GitHub Pages (M32)
+* [✅] Publish the documentation to GitHub Pages (M32) $\to$ [Link](https://kkkamur07.github.io/food103seg-calories/)
 * [✅] Revisit your initial project description. Did the project turn out as you wanted?
 * [✅] Create an architectural diagram over your MLOps pipeline
 * [✅] Make sure all group members have an understanding about all parts of the project
@@ -115,19 +115,16 @@ will check the repositories and the code to verify your answers.
 > **Enter the group number you signed up on**
 >
 > Answer:
-> krrish.agarwalla@campus.lmu.de
->
-> Alisha.Al@campus.lmu.de
+krrish.agarwalla@campus.lmu.de
+Alisha.Al@campus.lmu.de
 
->
 
 ### Question 2
 > **Enter the study number for each member in the group**
 >
 > Answer:
-> Krrish Agarwalla : 12934480
->
-> Alisha : 13023958
+Krrish Agarwalla : 12934480
+Alisha : 13023958
 
 
 ### Question 3
@@ -155,7 +152,7 @@ Overall, using uv provided tangible benefits in streamlining our project’s inf
 > Recommended answer length: 100-200 words
 >
 > Answer:
-> We managed project dependencies using both **uv** and **pip**. For uv, all core dependencies are specified in the `pyproject.toml` file, ensuring precise and reproducible installations using uv’s fast resolver. For pip users, we maintained `requirements.txt` for production dependencies and `requirements_dev.txt` for development-specific packages. This approach provided flexibility, allowing contributors to install dependencies using either tool depending on their workflow preferences.
+We managed project dependencies using both **uv** and **pip**. For uv, all core dependencies are specified in the `pyproject.toml` file, ensuring precise and reproducible installations using uv’s fast resolver. For pip users, we maintained `requirements.txt` for production dependencies and `requirements_dev.txt` for development-specific packages. This approach provided flexibility, allowing contributors to install dependencies using either tool depending on their workflow preferences.
 
 To set up an exact copy of the development environment, a new team member can:
 
@@ -189,7 +186,6 @@ Full installation steps and environment setup guidance are provided in our proje
 > Answer:
 We initialized our project using a custom cookiecutter template that we built by combining elements from several templates found on GitHub. The overall structure follows the standard cookiecutter approach but with a few key changes. One major addition is the **saved/** folder, which we use to store all important outputs from our model, such as visualizations, model weights, and logs, making it easy to track experiment results. Inside the **src/** folder, we created an **app/** folder where we keep files related to the API (**service.py**) and the frontend (**frontend.py**), keeping them separate from the training and modeling code. We found the existing cookiecutter template very helpful for setting up a clear project structure, but we customized it to better fit our workflow. Our custom template can be found at [https://github.com/kkkamur07/cookie-cutter/tree/main/mlops/]. These few changes made our project easier to manage and collaborate on.
 
-Sources
 
 
 
@@ -207,7 +203,6 @@ We implemented **pre-commit hooks** and used **ruff** for linting to ensure our 
 
 These practices matter even more in larger projects because they reduce confusion, make collaboration easier, and help prevent bugs. Consistent code formatting and good documentation mean new contributors can quickly understand and work with the codebase. Typing improves reliability by catching errors before runtime, which is especially important as projects get more complex and teams grow.
 
-Sources
 
 
 ## Version control
@@ -261,7 +256,6 @@ We used **Git extensively** throughout our workflow. Each team member worked on 
 
 This approach made collaboration smoother and minimized the risk of conflicts or bugs being introduced. Whenever someone started working, they made sure to first **pull the latest changes from the main branch** to stay up to date and avoid unnecessary merge conflicts. While we occasionally ran into fatal errors, using branches and PRs significantly helped us maintain code quality, shared understanding, and allowed us to easily manage version control as a team.
 
-Sources
 
 
 ### Question 10
@@ -307,7 +301,6 @@ Additionally, we connected our GitHub repository to **Google Cloud Build**. When
 You can find our main workflow here: [ci.yml on GitHub](https://github.com/kkkamur07/food103seg-calories/blob/main/.github/workflows/ci.yml).
 This setup keeps our development process efficient, reliable, and collaborative for all team members.
 
-Sources
 
 
 ## Running code and tracking experiments
@@ -681,5 +674,3 @@ After spending significant time troubleshooting, I decided to pivot and deploy t
 *Krrish :* CI pipelines, DVC, pre-commits, cloud build, Dockerization, project structure, documentation, and GitHub workflows with active part in model development and minor edits to everything.
 
 *Alisha :* Designed and implemented the API using both FastAPI and BentoML, integrated unit tests for the API endpoints using pytest, and performed load testing with Locust, deployed the API to Cloud Run. Created the main README, and contributed to documentation and project structure.
-
-

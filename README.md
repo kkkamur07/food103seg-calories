@@ -1,8 +1,9 @@
-# 🌟 Food Segmentation Model
+# 🍔 Food Segmentation Model
 
-![Food Banner](https://static6.depositphotos.com/1008611/583/v/950/depositphotos_5838506-stock-illustration-food-my-plate-breakfast-portions.jpg)
+![Demo](reports/figures/demo.gif)
 
-> **Delicious pixels, smartly segmented!** Welcome to the lively repository of our Food Segmentation project! This end-to-end machine learning project segments food items from images with precision, offers an interactive API, and a gorgeous frontend to boot.
+
+> **Delicious pixels, smartly segmented!** Welcome to the lively repository of our Food Segmentation project! This end-to-end machine learning project segments food items from images with precision, offers an interactive API, and a frontend to boot.
 
 ---
 
@@ -19,20 +20,20 @@ This project is a production-ready, MLOps-enabled food segmentation model built 
 ##  Project Structure
 
 ```
-k-kamur07-food103seg-calories/
-├── configs/               # Configs for models, datasets, sweeps
+root/
+├── configs/              # Configs for models, datasets, sweeps
 ├── src/
 │   ├── app/              # FastAPI, BentoML, Streamlit
 │   ├── segmentation/     # Core training logic
 │   └── tests/            # Unit & integration tests
-├── saved/                # DVC-tracked model weights
+├── saved/                # Model weights, logs and figures.
 ├── notebooks/            # Jupyter notebooks for experiments
 ├── report/               # Report, figures, results
 ├── .github/              # CI/CD pipelines (GitHub Actions)
 ├── Dockerfile.*, docker-compose.yml  # Containerization
-├── data.dvc              # Data tracking
-├── wandb_runner.py       # W&B experiment runner
-├── tasks.py              # Automation CLI (Invoke)
+├── data.dvc              # Data versioning and tracking
+├── wandb_runner.py       # W&B hyperparameter sweeping.
+├── tasks.py              # Automation of CLI using invoke
 ├── pyproject.toml        # Python project metadata + build system
 └── README.md             # You're here
 ```
@@ -54,12 +55,12 @@ Upload your favorite food pic and see it segmented live!
    * We trained a **UNet** model using our `Food103Seg` dataset
    * The dataset contains **104 food classes**
    * Images are preprocessed and fed into the UNet model
-   * Trained model is versioned using **DVC** and exported via FastAPI
+   * Trained model W&B is versioned using **DVC** and exported via FastAPI
 
 2. **API Development**
 
    * FastAPI / BentoML serves the model
-   * Predict endpoint handles image uploads and returns segmentation masks
+   * `\segment` endpoint handles image uploads and returns segmentation masks
 
 3. **Frontend**
 
@@ -67,7 +68,7 @@ Upload your favorite food pic and see it segmented live!
 
 4. **Docs & CI/CD**
 
-   * MkDocs auto-generates documentation
+   * MkDocs for documentation.
    * GitHub Actions handle CI/CD workflows
    * DVC handles data and model versioning across development cycles
 
@@ -82,7 +83,7 @@ cd food103seg-calories
 
 To run API:
 ```bash
-uvicorn src.app.api:app --host 0.0.0.0 --port 8000 --reload
+uvicorn src.app.service:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 To run frontend:
@@ -90,6 +91,11 @@ To run frontend:
 streamlit run src/app/frontend.py
 ```
 
+**Alternatively you can build the docker containers using**
+
+```bash
+docker-compose up --build
+```
 ---
 
 ## 📊 Model Results
@@ -114,25 +120,26 @@ Full API and usage documentation available at: [Documentation](https://kkkamur07
 * **Backend**: FastAPI, BentoML
 * **Frontend**: Streamlit
 * **Model**: UNet (PyTorch)
-* **Dataset**: Food103Seg (104 classes)
-* **MLOps**: Cookie-cutter template, Docker, GitHub Actions, **DVC**, GCP
+* **Dataset**: [Food103Seg](https://datasetninja.com/food-seg-103)
+* **MLOps**: Cookie-cutter, Docker, GitHub Actions, **DVC**, GCP, WandB
 * **Docs**: MkDocs
 
 ---
 
 ## ✅ CI/CD & Versioning
 
-* **GitHub Actions** for automated testing and deployment
-* **DVC** for tracking datasets and model files
-* **Docker** for consistent environments across development and production
-* **Pre-commit** hooks for code quality
+* **GitHub Actions** for automated testing and building of docker containers
+* **DVC** for tracking datasets and model weights and biases
+* **Docker** to ensure reproducibility and scalability of our work.
+* **Pre-commit** hooks for code quality and consistency.
 * **W\&B** for experiment tracking and sweeping
+* **GCP** for building & deploying our docker containers
 
 ---
 
 ## 🛂 Project Architecture
 
-![Model Architecture](reports/figures/Architecture.jpeg)
+![Model Architecture](reports/figures/architecture.jpeg)
 
 This architecture represents the full pipeline:
 
@@ -147,12 +154,3 @@ This architecture represents the full pipeline:
 * **Prediction Flow**: End-user hits API → Prediction → Stored in GCP Bucket.
 
 ---
-
-
-
-
-
-
-
-
-
