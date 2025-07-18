@@ -34,7 +34,7 @@ backend = [
     "dvc-data==3.16.10",
     "dvc-task==0.40.2",
     "dvc-gs==3.0.2",
-    "wandb==0.19.11",
+    "wandb==0.21.0",
     "gto==1.7.2",
     "dvc-studio-client>=0.21.0",
     "google-cloud-storage==3.1.0",

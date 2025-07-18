@@ -6,7 +6,7 @@ dvc-task==0.40.2            # DVC task management for pipelines
 dvc-gs==3.0.2           # DVC integration with Google Cloud Storage
 
 # Experiment Tracking & Model Registry
-wandb==0.19.11                # Experiment tracking and visualization
+wandb==0.21.0                # Experiment tracking and visualization
 gto==1.7.2                    # Git-based model registry and versioning
 dvc-studio-client>=0.21.0     # Integration for DVC Studio
 
