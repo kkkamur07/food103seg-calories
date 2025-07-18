@@ -23,7 +23,24 @@ os.environ["WANDB_CONSOLE"] = "off"
 
 
 def print_hyperparameters_table(cfg: DictConfig):
-    """Display hyperparameters in a clean table format"""
+    """
+    Display hyperparameters in a clean table format using Rich.
+
+    Creates a formatted table showing key training configuration parameters
+    including epochs, batch size, learning rate, and base directory path.
+
+    Args:
+        cfg (DictConfig): Hydra configuration object containing model hyperparameters
+            and path settings. Expected to have structure:
+            - cfg.model.hyperparameters.epochs
+            - cfg.model.hyperparameters.batch_size
+            - cfg.model.hyperparameters.lr
+            - cfg.paths.base_dir
+
+    Example:
+        >>> print_hyperparameters_table(cfg)
+        # Displays a formatted table with training configuration
+    """
     table = Table(
         title="🔧 Training Configuration", show_header=True, header_style="bold blue"
     )
@@ -41,8 +58,35 @@ def print_hyperparameters_table(cfg: DictConfig):
 
 @hydra.main(version_base=None, config_path=config_dir, config_name="config")
 def main(cfg: DictConfig):
-    """Simple training and visualization pipeline"""
+    """
+    Main training pipeline for food segmentation model.
 
+    Orchestrates the complete training workflow including data loading,
+    model training, and visualization generation. Uses Hydra for configuration
+    management and Rich for enhanced console output.
+
+    Args:
+        cfg (DictConfig): Hydra configuration object containing all training
+            parameters, paths, and settings. Expected structure:
+            - cfg.model.hyperparameters: Training hyperparameters
+            - cfg.paths.base_dir: Base directory for data and outputs
+            - cfg.profiling.enabled: Whether to enable performance profiling
+
+    Pipeline Steps:
+        1. Load and display configuration parameters
+        2. Initialize data loaders for training and testing
+        3. Create and configure trainer instance
+        4. Execute training loop
+        5. Generate training metrics visualizations
+        6. Generate prediction visualizations
+
+    Example:
+        Run with default config:
+        >>> python main.py
+
+        Run with custom parameters:
+        >>> python main.py model.hyperparameters.epochs=50 model.hyperparameters.lr=0.001
+    """
     epochs = cfg.model.hyperparameters.epochs
     batch_size = cfg.model.hyperparameters.batch_size
     learning_rate = cfg.model.hyperparameters.lr

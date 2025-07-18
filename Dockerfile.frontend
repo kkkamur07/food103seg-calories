@@ -1,0 +1,21 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install UV package manager
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+# Copy dependency files
+COPY pyproject.toml uv.lock ./
+
+# Copy application code
+COPY src/ ./src/
+
+# Install frontend dependencies
+RUN uv pip install --system ".[frontend]"
+
+# Expose port
+EXPOSE 8080
+
+# Run Streamlit frontend
+CMD ["uv", "run", "streamlit", "run", "src/app/frontend.py", "--server.port=8080", "--server.address=0.0.0.0"]

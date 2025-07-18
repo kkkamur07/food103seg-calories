@@ -1,0 +1,36 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies for ML libraries
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install UV package manager
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+# Copy dependency files
+COPY pyproject.toml uv.lock ./
+
+# Copy application code
+COPY src/ ./src/
+
+# Create models directory and copy model file
+RUN mkdir -p saved/models/
+COPY saved/models/model.pth ./saved/models/
+
+# Install backend dependencies
+RUN uv pip install --system ".[backend]"
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/healthz || exit 1
+
+# Expose port
+EXPOSE 8080
+
+# Run FastAPI backend
+CMD ["uv", "run", "uvicorn", "src.app.service:app", "--host", "0.0.0.0", "--port", "8080"]
