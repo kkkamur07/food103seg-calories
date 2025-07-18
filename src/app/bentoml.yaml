@@ -1,0 +1,27 @@
+name: food_segmentation_service
+
+version: v1
+
+service: "src.app.service:FoodSegmentationService"
+
+description: |
+  BentoML service for food segmentation using a trained model on the FoodSegmentationDataset.
+
+include:
+  - "src/app/bentoml_setup.py"
+  - "src/segmentation/model.py"
+  - "src/app/service.py"
+
+models:
+  - "food_segmentation_model:latest"
+
+python:
+  requirements_txt: ./requirements.txt
+  extra_pip_install_cmds:
+    - python -m ensurepip
+    - python -m pip install --upgrade pip setuptools wheel
+  packages:
+    - torch
+
+dependencies:
+  - torch==2.7.1

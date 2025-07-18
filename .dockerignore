@@ -2,7 +2,9 @@
 __pycache__
 *.pyc
 .env
-README.md
+*.pyo
+#README.md
+data/
 .pytest_cache
 .coverage
 *.log

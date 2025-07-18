@@ -1,9 +1,10 @@
 from locust import HttpUser, task, between
 import os
 
-   
+
 class FoodSegmentationUser(HttpUser):
     """Locust user for testing the Food Segmentation API"""
+
     wait_time = between(2, 4)
 
     @task(1)
@@ -11,18 +12,15 @@ class FoodSegmentationUser(HttpUser):
         response = self.client.get("/")
         if response.status_code != 200:
             print(f"Root endpoint failed: {response.status_code}")
-        
+
     @task(3)
     def segment_image(self):
         path = "src/tests/integration_tests/images.jpeg"
         if not os.path.exists(path):
             print(f"Image file not found: {path}")
             return
-        
+
         with open(path, "rb") as image_file:
             response = self.client.post("/segment", files={"file": image_file})
             if response.status_code != 200:
                 print(f"Food Segmentation failed: {response.status_code}")
-
-            
-            

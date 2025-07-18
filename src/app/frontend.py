@@ -34,12 +34,17 @@ import os
 # For cloud compatibility.
 FASTAPI_SERVICE_URL = os.getenv("FASTAPI_SERVICE_URL", "http://localhost:8080")
 SEGMENT_ENDPOINT = f"{FASTAPI_SERVICE_URL}/segment"
-HEALTH_ENDPOINT = f"{FASTAPI_SERVICE_URL}/healthz"
+HEALTH_ENDPOINT = f"{FASTAPI_SERVICE_URL}/status"
 
 
 @st.cache_data(show_spinner="Connecting to FastAPI service...")
 def check_fastapi_connection():
-    """Check if FastAPI service is running"""
+    """Check if FastAPI service is running and return health status
+    Returns:
+        tuple: (is_connected, health_info)
+            is_connected (bool): True if connection is successful, False otherwise.
+            health_info (dict): Health status from FastAPI service if connected.
+    """
     try:
         response = requests.get(HEALTH_ENDPOINT, timeout=10)
         if response.status_code == 200:
@@ -61,7 +66,13 @@ def check_fastapi_connection():
 
 
 def call_fastapi_segmentation(image_bytes: bytes, image_format: str):
-    """Send image to FastAPI for segmentation"""
+    """Send image to FastAPI for segmentation
+    Args:
+        image_bytes (bytes): The image file bytes.
+        image_format (str): The format of the image (e.g., "jpg", "png").
+    Returns:
+        PIL.Image: The segmented image.
+    """
     try:
         files = {
             "file": (f"image.{image_format}", image_bytes, f"image/{image_format}")
@@ -135,7 +146,7 @@ if is_connected:
                 segmented_image = call_fastapi_segmentation(image_bytes, image_format)
 
             if segmented_image:
-                segmented_image=segmented_image.resize(original_image.size)
+                segmented_image = segmented_image.resize(original_image.size)
                 st.success("✅ Segmentation complete!")
 
                 col1, col2 = st.columns(2)
@@ -161,5 +172,5 @@ if is_connected:
         st.info("Please upload an image to get started")
 else:
     st.error(
-        "❌ Cannot connect to FastAPI service. Please ensure it's running on port 3000"
+        "❌ Cannot connect to FastAPI service. Please ensure it's running on port 8080"
     )
