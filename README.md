@@ -1,6 +1,6 @@
 # 🌟 Food Segmentation Model
 
-![Food Banner]()
+![Food Banner](https://static6.depositphotos.com/1008611/583/v/950/depositphotos_5838506-stock-illustration-food-my-plate-breakfast-portions.jpg)
 
 > **Delicious pixels, smartly segmented!** Welcome to the lively repository of our Food Segmentation project! This end-to-end machine learning project segments food items from images with precision, offers an interactive API, and a gorgeous frontend to boot.
 
@@ -14,8 +14,6 @@ This project is a production-ready, MLOps-enabled food segmentation model built 
 * Deploys a FastAPI + BentoML backend
 * Serves predictions on a Streamlit-powered frontend
 * Has fully auto-generated documentation with MkDocs
-
-![Segmentted Image](https://segmentation-frontend-289925381630.us-central1.run.app/#segmentation-results)
 
 ---
 
@@ -44,7 +42,7 @@ k-kamur07-food103seg-calories/
 
 ## 🌐 Live Demo
 
-> Try out the live app: [Streamlit App 🔗](https://your-streamlit-app-url)
+> Try out the live app: [Streamlit App 🔗](https://segmentation-frontend-289925381630.us-central1.run.app/)
 
 Upload your favorite food pic and see it segmented live!
 
@@ -79,25 +77,22 @@ Upload your favorite food pic and see it segmented live!
 ## 🚧 Installation
 
 ```bash
-git clone https://github.com/your-username/food-segmentation
-cd food-segmentation
+git clone https://github.com/kkkamur07/food103seg-calories
+cd food103seg-calories
 make install
 ```
 
 To run API:
-
 ```bash
-make serve-api
+uvicorn src.app.api:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 To run frontend:
-
 ```bash
-make serve-frontend
+streamlit run src/app/frontend.py
 ```
 
 To launch docs:
-
 ```bash
 mkdocs serve
 ```
@@ -120,7 +115,7 @@ mkdocs serve
 
 ## 📑 Documentation
 
-Full API and usage documentation available at: [https://kkkamur07.github.io/food103seg-calories/](https://your-docs-site)
+Full API and usage documentation available at: [Documentation](https://kkkamur07.github.io/food103seg-calories/)
 
 ---
 
@@ -130,7 +125,7 @@ Full API and usage documentation available at: [https://kkkamur07.github.io/food
 * **Frontend**: Streamlit
 * **Model**: UNet (PyTorch)
 * **Dataset**: Food103Seg (104 classes)
-* **MLOps**: Cookie-cutter template, Docker, GitHub Actions, **DVC**
+* **MLOps**: Cookie-cutter template, Docker, GitHub Actions, **DVC**, GCP
 * **Docs**: MkDocs
 
 ---
