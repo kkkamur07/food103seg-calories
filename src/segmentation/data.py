@@ -6,7 +6,7 @@ from torch.utils.data import Dataset
 
 
 class FoodSegDataset(Dataset):
-    def __init__(self, base_dir, mode="train", transforms=None, ann_transform=None):
+    def __init__(self, base_dir, mode, transforms=None, ann_transform=None):
         self.base_dir = base_dir
         self.data_dir = os.path.join(base_dir, "data")
         self.mode = mode  # 'train' or 'test'
