@@ -11,7 +11,7 @@ gto==1.7.2                    # Git-based model registry and versioning
 dvc-studio-client>=0.21.0     # Integration for DVC Studio
 
 # Model Serving & APIs
-fastapi==0.115.12             # API framework for model serving
+fastapi==0.116.1             # API framework for model serving
 uvicorn==0.34.2               # ASGI server for FastAPI
 google-cloud-storage==3.1.0   # Cloud storage for model artifacts :cite[3]:cite[6]
 
