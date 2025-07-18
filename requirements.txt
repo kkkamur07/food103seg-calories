@@ -39,3 +39,4 @@ invoke==2.2.0
 tqdm==4.67.1
 streamlit>=1.46.1
 matplotlib
+python-multipart==0.0.20
