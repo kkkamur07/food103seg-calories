@@ -8,12 +8,11 @@
 
 ## 🚀 Project Overview
 
-This project is a production-ready, MLOps-enabled food segmentation model built using a robust [cookie-cutter MLOps template](https://github.com/kkkamur07/cookie-cutter). It:
+This project is a production-ready, MLOps-enabled food segmentation model built using a [cookie-cutter MLOps template](https://github.com/kkkamur07/cookie-cutter). It:
 
 * Segments food items from images using deep learning
-* Deploys a FastAPI + BentoML backend
-* Serves predictions on a Streamlit-powered frontend
-* Has fully auto-generated documentation with MkDocs
+* Deploys a FastAPI / BentoML backend
+* Serves predictions on a Streamlit frontend
 
 ---
 
@@ -27,14 +26,14 @@ k-kamur07-food103seg-calories/
 │   ├── segmentation/     # Core training logic
 │   └── tests/            # Unit & integration tests
 ├── saved/                # DVC-tracked model weights
-├── notebooks/            # Jupyter notebooks
+├── notebooks/            # Jupyter notebooks for experiments
 ├── report/               # Report, figures, results
 ├── .github/              # CI/CD pipelines (GitHub Actions)
 ├── Dockerfile.*, docker-compose.yml  # Containerization
 ├── data.dvc              # Data tracking
 ├── wandb_runner.py       # W&B experiment runner
 ├── tasks.py              # Automation CLI (Invoke)
-├── requirements*.txt     # Dependencies
+├── pyproject.toml        # Python project metadata + build system
 └── README.md             # You're here
 ```
 
@@ -52,14 +51,14 @@ Upload your favorite food pic and see it segmented live!
 
 1. **Model Training**
 
-   * We trained a **UNet** model using our custom `Food103Seg` dataset
+   * We trained a **UNet** model using our `Food103Seg` dataset
    * The dataset contains **104 food classes**
    * Images are preprocessed, augmented, and fed into the UNet model
    * Trained model is versioned using **DVC** and exported via BentoML
 
 2. **API Development**
 
-   * FastAPI + BentoML serves the model
+   * FastAPI / BentoML serves the model
    * Predict endpoint handles image uploads and returns segmentation masks
 
 3. **Frontend**
@@ -79,7 +78,6 @@ Upload your favorite food pic and see it segmented live!
 ```bash
 git clone https://github.com/kkkamur07/food103seg-calories
 cd food103seg-calories
-make install
 ```
 
 To run API:
@@ -92,24 +90,16 @@ To run frontend:
 streamlit run src/app/frontend.py
 ```
 
-To launch docs:
-```bash
-mkdocs serve
-```
-
 ---
 
 ## 📊 Model Results
 
 | Metric         | Value          |
 | -------------- | -------------- |
-| mIoU           | 0.87           |
-| Accuracy       | 94.3%          |
-| Inference Time | 50ms/image     |
+| Accuracy       | 65%            |
+| Inference Time | 100ms/image    |
 | Classes        | 104 food items |
 
-
-![Before After](https://user-images.githubusercontent.com/12345678/before-after.gif)
 
 ---
 
@@ -142,7 +132,17 @@ Full API and usage documentation available at: [Documentation](https://kkkamur07
 
 ## 🛂 Project Architecture
 
-*To be added soon: a visual overview of our backend, API, model, and frontend interaction.*
+![Model Architecture](Architecture.jpeg)
+
+This architecture represents the full pipeline:
+
+* **Local Side**: Code versioning (Git), data/model tracking (DVC), PyTorch app orchestration via Hydra & Typer, debugging/profiling, and W\&B logging.
+* **Cloud Side**: CI/CD via GitHub Actions → GCP Build → Docker artifact → Cloud Run hosting.
+* **API & Load Test**: FastAPI app is hosted on Cloud Run, exposed to the end-user. Locust performs load testing.
+* **Monitoring**: GCP Logging tracks logs, errors, and performance.
+* **Prediction Flow**: End-user hits API → Prediction → Stored in GCP Bucket.
+
+---
 
 
 
