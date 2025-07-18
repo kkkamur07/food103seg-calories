@@ -38,11 +38,13 @@ k-kamur07-food103seg-calories/
 ├── tasks.py              # Automation CLI (Invoke)
 ├── requirements*.txt     # Dependencies
 └── README.md             # You're here
+```
+
 ---
 
 ## 🌐 Live Demo
 
-> Try out the live app: [Streamlit App 🔗](https://segmentation-frontend-289925381630.us-central1.run.app/)
+> Try out the live app: [Streamlit App 🔗](https://your-streamlit-app-url)
 
 Upload your favorite food pic and see it segmented live!
 
@@ -111,6 +113,7 @@ mkdocs serve
 | Inference Time | 50ms/image     |
 | Classes        | 104 food items |
 
+
 ![Before After](https://user-images.githubusercontent.com/12345678/before-after.gif)
 
 ---
@@ -145,3 +148,12 @@ Full API and usage documentation available at: [https://kkkamur07.github.io/food
 ## 🛂 Project Architecture
 
 *To be added soon: a visual overview of our backend, API, model, and frontend interaction.*
+
+
+
+
+
+
+
+
+
