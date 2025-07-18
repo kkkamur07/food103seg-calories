@@ -34,7 +34,7 @@ import os
 # For cloud compatibility.
 FASTAPI_SERVICE_URL = os.getenv("FASTAPI_SERVICE_URL", "http://localhost:8080")
 SEGMENT_ENDPOINT = f"{FASTAPI_SERVICE_URL}/segment"
-HEALTH_ENDPOINT = f"{FASTAPI_SERVICE_URL}/healthz"
+HEALTH_ENDPOINT = f"{FASTAPI_SERVICE_URL}/status"
 
 
 @st.cache_data(show_spinner="Connecting to FastAPI service...")

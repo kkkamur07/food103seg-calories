@@ -66,7 +66,7 @@ async def root():
     return {"message": "Food Segmentation API is running"}
 
 
-@app.get("/healthz")
+@app.get("/status")
 async def health_check():
     """Health check endpoint for Streamlit frontend"""
     return {"status": "healthy", "model_loaded": model is not None}
