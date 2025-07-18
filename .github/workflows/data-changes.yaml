@@ -11,7 +11,7 @@ jobs:
   data-validation:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Run data validation or processing (without pulling data)
         run: |
