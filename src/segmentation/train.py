@@ -40,6 +40,17 @@ class Trainer:
         enable_profiler=None,
         init_wandb=True,
     ):
+        """
+        Initialize the Trainer and do experimental logging with Weights and Biases.
+
+        Args:
+            lr (float): Learning rate for the optimizer.
+            epochs (int): Number of training epochs.
+            batch_size (int): Batch size for training.
+            base_dir (str): Project's root directory.
+            enable_profiler (bool): Whether to enable PyTorch profiler.
+            init_wandb (bool): Whether to initialize Weights and Biases.
+        """
 
         super().__init__()
         # model
@@ -109,9 +120,27 @@ class Trainer:
             logger.info("Weights and Biases initialized for tracking.")
 
     def forward(self, x):
+        """Forward pass through the model."""
         return self.model(x)
 
     def train(self):
+        """
+
+        Execute the training loop with optional profiling and Weights and Biases logging.
+
+        Pipeline Steps :
+        1. Initialize the device for training (GPU or CPU).
+        2. Check if the model path is set.
+        3. Create profiler if enabled.
+        4. Loop through the number of epochs:
+        5. Train the model on the training dataset.
+        6. Calculate and log training metrics (loss, accuracy, IoU).
+        7. Validate the model on the test dataset.
+        8. Save the best model based on test loss.
+        9. Log metrics to Weights and Biases.
+        10. Finish Weights and Biases run.
+
+        """
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         if not self.model_path:
@@ -395,7 +424,14 @@ class Trainer:
 
     def visualize_predictions(self, num_images=5):
         """
-        Visualize predictions on multiple test images in one figure.
+        This function generates a grid of input images, ground truth masks, and model predictions.
+
+        Args:
+            num_images (int): Number of images to visualize.
+
+        Returns:
+            None: Saves the prediction grid to the specified path.
+
         """
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.eval()
@@ -454,7 +490,7 @@ class Trainer:
         plt.close()
 
     def calculate_iou(self, pred_mask, true_mask, num_classes=104):
-        """Simple IoU calculation"""
+        """Implements the Intersection over Union (IoU) metric for segmentation tasks."""
         ious = []
         pred_mask = pred_mask.view(-1)
         true_mask = true_mask.view(-1)

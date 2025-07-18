@@ -8,8 +8,10 @@ version = "0.1.0"
 description = "Food segmentation application with FastAPI and Streamlit"
 requires-python = ">=3.11"
 dependencies = [
+    "mkdocs>=1.6.1",
     "numpy>=1.24.0",
     "pillow>=10.0.0",
+    "prometheus-client>=0.22.1",
     "tqdm==4.67.1",
 ]
 
@@ -40,6 +42,7 @@ backend = [
     "google-cloud-storage==3.1.0",
     "gcsfs==2025.5.1",
     "gdown==5.2.0",
+    "prometheus-client>=0.22.1",
 ]
 
 frontend = [
@@ -52,7 +55,7 @@ frontend = [
 dev = [
     "ruff==0.11.13",
     "pre_commit==4.2.0",
-    "pytest==8.4.0",
+    "pytest==8.4.1",
     "invoke==2.2.0",
     "loguru==0.7.3",
 ]
