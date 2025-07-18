@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import torch.nn.utils.prune as prune
 import os
 import numpy as np
 from tqdm import tqdm
@@ -12,7 +13,7 @@ from matplotlib import pyplot as plt
 from torch.profiler import profile, ProfilerActivity, schedule
 
 # Logging into the files
-logger.remove()
+# logger.remove()
 logger.add(
     "saved/logs/model_training.log",
     rotation="1 day",
@@ -39,6 +40,7 @@ class Trainer:
         base_dir=None,
         enable_profiler=None,
         init_wandb=True,
+        prune_amount=0.2,
     ):
         """
         Initialize the Trainer and do experimental logging with Weights and Biases.
@@ -53,8 +55,30 @@ class Trainer:
         """
 
         super().__init__()
+
         # model
         self.model = MiniUNet().to("cuda" if torch.cuda.is_available() else "cpu")
+
+        # Check if pruning is enabled
+        if prune_amount > 0.0:
+            logger.info(f"Applying pruning with amount: {prune_amount}")
+
+            # Apply global unstructured pruning to Conv2d and Linear layers
+            parameters_to_prune = []
+            for module in self.model.modules():
+                if isinstance(module, (torch.nn.Conv2d, torch.nn.Linear)):
+                    parameters_to_prune.append((module, "weight"))
+
+            if parameters_to_prune:
+                prune.global_unstructured(
+                    parameters_to_prune,
+                    pruning_method=prune.L1Unstructured,
+                    amount=prune_amount,
+                )
+                logger.info("Pruning applied to the model.")
+            else:
+                logger.warning("No Conv2d or Linear layers found for pruning.")
+
         # Model Parameters
         self.parameters = sum(
             p.numel() for p in self.model.parameters() if p.requires_grad
@@ -118,6 +142,24 @@ class Trainer:
             )
             wandb.watch(self.model, log="all")
             logger.info("Weights and Biases initialized for tracking.")
+
+    def remove_pruning(self):
+        """
+        Remove pruning from the model.
+
+        This method iterates through all modules in the model and removes
+        pruning parameters if they exist. It is useful for restoring the
+        original model state after pruning has been applied.
+        """
+
+        for module in self.model.modules():
+            if hasattr(module, "weight_orig"):
+                prune.remove(module, "weight")
+            if hasattr(module, "bias_orig"):
+                prune.remove(module, "bias")
+                logger.info(f"Removed pruning from bias of {module}")
+
+        logger.info("Pruning removed from the model.")
 
     def forward(self, x):
         """Forward pass through the model."""
@@ -278,6 +320,7 @@ class Trainer:
 
             if test_loss < self.best_test_loss:
                 self.best_test_loss = test_loss
+                self.remove_pruning()
                 torch.save(
                     {
                         "model_state_dict": self.model.state_dict(),
