@@ -397,6 +397,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#mlops-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      MLOps Template
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#project-structure" class="md-nav__link">
     <span class="md-ellipsis">
       Project Structure
@@ -703,6 +712,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#mlops-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      MLOps Template
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#project-structure" class="md-nav__link">
     <span class="md-ellipsis">
       Project Structure
@@ -746,33 +764,57 @@
 
 
 <h1 id="food103seg-calories">Food103Seg Calories</h1>
-<p>Welcome to <strong>Food103Seg Calories</strong> - a deep learning project for food image segmentation and calorie estimation.</p>
+<p>Welcome to <strong>Food103Seg</strong> - a deep learning project for food image segmentation.</p>
 <h2 id="live-demo">🚀 Live Demo</h2>
-<p><strong>Try the application now!</strong> Our Streamlit app is live at: <a href="your-streamlit-link"><strong>the link</strong></a></p>
+<p><strong>Try the application now!</strong> Our Streamlit app is live at: <a href="https://segmentation-frontend-289925381630.us-central1.run.app/"><strong>the link</strong></a></p>
 <h2 id="overview">Overview</h2>
-<p>This project uses computer vision to identify different food items in images and estimate their caloric content. Built with PyTorch and featuring a MiniUNet architecture, it can segment 104 different food categories with high accuracy.</p>
+<p>This project uses computer vision to identify different food items in images by segmenting them. We have Built this with PyTorch and by using a simplified MiniUNet architecture, it can segment 104 different food categories with moderate accuracy. We trained the MiniUNet architecture on <em>RTX</em> 4090 for about 20 Minutes and the hyperparameter configuration were determined by the hyperparameter sweep of wandb. </p>
 <h2 id="features">Features</h2>
 <ul>
 <li><strong>🍕 Food Segmentation</strong>: Identifies and segments different food items in images</li>
-<li><strong>📊 Calorie Estimation</strong>: Calculates caloric content from segmented food regions</li>
 <li><strong>🧠 MiniUNet Model</strong>: Lightweight U-Net architecture optimized for food segmentation</li>
 <li><strong>🌐 Web Interface</strong>: User-friendly Streamlit application</li>
 <li><strong>⚙️ Easy Configuration</strong>: Hydra-based configuration management</li>
 <li><strong>📈 Experiment Tracking</strong>: Integration with Weights &amp; Biases</li>
 </ul>
 <h2 id="quick-start">Quick Start</h2>
-<pre><code class="language-bash"># Install dependencies
-pip install -r requirements.txt
+<pre><code class="language-bash"># Clone the repository
+git clone https://github.com/kkkamur07/food103seg-calories
+
+# Navigate to the project directory
+cd food103seg-calories
+
+# Create virtual environment using UV
+uv venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install the dependencies 
+uv pip install -r requirements.txt
 
 # Train the model
-python src/segmentation/main.py
+python -m src.segmentation.main
 
-# Launch web app
+# Launch API Server
+uvicorn src.app.api:app --host 0.0.0.0 --port 8000 --reload
+
+# Launch Web App
 streamlit run src/app/frontend.py
 </code></pre>
+<h2 id="mlops-template">MLOps Template</h2>
+<p>We provide a ready-to-use MLOps template for this project structure:</p>
+<pre><code class="language-bash"># Install cookiecutter
+pip install cookiecutter
+
+# Generate project using our template
+cookiecutter https://github.com/kkkamur07/cookie-cutter --directory=mlops
+</code></pre>
+<p>Find the complete template and installation guide at:</p>
+<pre><code>https://github.com/kkkamur07/cookie-cutter --directory=mlops
+</code></pre>
+<p>Sources</p>
 <h2 id="project-structure">Project Structure</h2>
 <pre><code>├── src/
-│   ├── segmentation/          # Core ML modules
+│   ├── segmentation/         # Core ML modules
 │   │   ├── data.py           # Data loading
 │   │   ├── model.py          # MiniUNet architecture
 │   │   ├── train.py          # Training pipeline
@@ -780,9 +822,16 @@ streamlit run src/app/frontend.py
 │   └── app/                  # Web application
 │       ├── frontend.py       # Streamlit interface
 │       └── service.py        # API service
-├── configs/                  # Configuration files
-├── notebooks/                # Jupyter notebooks
+├── configs/                  # Configuration files and management
+├── notebooks/                # Jupyter notebooks for experiments
 └── docs/                     # Documentation
+</code></pre>
+<p>We have also used <code>bentoML</code> for optimized API for ML models specially, this can be found in. </p>
+<pre><code>├── src/
+    ├── segmentation/ 
+        ├── bentoml.py        # For BentoML
+        ├── bentoml_setup.py  # For setting up BentoML
+
 </code></pre>
 <h2 id="getting-started">Getting Started</h2>
 <ol>
@@ -794,11 +843,11 @@ streamlit run src/app/frontend.py
 <h2 id="model-performance">Model Performance</h2>
 <ul>
 <li><strong>104 Food Classes</strong>: Comprehensive food category coverage</li>
-<li><strong>High Accuracy</strong>: &gt;85% mean IoU on test set</li>
-<li><strong>Fast Inference</strong>: ~50ms per image on GPU</li>
+<li><strong>Moderate Accuracy</strong>: &gt;20% mean IoU on test set</li>
+<li><strong>Moderate Inference Speed</strong>: ~100ms per image on GPU</li>
 <li><strong>Lightweight</strong>: ~15MB model size</li>
 </ul>
-<p>Ready to start? Check out our <a href="installation/">installation guide</a> or try the <a href="your-streamlit-link">live demo</a>!</p>
+<p>Ready to start? Check out our <a href="installation/">installation guide</a> or try the <a href="(https://segmentation-frontend-289925381630.us-central1.run.app/)">live demo</a>!</p>
 <p>Sources</p>
 
 
