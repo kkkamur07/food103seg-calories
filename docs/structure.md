@@ -67,7 +67,7 @@ kkkamur07-food103seg-calories/
 │   └── report.py                     # Report generation script
 ├── favicon.py                        # API favicon
 ├── static/                           # Static files
-│   ├── favicon.ico                   
+│   ├── favicon.ico
 └── .github/                          # GitHub CI/CD config
     ├── dependabot.yaml               # Dependency update config
     └── workflows/                    # GitHub Actions workflows
