@@ -73,5 +73,3 @@ substitutions:
 
 options:
   logging: CLOUD_LOGGING_ONLY
-  machineType: 'N2_Standard_2'
-  timeout: '1200s'  # 20 minutes
