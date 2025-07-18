@@ -10,6 +10,8 @@ import torch
 from contextlib import asynccontextmanager
 from loguru import logger
 import os
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 # Global variables for model
 model = None
@@ -43,6 +45,13 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Mount static directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Serve favicon
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse("static/favicon.ico")
 
 def preprocess_image(image: Image.Image):
     """Convert PIL Image to normalized tensor"""
