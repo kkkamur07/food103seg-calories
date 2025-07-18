@@ -4,7 +4,7 @@ __pycache__
 .env
 *.pyo
 #README.md
-data/ 
+data/
 .pytest_cache
 .coverage
 *.log
