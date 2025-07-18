@@ -29,7 +29,7 @@ backend = [
     "hydra-core==1.3.2",
     "loguru==0.7.3",
     "annotated-types==0.7.0",
-    "celery==5.5.2",
+    "celery==5.5.3",
     "dvc==3.59.1",
     "dvc-data==3.16.10",
     "dvc-task==0.40.2",
