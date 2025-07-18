@@ -93,11 +93,11 @@ will check the repositories and the code to verify your answers.
 
 * [ ] Check how robust your model is towards data drifting (M27)
 * [ ] Deploy to the cloud a drift detection API (M27)
-* [ ] Instrument your API with a couple of system metrics (M28)
+* [✅] Instrument your API with a couple of system metrics (M28)
 * [✅] Setup cloud monitoring of your instrumented application (M28)
 * [✅] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
-* [ ] If applicable, optimize the performance of your data loading using distributed data loading (M29)
-* [ ] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
+* [✅] If applicable, optimize the performance of your data loading using distributed data loading (M29)
+* [✅] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
 * [✅] Play around with quantization, compilation and pruning for you trained models to increase inference speed (M31)
 
 ### Extra
@@ -112,20 +112,18 @@ will check the repositories and the code to verify your answers.
 ## Group information
 
 ### Question 1
-> **Enter the group number you signed up on <learn.inside.dtu.dk>**
+> **Enter the group number you signed up on**
 >
 > Answer:
+> krrish.agarwalla@campus.lmu.de
 
-> 
+>
 
 ### Question 2
 > **Enter the study number for each member in the group**
 >
-> Example:
->
-> *sXXXXXX, sXXXXXX, sXXXXXX*
->
 > Answer:
+> Krrish Agarwalla : 12934480
 
 --- question 2 fill here ---
 
@@ -133,15 +131,13 @@ will check the repositories and the code to verify your answers.
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
 > **did you choose to work with and did it help you complete the project?**
 >
-> Recommended answer length: 100-200 words.
->
-> Example:
-> *We used the third-party framework ... in our project. We used functionality ... and functionality ... from the*
-> *package to do ... and ... in our project*.
->
 > Answer:
+We used the third-party package **uv** to optimize our Docker image building process and speed up package installation times in our project. With uv, dependency resolution and installation became significantly faster, which improved our development workflow and reduced the time needed to rebuild Docker containers. This allowed us to iterate more quickly and keep our development environment consistent across different setups.
 
---- question 3 fill here ---
+Initially, we also planned to use the **transformers** package from Hugging Face to leverage pre-trained models for the image segmentation component of our project. However, after implementing and evaluating our own MiniUNET model, we found that it performed efficiently and met our requirements with lightweight computation. As a result, we did not end up integrating transformers, since the added complexity and resource demand were not necessary.
+
+Overall, using uv provided tangible benefits in streamlining our project’s infrastructure, even though our primary modeling objectives were achieved with a custom, lighter approach.
+
 
 ## Coding environment
 
@@ -155,13 +151,25 @@ will check the repositories and the code to verify your answers.
 >
 > Recommended answer length: 100-200 words
 >
-> Example:
-> *We used ... for managing our dependencies. The list of dependencies was auto-generated using ... . To get a*
-> *complete copy of our development environment, one would have to run the following commands*
->
 > Answer:
+> We managed project dependencies using both **uv** and **pip**. For uv, all core dependencies are specified in the `pyproject.toml` file, ensuring precise and reproducible installations using uv’s fast resolver. For pip users, we maintained `requirements.txt` for production dependencies and `requirements_dev.txt` for development-specific packages. This approach provided flexibility, allowing contributors to install dependencies using either tool depending on their workflow preferences.
 
---- question 4 fill here ---
+To set up an exact copy of the development environment, a new team member can:
+
+- **Option 1: Use uv**
+  - Clone the project repository.
+  - Run `uv pip sync` to install dependencies as specified in `pyproject.toml`.
+
+- **Option 2: Use pip**
+  - Clone the repository.
+  - Run `pip install -r requirements.txt` for core dependencies.
+  - Optionally, use `pip install -r requirements_dev.txt` for development tools.
+
+- **Option 3: Use Docker Compose**
+  - Run the provided `docker-compose.yml` to automatically set up both the backend and frontend, with all dependencies and models pulled and configured.
+
+Full installation steps and environment setup guidance are provided in our project documentation. This ensures new team members can quickly replicate the exact development environment with minimal setup overhead.
+
 
 ### Question 5
 
@@ -176,8 +184,11 @@ will check the repositories and the code to verify your answers.
 > *experiments.*
 >
 > Answer:
+We initialized our project using a custom cookiecutter template that we built by combining elements from several templates found on GitHub. The overall structure follows the standard cookiecutter approach but with a few key changes. One major addition is the **saved/** folder, which we use to store all important outputs from our model, such as visualizations, model weights, and logs, making it easy to track experiment results. Inside the **src/** folder, we created an **app/** folder where we keep files related to the API (**service.py**) and the frontend (**frontend.py**), keeping them separate from the training and modeling code. We found the existing cookiecutter template very helpful for setting up a clear project structure, but we customized it to better fit our workflow. Our custom template can be found at [https://github.com/kkkamur07/cookie-cutter/tree/main/mlops/]. These few changes made our project easier to manage and collaborate on.
 
---- question 5 fill here ---
+Sources
+
+
 
 ### Question 6
 
@@ -186,13 +197,15 @@ will check the repositories and the code to verify your answers.
 >
 > Recommended answer length: 100-200 words.
 >
-> Example:
-> *We used ... for linting and ... for formatting. We also used ... for typing and ... for documentation. These*
-> *concepts are important in larger projects because ... . For example, typing ...*
 >
 > Answer:
 
---- question 6 fill here ---
+We implemented **pre-commit hooks** and used **ruff** for linting to ensure our code followed consistent style and quality guidelines. At first, adapting to these rules was a challenge, but we realized that maintaining formatting and linting standards helps keep our codebase organized and easier to read as the project grows. We also used **type hints** in our Python code, which made the functions and modules clearer to understand and enabled type checking tools to catch mistakes early. For documentation, we made sure to write docstrings for key functions and modules, helping both current and future team members understand the code’s purpose and usage.
+
+These practices matter even more in larger projects because they reduce confusion, make collaboration easier, and help prevent bugs. Consistent code formatting and good documentation mean new contributors can quickly understand and work with the codebase. Typing improves reliability by catching errors before runtime, which is especially important as projects get more complex and teams grow.
+
+Sources
+
 
 ## Version control
 

@@ -1,116 +1,107 @@
-# 🌯 Multi Class Food Segmentation & Calories Estimation
+# Food103Seg Calories
 
-## 👥 Team Members
-- **Astha**
-- **Alisha**
-- **Akshata**
-- **Krrish**
+Welcome to **Food103Seg** – a deep learning project for food image segmentation.
 
----
+## 🚀 Live Demo
 
-## 📋 Randomized Task Distribution
+Try out the app here: [Live Demo](https://segmentation-frontend-289925381630.us-central1.run.app/)
 
-### 🔧 **Astha's Tasks** (11 tasks)
+## Overview
 
-#### Week 1 Remaining
-- [ ] **M10** - Dockerfile(s) created and working
-- [ ] **M15** - PyTorch Lightning integration (if applicable)
+**Food103Seg** utilizes computer vision to identify different food items in images via semantic segmentation. The project is built with PyTorch, leveraging a simplified MiniUNet architecture, and can segment 104 food categories with moderate accuracy. Training was performed on an RTX 4090 for approximately 20 minutes, with optimal hyperparameters determined using Weights & Biases sweeps.
 
-#### Week 2
-- [ ] **M16** - Unit tests: data loading
-- [ ] **M19** - Data-change triggered workflow
-- [✅] **M21** - GCP bucket + DVC integration
-- [ ] **M22** - FastAPI inference app
-- [ ] **M25** - ONNX / BentoML export API
+## Features
 
-#### Week 3
-- [ ] **M27** - Test model robustness to data drift
-- [ ] **M28** - Cloud monitoring setup
-- [ ] **M31** - Model quantization / pruning / compilation
+- **🍕 Food Segmentation**: Detects and segments multiple food items within an image.
+- **🧠 MiniUNet Model**: Lightweight custom U-Net variant designed for efficient food segmentation.
+- **🌐 Web Interface**: Simple and interactive Streamlit application.
+- **⚙️ Flexible Configuration**: Managed with Hydra for consistency and reproducibility.
+- **📈 Experiment Tracking**: Seamless integration with Weights & Biases for run comparison and tracking.
+- **🦾 MLOps-ready**: Includes ready-to-use MLOps cookiecutter template.
 
-#### Extra
-- [ ] **M32** - Write and publish documentation
+## Quick Start
 
----
+```bash
+# Clone the repository
+git clone https://github.com/kkkamur07/food103seg-calories
 
-### 🧪 **Alisha's Tasks** (11 tasks)
+# Navigate to the project directory
+cd food103seg-calories
 
-#### Week 1 Remaining
-- [ ] **M11** - Hydra config files added
-- [ ] **M14** - W&B logging integrated
+# Create a virtual environment using UV
+uv venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-#### Week 2
-- [ ] **M16** - Unit tests: model/training
-- [ ] **M17** - Multi-OS/py/torch CI + cache
-- [ ] **M18** - Pre-commit hooks
-- [ ] **M21** - Auto Docker image build on trigger
-- [ ] **M23** - Deploy API via Cloud Run/Functions
-- [ ] **M24** - Load testing for API
+# Install dependencies
+uv pip install -r requirements.txt
 
-#### Week 3
-- [ ] **M28** - Instrument API with system metrics
-- [ ] **M30** - Optimize training pipeline
+# Train the model
+python -m src.segmentation.main
 
-#### Extra
-- [ ] Push all code to GitHub
+# Launch the API Server
+uvicorn src.app.api:app --host 0.0.0.0 --port 8000 --reload
 
----
+# Launch the Web App
+streamlit run src/app/frontend.py
+```
 
-### 🚀 **Akshata's Tasks** (11 tasks)
+## MLOps Template
 
-#### Week 1 Remaining
-- [ ] **M11** - Hyperparameter control via Hydra
-- [ ] **M12** - Code profiling added
-- [ ] **M14** - Logging implemented
+A production-ready MLOps template is included for rapid project structuring:
 
-#### Week 2
-- [ ] **M17** - GitHub Actions for CI
-- [ ] **M19** - Model-registry triggered workflow
-- [ ] **M21** - GCP training via VertexAI or Cloud Engine
-- [ ] **M24** - API tests + CI
-- [ ] **M26** - Frontend for inference
+```bash
+# Install cookiecutter
+pip install cookiecutter
 
-#### Week 3
-- [ ] **M29** - Optimize data loading
+# Generate a new project structure
+cookiecutter https://github.com/kkkamur07/cookie-cutter --directory=mlops
+```
 
-#### Extra
-- [ ] Revisit project description
-- [ ] All team members understand all components
+Find the full template and installation guide at:
+```
+https://github.com/kkkamur07/cookie-cutter --directory=mlops
+```
 
----
+## Project Structure
 
-### 🎯 **Krrish's Tasks** (14 tasks)
+```
+├── src/
+│   ├── segmentation/         # Core ML modules
+│   │   ├── data.py           # Data loading utilities
+│   │   ├── model.py          # MiniUNet architecture
+│   │   ├── train.py          # Model training pipeline
+│   │   ├── main.py           # Main training runner
+│   │   ├── bentoml.py        # BentoML deployment
+│   │   └── bentoml_setup.py  # BentoML configuration
+│   └── app/                  # Web and API interface
+│       ├── frontend.py       # Streamlit web UI
+│       └── service.py        # API backend logic
+├── configs/                  # Model and training configs
+├── notebooks/                # Jupyter Notebooks for experimentation
+└── docs/                     # Project documentation
+```
 
-#### Week 1 Remaining
-- [✅] **M8** - Data versioning setup (e.g. DVC)
-- [✅] **M9** - CLI support (e.g. argparse / typer)
-- [ ] **M14** - W&B sweeps for hyperparameter tuning
+## Model Performance
 
-#### Week 2
-- [ ] **M16** - Code coverage report
-- [ ] **M17** - Linting via CI
+- **104 Food Classes:** Extensive coverage of common food items.
+- **Moderate Accuracy:** Achieves over 20% mean IoU on the test dataset.
+- **Moderate Inference Speed:** ~100ms per image with GPU support.
+- **Compact Size:** Weighs around 15MB for deployment ease.
 
-#### Week 3
-- [ ] **M27** - Deploy drift detection API
-- [ ] **M28** - GCP alert system
+## System Architecture
 
-#### Extra
-- [ ] MLOps pipeline architecture diagram
+<!-- Space intentionally left for a system architecture diagram.
+   Insert a comprehensive diagram here (e.g. flow of data from frontend upload -> segmentation model -> API -> calorie estimates/output) for better clarity. -->
 
-#### Cross-cutting Responsibilities (6 additional tasks)
-- [ ] Code review coordination across all modules
-- [ ] Integration testing between components
-- [ ] Documentation consistency review
-- [ ] Performance benchmarking validation
-- [ ] Bug tracking and issue resolution
-- [ ] Final project quality assurance
+_Add your system architecture diagram here to illustrate component interaction and flow._
 
----
+## Getting Started
 
-## 📊 Task Summary
-- **Astha**: 11 tasks (Mix of Docker, ML, Testing, Cloud, Documentation)
-- **Alisha**: 11 tasks (Mix of Config, Logging, CI/CD, Cloud, Optimization)
-- **Akshata**: 11 tasks (Mix of Config, Profiling, CI, Cloud, Frontend)
-- **Krrish**: 14 tasks (8 specific + 6 cross-cutting coordination tasks)
+1. **[Installation](installation.md)** – Step-by-step setup guide.
+2. **[Quick Start](quickstart.md)** – Fastest way to run the project.
+3. **[API Reference](api/data.md)** – Explore available code and endpoints.
+4. **[Training Guide](guide/training.md)** – Tutorial for training your own models.
 
-**Total**: 47 tasks distributed randomly across all team members with diverse skill areas for each person.
+## Try It Yourself
+
+To get started, check the [installation guide](installation.md) or launch the [live demo](https://segmentation-frontend-289925381630.us-central1.run.app/).
