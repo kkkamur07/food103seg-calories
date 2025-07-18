@@ -135,7 +135,7 @@ if is_connected:
                 segmented_image = call_fastapi_segmentation(image_bytes, image_format)
 
             if segmented_image:
-                segmented_image=segmented_image.resize(original_image.size)
+                segmented_image = segmented_image.resize(original_image.size)
                 st.success("✅ Segmentation complete!")
 
                 col1, col2 = st.columns(2)
@@ -161,5 +161,5 @@ if is_connected:
         st.info("Please upload an image to get started")
 else:
     st.error(
-        "❌ Cannot connect to FastAPI service. Please ensure it's running on port 3000"
+        "❌ Cannot connect to FastAPI service. Please ensure it's running on port 8080"
     )

@@ -1,4 +1,4 @@
-# cloudbuild.yaml - GCP-native model download
+# cloudbuild.yaml - Build and push Docker images to Artifact Registry
 steps:
   # Step 1: Download model from GCS bucket
   - name: 'gcr.io/cloud-builders/gsutil'
@@ -18,44 +18,57 @@ steps:
         ls -la saved/models/
         echo "✅ Model ready for Docker build"
 
-  # Step 3: Build Docker image with downloaded model
+  # Step 3: Build backend Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
-      '-t', '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/food-segmentation-app:${SHORT_SHA}',
-      '-t', '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/food-segmentation-app:latest',
+      '-f', 'Dockerfile.backend',
+      '-t', '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/segmentation-backend:${SHORT_SHA}',
+      '-t', '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/segmentation-backend:latest',
       '.'
     ]
 
-  # Step 4: Push image to Artifact Registry
+  # Step 4: Build frontend Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-f', 'Dockerfile.frontend',
+      '-t', '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/segmentation-frontend:${SHORT_SHA}',
+      '-t', '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/segmentation-frontend:latest',
+      '.'
+    ]
+
+  # Step 5: Push backend image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'push',
       '--all-tags',
-      '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/food-segmentation-app'
+      '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/segmentation-backend'
     ]
 
-  # Step 5: Deploy to Cloud Run automatically
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
+  # Step 6: Push frontend image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
     args: [
-      'run', 'deploy', '${_SERVICE_NAME}',
-      '--image', '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/food-segmentation-app:${SHORT_SHA}',
-      '--region', '${_LOCATION}',
-      '--platform', 'managed',
-      '--port', '8080',
-      '--memory', '4Gi',
-      '--cpu', '2',
-      '--timeout', '300',
-      '--allow-unauthenticated',
-      '--set-env-vars', 'MODEL_VERSION=${SHORT_SHA},BUILD_SHA=${SHORT_SHA}'
+      'push',
+      '--all-tags',
+      '${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/segmentation-frontend'
     ]
+
+  # Step 7: Confirm successful build and push
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "🐳 Docker images built and pushed successfully!"
+        echo "Backend: ${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/segmentation-backend:${SHORT_SHA}"
+        echo "Frontend: ${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/segmentation-frontend:${SHORT_SHA}"
+        echo "✅ Images ready for deployment"
 
 # Configuration variables
 substitutions:
-  _LOCATION: 'europe-west10'
+  _LOCATION: 'us-central1'
   _REPOSITORY: 'food-segmentation-repo'
-  _SERVICE_NAME: 'food-segmentation-service'
   _GCP_BUCKET: 'food-segmentation-models'
 
 options:
