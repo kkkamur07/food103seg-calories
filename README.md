@@ -53,8 +53,8 @@ Upload your favorite food pic and see it segmented live!
 
    * We trained a **UNet** model using our `Food103Seg` dataset
    * The dataset contains **104 food classes**
-   * Images are preprocessed, augmented, and fed into the UNet model
-   * Trained model is versioned using **DVC** and exported via BentoML
+   * Images are preprocessed and fed into the UNet model
+   * Trained model is versioned using **DVC** and exported via FastAPI
 
 2. **API Development**
 
@@ -69,7 +69,7 @@ Upload your favorite food pic and see it segmented live!
 
    * MkDocs auto-generates documentation
    * GitHub Actions handle CI/CD workflows
-   * DVC handles data/model versioning across development cycles
+   * DVC handles data and model versioning across development cycles
 
 ---
 
