@@ -77,8 +77,4 @@ profiling:
 
 This approach provides **reproducible experiments** with easy parameter tuning through CLI overrides, making it ideal for hyperparameter sweeps and experiment tracking.
 
-```python
-:::src.segmentation.main
-```
-
-Sources
+::: src.segmentation.main

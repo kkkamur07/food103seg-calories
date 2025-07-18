@@ -254,7 +254,12 @@ Sources
 >
 > Answer:
 
---- question 9 fill here ---
+We used **Git extensively** throughout our workflow. Each team member worked on their own **feature/teammate_branch**, which allowed everyone to develop and test new features separately without affecting the main codebase. Even small changes were committed regularly to these individual branches. When ready, we would create a **pull request (PR)** and all team members would review the proposed changes. Only after everyone had reviewed, discussed, and understood the updates was the PR merged into the main branch.
+
+This approach made collaboration smoother and minimized the risk of conflicts or bugs being introduced. Whenever someone started working, they made sure to first **pull the latest changes from the main branch** to stay up to date and avoid unnecessary merge conflicts. While we occasionally ran into fatal errors, using branches and PRs significantly helped us maintain code quality, shared understanding, and allowed us to easily manage version control as a team.
+
+Sources
+
 
 ### Question 10
 
@@ -269,7 +274,11 @@ Sources
 >
 > Answer:
 
---- question 10 fill here ---
+We used DVC (Data Version Control) extensively in our project to manage both data and model weights. DVC was especially valuable for sharing large datasets among team members and keeping everyone synchronized on data preprocessing steps—when one teammate processed and updated the dataset (e.g., converted images to tensors), DVC made it easy for others to pull the exact same version. We also used DVC to track model weights as they evolved, which helped us manage different model checkpoints and ensure full reproducibility without relying on external tools like wandb. Integrating DVC with GitHub Actions further automated our workflow, supporting continuous integration and deployment for our machine learning pipeline.
+
+While we did encounter some hurdles, we documented fixes and solutions thoroughly to help future contributors. Overall, DVC gave us granular control over data and model versioning, streamlining team collaboration and experiment management across development environments.
+
+https://kkkamur07.github.io/food103seg-calories/source/data/
 
 ### Question 11
 
@@ -279,14 +288,24 @@ Sources
 >
 > Recommended answer length: 200-300 words.
 >
-> Example:
-> *We have organized our continuous integration into 3 separate files: one for doing ..., one for running ... testing*
-> *and one for running ... . In particular for our ..., we used ... .An example of a triggered workflow can be seen*
-> *here: <weblink>*
 >
 > Answer:
 
---- question 11 fill here ---
+Our project uses a continuous integration (CI) setup built around **GitHub Actions** to automate code quality checks, testing, and deployment. The main workflow file, [`ci.yml`](https://github.com/kkkamur07/food103seg-calories/blob/main/.github/workflows/ci.yml), handles several key steps to keep our code robust and our team productive.
+
+First, every time we push changes or create a pull request, the CI pipeline runs **unit tests with pytest** to catch errors early. We also use **ruff** for linting to enforce style consistency and catch common issues automatically. Our workflow is set up to test on multiple operating systems (like Ubuntu and MacOS) and with different versions of Python, so we know the codebase will work reliably in various environments.
+
+To speed up our builds, we use **caching** for Python dependencies. This means common libraries don’t need to be downloaded and installed from scratch each time, which saves time on every run.
+
+For versioning data and models, we integrated **DVC** with our CI. If any data or model files tracked by DVC (`data.dvc` or `models.dvc`) are updated, the CI workflow detects this and can trigger rebuilding or redeploying relevant parts of the project, making sure everyone is always working with the latest versions.
+
+Additionally, we connected our GitHub repository to **Google Cloud Build**. When we push to the main branch, this trigger automatically builds Docker images for our app. These images can then be deployed on Cloud Run, so our updates go live smoothly without manual steps.
+
+You can find our main workflow here: [ci.yml on GitHub](https://github.com/kkkamur07/food103seg-calories/blob/main/.github/workflows/ci.yml).
+This setup keeps our development process efficient, reliable, and collaborative for all team members.
+
+Sources
+
 
 ## Running code and tracking experiments
 
@@ -337,7 +356,6 @@ Sources
 >
 > Answer:
 
---- question 14 fill here ---
 
 ### Question 15
 
@@ -352,7 +370,21 @@ Sources
 >
 > Answer:
 
---- question 15 fill here ---
+We used **Docker** extensively to containerize our project's frontend, backend, and, in the initial phases, the training environment. This approach allowed us to isolate dependencies for each component and avoid conflicts, making development and debugging far more manageable. It also enabled us to work on the backend and frontend independently, fixing issues in one without affecting the other. Another practical reason for this separation was that cloud deployment options sometimes restrict exposing multiple ports, so having distinct, self-contained containers for each service made deployment more flexible.
+
+To streamline running both services together, we created a **docker-compose file**. With this setup, you can build and launch both the frontend and backend simultaneously using:
+
+```bash
+docker-compose up --build
+```
+
+This command will build the images for both the frontend and backend based on the included Dockerfiles and start the containers, provided you’ve configured the ports correctly. Proper port mapping is essential, as incorrect configuration can cause services to fail or conflict.
+
+For those interested in our Docker setup, you can find an example Dockerfile here:
+[Dockerfile (backend) on GitHub](https://github.com/kkkamur07/food103seg-calories/blob/main/Dockerfile.backend)
+
+This approach made experimenting, development, and deployment much smoother and more reproducible for all team members.
+
 
 ### Question 16
 
@@ -384,8 +416,13 @@ Sources
 >
 > Answer:
 
---- question 17 fill here ---
-
+We utilized several Google Cloud Platform (GCP) services to streamline and automate various stages of our project:
+	•	Cloud Storage Buckets: Used in combination with DVC for storing and sharing model weights, datasets, and other large files. The bucket allowed team members to access the latest data and ensure everyone worked with the same versioned assets.
+	•	Cloud Build Triggers: Set up to automatically initiate builds when code is pushed to our repository. This ensured that our Docker images and deployments were always up-to-date with the latest changes.
+	•	Artifact Registry: Employed to securely store and manage our Docker container images. This made it easy to organize and retrieve images for deployment and testing.
+	•	Cloud Run: Used for deploying and running our containerized backend and frontend services. Cloud Run automatically managed scaling, provided secure HTTPS endpoints, and simplified deployment.
+	•	Monitoring and Alerts: Implemented system monitoring for our deployed services. This allowed us to track resource usage, identify issues quickly, and receive alerts for any problems in real time.
+Each of these GCP services played a specific role in making our workflow efficient, reliable, and highly collaborative.
 ### Question 18
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
@@ -399,7 +436,12 @@ Sources
 >
 > Answer:
 
---- question 18 fill here ---
+We used **Google Compute Engine (GCE)** primarily for building, hosting, and testing our application containers in the cloud. While we conducted model training locally due to GCP credit restrictions, GCE allowed us to experiment with and deploy various configurations tailored to our needs.
+
+For our **backend**, we provisioned virtual machines with **8 GB of RAM and 2 CPU cores**, ensuring ample resources for running inference services and handling multiple API requests efficiently. For the **frontend**, we used lighter VM instances with **2 GB of RAM and 1 CPU core**, which was sufficient to serve the Streamlit-based interface to users without unnecessary overhead.
+
+We relied on **standard E2 machine types** and adjusted resource allocations as needed for development, testing, and deployment. This approach gave us flexibility and control, while keeping cloud resource costs manageable. Docker containers were built and deployed on these VMs to maintain a consistent and reproducible environment from development to production.
+
 
 ### Question 19
 
@@ -441,7 +483,13 @@ Sources
 >
 > Answer:
 
---- question 22 fill here ---
+We were not able to train our model in the cloud using either Google Compute Engine or Vertex AI due to restrictions associated with our $300 cloud credits—most notably, we did not have access to GPU resources required for effective deep learning model training. As a result, we conducted all model training locally on a high-performance workstation equipped with an RTX 4090 GPU (24 GB VRAM).
+
+Our main model was trained for approximately 20 minutes on this local setup, which provided the computational power and memory needed for fast experimentation and solid model performance. For hyperparameter tuning, we utilized wandb sweeps, running additional experiments on the same GPU for about an hour to optimize our results efficiently.
+
+This RTX 4090 machine was provided by our university, enabling us to achieve our project goals despite the limitations of our cloud environment. While cloud training would have been ideal for collaboration and scalability, our local setup allowed us to iterate quickly without incurring prohibitive costs or hardware limitations.
+
+
 
 ## Deployment
 
@@ -474,7 +522,20 @@ Sources
 >
 > Answer:
 
---- question 24 fill here ---
+We successfully deployed our API both locally and in the cloud. For local deployment, we wrapped our model and prediction logic in a FastAPI application, serving it via a Docker container and a Uvicorn server. This allowed us to thoroughly test the API on our own machines, using tools like Locust for load testing and FastAPI’s `/docs` endpoint for real-time interaction and debugging.
+
+For cloud deployment, we chose to build and ship our backend as a Docker image and run it using Google Cloud Run. We decided against using Cloud Functions, as we wanted to avoid the extra code re-writing and restrictions of their runtime environment. Instead, by containerizing our `service.py` (API logic) and model weights, we gained flexibility and reproducibility, deploying a portable image directly to the cloud.
+
+To invoke the deployed service, users can make a POST request to the endpoint with their data. For example:
+```bash
+curl -X POST -F "file=@test_image.jpg" https://segmentation-backend-289925381630.us-central1.run.app/predict
+```
+
+We made extensive use of the automatic API documentation at `/docs` provided by FastAPI, which streamlined our testing and reduced errors compared to manual terminal inputs.
+
+You can view and test our deployed API at:
+[https://segmentation-backend-289925381630.us-central1.run.app](https://segmentation-backend-289925381630.us-central1.run.app)
+
 
 ### Question 25
 
@@ -504,7 +565,13 @@ Sources
 >
 > Answer:
 
---- question 26 fill here ---
+We successfully implemented monitoring for our deployed model using Prometheus. We extended our FastAPI backend (service.py) to expose a `/metrics` endpoint, which Prometheus can scrape to collect real-time performance metrics and service-level data. This was achieved by integrating the `prometheus_client` library directly into our API code.
+Some of the key metrics we track include:
+	•	Total API requests: Counts every request made to our service, helping us monitor usage patterns.
+	•	API errors: Logs the number of errors encountered, allowing us to catch spikes in failures or investigate specific problem cases.
+	•	Latency (inference time): Measures how long the model takes to process each request, both as an overall summary and with a histogram for distribution insights.
+	•	Input image size: Monitors the size of uploaded images, which helps in identifying unusually large requests that might need special handling or could lead to performance issues.
+By collecting these metrics, we gain visibility into the health and performance of our model and API in production. For example, we can quickly spot if latency increases, error rates spike, or input trends change over time. This monitoring approach supports proactive maintenance, helps in scaling decisions, and makes it easier to ensure a reliable, responsive service as usage grows or shifts.
 
 ## Overall discussion of project
 
@@ -523,7 +590,9 @@ Sources
 >
 > Answer:
 
---- question 27 fill here ---
+During the project, we used approximately $50 worth of Google Cloud credits. The majority of these credits (about 80%) were consumed by Cloud Run, since we relied on it extensively to deploy and run our API and frontend services. Cloud Build accounted for roughly 10% of our credit usage, with the remaining 10% split between Artifact Registry and Cloud Storage buckets for storing Docker images and datasets.
+Everyone in our group contributed to the cloud development, and we believe the credits were used equally among team members. We were able to save a significant amount on compute costs by running all heavy model training and hyperparameter tuning locally on an RTX 4090 GPU. If we had used Vertex AI for cloud training, our spending would have likely reached $90–100 or more due to the higher costs of GPU usage.
+Overall, working in the cloud was flexible and convenient. It made collaboration easier, enabled fast and reproducible deployments, and streamlined service sharing. However, careful resource management and local training were important to keep costs under control.
 
 ### Question 28
 
@@ -539,7 +608,9 @@ Sources
 >
 > Answer:
 
---- question 28 fill here ---
+Yes, we implemented a frontend using Streamlit to interact with our API, making it much more engaging and intuitive for users and stakeholders to try out the segmentation model and visualize results. Having a user-friendly frontend was important for demonstrating our project in a clear and interactive way.
+Additionally, we used DVC for model weights and data versioning. This allowed us to track model and data changes without relying on paid services like wandb premium, providing reproducibility and easy sharing of model checkpoints and datasets within the team. We also set up CI pipelines in GitHub Actions that could detect and respond to changes in data or models tracked by DVC, even though such triggers weren’t critical for our specific workflow.
+These extra steps improved collaboration, reproducibility, and accessibility for both technical and non-technical users involved in the project.
 
 ### Question 29
 
@@ -570,7 +641,9 @@ Sources
 >
 > Answer:
 
---- question 30 fill here ---
+*Krrish *: The biggest struggle in our project was getting the CI/CD pipelines to work reliably. The process was much more difficult than we expected—if a single task or dependency failed in the GitHub Actions workflow, the whole pipeline would stop, leaving us to sift through logs and test different fixes. This resulted in a lot of trial and error and took up a significant amount of our time. We also had to constantly monitor how many build minutes we were using, spending around $20 of our GitHub Actions credits and always worrying about going over budget.
+Another challenge was with Docker containerization—setting up and connecting the backend and frontend services, especially with cloud deployments, was not straightforward. Even small mistakes in configuration could result in services not communicating properly.
+To overcome these issues, we broke tasks down into smaller steps, relied heavily on documentation, and worked closely together as a team to isolate and solve problems quickly. Careful resource management and frequent small tests were key to making progress without running into excessive costs or major delays.
 
 ### Question 31
 
@@ -588,14 +661,4 @@ Sources
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
 
-fewafewubaofewnafioewnifowf ewafw afew afewafewafionewoanf waf ewonfieownaf fewnaiof newio fweanøf wea fewa
- fweafewa fewiagonwa ognwra'g
- wa
- gwreapig ipweroang w rag
- wa grwa
-  g
-  ew
-  gwea g
-  ew ag ioreabnguorwa bg̈́aw
-   wa
-   gew4igioera giroeahgi0wra gwa
+*Krrish :* CI pipelines, DVC, pre-commits, cloud build, Dockerization, project structure, documentation, and GitHub workflows with active part in model development and minor edits to everything.

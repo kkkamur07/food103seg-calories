@@ -24,6 +24,5 @@ Comprehensive training pipeline with metrics tracking and visualization for food
 
 This focuses on **essential segmentation metrics** while maintaining training pipeline simplicity.
 
-```python
-:::src.segmentation.train
-```
+
+::: src.segmentation.train

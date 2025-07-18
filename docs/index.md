@@ -92,9 +92,8 @@ We have also used `bentoML` for optimized API for ML models specially, this can 
 ## Getting Started
 
 1. **[Installation](installation.md)** - Set up the project
-2. **[Quick Start](quickstart.md)** - Get running quickly
-3. **[API Reference](api/data.md)** - Explore the code
-4. **[Training Guide](guide/training.md)** - Train your own models
+2. **[API Reference](source/data.md)** - Explore the code
+3. **[Training Guide](source/training.md)** - Train your own models
 
 ## Model Performance
 
