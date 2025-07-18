@@ -22,7 +22,7 @@ backend = [
     "uvicorn==0.34.2",
     "python-multipart>=0.0.20",
     "torch==2.7.0",
-    "torchvision==0.22.0",
+    "torchvision==0.22.1",
     "scikit-learn==1.6.1",
     "matplotlib>=3.7.0",
     "omegaconf==2.3.0",

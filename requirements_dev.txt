@@ -21,7 +21,7 @@ gdown==5.2.0                  # Google Drive downloader
 
 # ML Frameworks & Math
 torch==2.7.0                  # Deep learning framework
-torchvision==0.22.0           # Vision datasets/models for PyTorch
+torchvision==0.22.1           # Vision datasets/models for PyTorch
 scikit-learn==1.6.1           # Traditional ML algorithms
 numpy==2.2.6                  # Numerical operations
 scipy==1.15.3                 # Scientific computing
