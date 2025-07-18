@@ -44,4 +44,6 @@ docker = [
     "supervisor>=4.2.0",
 ]
 
-
+[tool.coverage.run]
+source = ["src.segmentation"]
+omit = ["src/tests/**/*"]
