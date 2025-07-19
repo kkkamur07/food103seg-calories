@@ -20,7 +20,6 @@ nav:
     - Data Module: source/data.md
     - Model Module: source/model.md
     - Training Module: source/training.md
-    - Loss Functions: source/loss.md
     - Main Pipeline: source/main.md
   - Project Structure: structure.md
 
