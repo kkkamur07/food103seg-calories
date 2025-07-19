@@ -97,7 +97,7 @@ will check the repositories and the code to verify your answers.
 * [✅] Setup cloud monitoring of your instrumented application (M28)
 * [✅] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
 * [✅] If applicable, optimize the performance of your data loading using distributed data loading (M29)
-* [✅] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
+* [ ] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
 * [✅] Play around with quantization, compilation and pruning for you trained models to increase inference speed (M31)
 
 ### Extra
@@ -119,7 +119,7 @@ will check the repositories and the code to verify your answers.
 krrish.agarwalla@campus.lmu.de <br>
 alisha.al@campus.lmu.de <br>
 astha.gupta@campus.lmu.de <br>
-akshata.lokhade@campus.lmu.de <br>
+akshata.lokhande@campus.lmu.de <br>
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -164,7 +164,7 @@ To set up an exact copy of the development environment, a new team member can:
 
 **Option 1: Use uv**
   - Clone the project repository.
-  - Run `uv pip sync` to install dependencies as specified in `pyproject.toml`.
+  - Run `uv pip install -r requirements.txt` to install dependencies as specified in `pyproject.toml`.
 
 **Option 2: Use pip**
   - Clone the repository.
@@ -196,7 +196,7 @@ Most notably, we added a **saved/** directory to store important model outputs�
 
 Other files include DVC and cloud build configs, Dockerfiles for both the backend and frontend, automation scripts, and well-organized configuration in **configs/**. CI/CD pipelines and pre-commit checks are set up via GitHub Actions.
 
-These modifications make the project easier to manage, modular, and collaborative. Our customized template is available at [https://github.com/kkkamur07/cookie-cutter/tree/main/mlops/].
+These modifications make the project easier to manage, modular, and collaborative. Our customized template is available at [Template](https://github.com/kkkamur07/cookie-cutter/tree/main/mlops/).
 
 
 ### Question 6
@@ -228,6 +228,7 @@ We implemented **pre-commit hooks** and used **ruff** for linting to ensure our 
 > *application but also ... .*
 >
 > Answer:
+
 In total, we have implemented 14 tests. We are primarily testing three critical aspects of the application:
 
 Data Pipeline: Ensuring correct loading and batching of data.
@@ -237,7 +238,6 @@ Model Architecture: Verifying the neural network's structure, initialization, an
 Training Process: Confirming the end-to-end training loop's execution, logging with Weights & Biases, model saving, and visualization of metrics and predictions.
 
 These tests collectively ensure the robustness and correctness of our machine learning pipeline's core components.
---- question 7 fill here ---
 
 ### Question 8
 
@@ -252,7 +252,9 @@ These tests collectively ensure the robustness and correctness of our machine le
 >
 > Answer:
 
-The overall code coverage of our project is around 61%.Below is the code coverage breakdown for each module:
+The overall code coverage of our project is around 61%. Below is the code coverage breakdown for each module:
+
+```bash
 (foodenv) krrish@LMMISTA-gpu1:~/home/desktop/sarengeyo/food103seg-calories$ coverage report
 Name                           Stmts   Miss  Cover
 --------------------------------------------------
@@ -263,8 +265,9 @@ src/segmentation/model.py         36      0   100%
 src/segmentation/train.py        255    115    55%
 --------------------------------------------------
 TOTAL                            379    145    61%
+```
 
-Even if the code coverage were 100%, we still cannot ensure that the code is free from logical or mathematical errors.Code coverage reflects the percentage of code run by tests but does not guarantee that the implementation is correct or that all edge cases are handled properly. Bugs may still exist due to incorrect logic, faulty assumptions, or unexpected data inputs.
+Even if the code coverage were 100%, we still cannot ensure that the code is free from logical or mathematical errors. Code coverage reflects the percentage of code run by tests but does not guarantee that the implementation is correct or that all edge cases are handled properly. Bugs may still exist due to incorrect logic, faulty assumptions, or unexpected data inputs.
 
 To improve the reliability of our code beyond, we have implemented assert statements throughout our test cases. These assertions help us verify the shape and size of tensors.
 
@@ -299,7 +302,7 @@ We used **Git extensively** throughout our workflow. Each team member worked on 
 
 We leveraged **DVC (Data Version Control)** extensively to manage both our datasets and model weights throughout the project. DVC streamlined collaboration by enabling team members to easily share and stay synchronized on large datasets and data preprocessing steps—any updates, such as converting images to tensors, could be versioned and seamlessly pulled by others. We also used DVC to track evolving model weights, which helped us manage different checkpoints and ensure full reproducibility independently of external experiment tracking platforms.
 
-While DVC can be integrated with GitHub workflows to automate retraining when data changes, this level of automation wasn’t essential for our current use case. Instead, our CI/CD setup focused on **automatic Docker deployments** that included the latest updated models. Our entire approach and lessons learned with DVC are thoroughly documented in our [project documentation](https://kkkamur07.github.io/food103seg-calories/source/data/).
+While DVC can be integrated with GitHub workflows to automate retraining when data changes, this level of automation wasn’t essential for our current use case. Instead, our CI/CD setup focused on **Automatic Docker deployments** that included the latest updated models. Our entire approach and lessons learned with DVC are thoroughly documented in our [project documentation](https://kkkamur07.github.io/food103seg-calories/source/data/).
 
 
 ### Question 11
@@ -315,7 +318,7 @@ While DVC can be integrated with GitHub workflows to automate retraining when da
 
 Our project employs a decent CI/CD pipeline leveraging GitHub Actions and Google Cloud Build to streamline testing, linting, and deployment. The core CI workflow automatically runs unit tests using pytest and code linting with ruff on every commit or pull request. This helps maintain code quality and consistency while catching issues early, we have around 14 tests covering everything from data to training. We test across multiple operating systems (Ubuntu, macOS) and Python versions to ensure cross-platform compatibility. To speed up build times, pip caching is used for Python dependencies in the github workflows though locally & in cloud we are using uv to speed up the dependency resolution process. Although DVC is integrated into the pipeline to track data and model file changes (e.g., data.dvc, models.dvc), we found it unnecessary in our case, as the dataset remained static throughout development, but we used DVC extensively to build docker containers on cloud if there is change in model weights and biases. For deployments, we use with Google Cloud Build, which automatically builds Docker images when data updates or new commits land on the main branch. These images are deployed to Cloud Run, eliminating the need for time-consuming local builds and ensuring production readiness.
 
-[ci.yml](https://github.com/kkkamur07/food103seg-calories/blob/main/.github/workflows/ci.yml)
+[ci.yml](https://github.com/kkkamur07/food103seg-calories/blob/main/.github/workflows/ci.yml) <br>
 [cloudbuild.yaml](https://github.com/kkkamur07/food103seg-calories/blob/main/cloudbuild.yaml)
 
 ## Running code and tracking experiments
@@ -340,6 +343,7 @@ We used Hydra for configuration management in our experiments. All key settings�
 If we need to override any parameter for a specific run, we can do so directly from the command line using Hydra’s syntax. For instance:
 ```bash
 python src/segmentation/main.py model.hyperparameters.lr=0.005 profiling.enabled=true
+wandb sweep configs/wandb_sweep.yaml
 ```
 
 ### Question 13
@@ -466,13 +470,13 @@ In terms of debugging, we didn’t face major device-related or tensor shape bug
 > Answer:
 
 We utilized several Google Cloud Platform (GCP) services to streamline and automate various stages of our project:
-	•	**Cloud Storage Buckets:** Used in combination with DVC for storing, sharing & versioning model weights & datasets.
-	•	**Cloud Build Triggers:** Set up to automatically initiate builds when code is pushed to our repository. This ensured we didn't have to build the large docker file on our local.
-	•	**Artifact Registry:** Employed to store and manage our Docker container images. This made it easy to organize and retrieve images for deployment and testing.
-	•	**Cloud Run:** Used for deploying and running our containerized backend and frontend services.
-	•	**Monitoring and Alerts:** Implemented system monitoring & service level objectives for our deployed services. We recieved real time updates about our SLOs
+**Cloud Storage Buckets:** Used in combination with DVC for storing, sharing & versioning model weights & datasets.
+**Cloud Build Triggers:** Set up to automatically initiate builds when code is pushed to our repository. This ensured we didn't have to build the large docker file on our local.
+**Artifact Registry:** Employed to store and manage our Docker container images. This made it easy to organize and retrieve images for deployment and testing.
+**Cloud Run:** Used for deploying and running our containerized backend and frontend services.
+**Monitoring and Alerts:** Implemented system monitoring & service level objectives for our deployed services. We recieved real time updates about our SLOs
 
-![RealTime-Updates](reports/figures/realtime.jpeg)
+![RealTime-Updates](figures/realtime.jpeg)
 
 ### Question 18
 
@@ -699,7 +703,7 @@ Additionally, we introduced **model quantization and pruning**, enabling us to s
 >
 > Answer:
 
-![Model Architechture](figures/Architecture.jpeg)
+![Model Architechture](figures/Architecture.png)
 
 Local Environment:
 Development begins in the local environment using tools like Hydra (for configuration management), Typer (CLI interface), and Wandb (for experiment logging). The core ML logic is encapsulated in a PyTorch application, managed with reusable boilerplate templates generated via Cookiecutter. Dependencies are handled using Conda, and Docker is used for containerization. The Profiler and Debugger tools assist in performance tuning, while local data storage allows for data consumption during experimentation.

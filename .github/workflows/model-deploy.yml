@@ -8,13 +8,10 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  REGION: europe-west10
-  SERVICE_NAME: food-segmentation-service
-  REPOSITORY: food-segmentation-repo
-  GCP_BUCKET: food-segmentation-models
+  REGION: us-central1
 
 jobs:
-  build-and-deploy:
+  trigger-cloud-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,25 +26,11 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Download model from GCS bucket
+      - name: Trigger Cloud Build
         run: |
-          mkdir -p saved/models/
-          gsutil cp gs://${{ env.GCP_BUCKET }}/models/model.pth saved/models/model.pth
-          ls -la saved/models/
-
-      - name: Build and deploy with Cloud Build
-        run: |
+          echo "🚀 Triggering Cloud Build for Food Segmentation Model deployment..."
           gcloud builds submit \
             --region=${{ env.REGION }} \
-            --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app:${{ github.sha }} \
+            --config=cloudbuild.yaml \
             .
-
-          gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/food-segmentation-app:${{ github.sha }} \
-            --region ${{ env.REGION }} \
-            --platform managed \
-            --port 8080 \
-            --memory 4Gi \
-            --cpu 2 \
-            --timeout 300 \
-            --allow-unauthenticated
+          echo "✅ Cloud Build has been triggered successfully!"

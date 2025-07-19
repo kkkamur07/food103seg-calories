@@ -15,7 +15,7 @@ class FoodSegmentationUser(HttpUser):
 
     @task(3)
     def segment_image(self):
-        path = "src/tests/integration_tests/images.jpeg"
+        path = "src/tests/tests_integration/burger.jpg"
         if not os.path.exists(path):
             print(f"Image file not found: {path}")
             return

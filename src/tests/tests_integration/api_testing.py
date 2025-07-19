@@ -11,8 +11,9 @@ def test_read_root():
 
 
 def test_segment_image():
-    with open("src/tests/integration_tests/images.jpeg", "rb") as image_file:
-        response = client.post("/segment", files={"file": image_file})
-    assert response.status_code == 200
-    assert response.headers["content-type"] == "image/png"
-    assert len(response.content) > 0
+    with TestClient(app) as client:
+        with open("src/tests/tests_integration/burger.jpg", "rb") as image_file:
+            response = client.post("/segment", files={"file": image_file})
+        assert response.status_code == 200
+        assert response.headers["content-type"] == "image/png"
+        assert len(response.content) > 0

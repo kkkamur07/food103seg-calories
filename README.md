@@ -11,7 +11,7 @@ Try out the live app: [Streamlit App 🔗](https://segmentation-frontend-2899253
 ---
 ## 🛂 Project Architecture
 
-![Model Architecture](reports/figures/Architecture.jpeg)
+![Model Architecture](reports/figures/Architecture.png)
 
 This architecture represents the full pipeline:
 
