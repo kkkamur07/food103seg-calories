@@ -1,50 +1,67 @@
-# 🌟 Food Segmentation Model
+# 🍔 Food Segmentation Model
 
-![Food Banner](https://static6.depositphotos.com/1008611/583/v/950/depositphotos_5838506-stock-illustration-food-my-plate-breakfast-portions.jpg)
+## Live Demo 💻
+![Demo](reports/figures/demo.gif)
 
-> **Delicious pixels, smartly segmented!** Welcome to the lively repository of our Food Segmentation project! This end-to-end machine learning project segments food items from images with precision, offers an interactive API, and a gorgeous frontend to boot.
+
+> **Delicious pixels, smartly segmented!** Welcome to the lively repository of our Food Segmentation project! This end-to-end machine learning project segments food items from images with precision, offers an interactive API, and a frontend to boot.
+
+Try out the live app: [Streamlit App 🔗](https://segmentation-frontend-289925381630.us-central1.run.app/)
+
+---
+## 🛂 Project Architecture
+
+![Model Architecture](reports/figures/Architecture.jpeg)
+
+This architecture represents the full pipeline:
+
+* **Local Side**: Code versioning (Git), data/model tracking (DVC), PyTorch app orchestration via Hydra & Typer, debugging/profiling, and W\&B logging.
+
+* **Cloud Side**: CI/CD via GitHub Actions → GCP Build → Docker artifact → Cloud Run hosting.
+
+* **API & Load Test**: FastAPI app is hosted on Cloud Run, exposed to the end-user. Locust performs load testing.
+
+* **Monitoring**: GCP Logging tracks logs, errors, and performance.
+
+* **Prediction Flow**: End-user hits API → Prediction → Stored in GCP Bucket.
 
 ---
 
 ## 🚀 Project Overview
 
-This project is a production-ready, MLOps-enabled food segmentation model built using a robust [cookie-cutter MLOps template](https://github.com/kkkamur07/cookie-cutter). It:
+This project is a production-ready, MLOps-enabled food segmentation model built using a [cookie-cutter MLOps template](https://github.com/kkkamur07/cookie-cutter). It:
 
 * Segments food items from images using deep learning
-* Deploys a FastAPI + BentoML backend
-* Serves predictions on a Streamlit-powered frontend
-* Has fully auto-generated documentation with MkDocs
+* Deploys a FastAPI / BentoML backend
+* Serves predictions on a Streamlit frontend
+
+ 📄 **Here is our report for the exam:** [View Report](https://github.com/kkkamur07/food103seg-calories/blob/main/reports/README.md)
+ 
+ 🌐 **HTML version of the report:** [View HTML Report](https://github.com/kkkamur07/food103seg-calories/blob/main/reports/report.html)  
 
 ---
 
 ##  Project Structure
 
 ```
-k-kamur07-food103seg-calories/
-├── configs/               # Configs for models, datasets, sweeps
+root/
+├── configs/              # Configs for models, datasets, sweeps
 ├── src/
 │   ├── app/              # FastAPI, BentoML, Streamlit
 │   ├── segmentation/     # Core training logic
 │   └── tests/            # Unit & integration tests
-├── saved/                # DVC-tracked model weights
-├── notebooks/            # Jupyter notebooks
+├── saved/                # Model weights, logs and figures.
+├── notebooks/            # Jupyter notebooks for experiments
 ├── report/               # Report, figures, results
 ├── .github/              # CI/CD pipelines (GitHub Actions)
 ├── Dockerfile.*, docker-compose.yml  # Containerization
-├── data.dvc              # Data tracking
-├── wandb_runner.py       # W&B experiment runner
-├── tasks.py              # Automation CLI (Invoke)
-├── requirements*.txt     # Dependencies
+├── data.dvc              # Data versioning and tracking
+├── wandb_runner.py       # W&B hyperparameter sweeping.
+├── tasks.py              # Automation of CLI using invoke
+├── pyproject.toml        # Python project metadata + build system
 └── README.md             # You're here
 ```
 
----
-
-## 🌐 Live Demo
-
-> Try out the live app: [Streamlit App 🔗](https://segmentation-frontend-289925381630.us-central1.run.app/)
-
-Upload your favorite food pic and see it segmented live!
 
 ---
 
@@ -52,15 +69,15 @@ Upload your favorite food pic and see it segmented live!
 
 1. **Model Training**
 
-   * We trained a **UNet** model using our custom `Food103Seg` dataset
+   * We trained a **UNet** model using our `Food103Seg` dataset
    * The dataset contains **104 food classes**
-   * Images are preprocessed, augmented, and fed into the UNet model
-   * Trained model is versioned using **DVC** and exported via BentoML
+   * Images are preprocessed and fed into the UNet model
+   * Trained model W&B is versioned using **DVC** and exported via FastAPI
 
 2. **API Development**
 
-   * FastAPI + BentoML serves the model
-   * Predict endpoint handles image uploads and returns segmentation masks
+   * FastAPI / BentoML serves the model
+   * `\segment` endpoint handles image uploads and returns segmentation masks
 
 3. **Frontend**
 
@@ -68,9 +85,9 @@ Upload your favorite food pic and see it segmented live!
 
 4. **Docs & CI/CD**
 
-   * MkDocs auto-generates documentation
+   * MkDocs for documentation.
    * GitHub Actions handle CI/CD workflows
-   * DVC handles data/model versioning across development cycles
+   * DVC handles data and model versioning across development cycles
 
 ---
 
@@ -79,12 +96,11 @@ Upload your favorite food pic and see it segmented live!
 ```bash
 git clone https://github.com/kkkamur07/food103seg-calories
 cd food103seg-calories
-make install
 ```
 
 To run API:
 ```bash
-uvicorn src.app.api:app --host 0.0.0.0 --port 8000 --reload
+uvicorn src.app.service:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 To run frontend:
@@ -92,24 +108,21 @@ To run frontend:
 streamlit run src/app/frontend.py
 ```
 
-To launch docs:
-```bash
-mkdocs serve
-```
+**Alternatively you can build the docker containers using**
 
+```bash
+docker-compose up --build
+```
 ---
 
 ## 📊 Model Results
 
 | Metric         | Value          |
 | -------------- | -------------- |
-| mIoU           | 0.87           |
-| Accuracy       | 94.3%          |
-| Inference Time | 50ms/image     |
+| Accuracy       | 65%            |
+| Inference Time | 100ms/image    |
 | Classes        | 104 food items |
 
-
-![Before After](https://user-images.githubusercontent.com/12345678/before-after.gif)
 
 ---
 
@@ -124,31 +137,19 @@ Full API and usage documentation available at: [Documentation](https://kkkamur07
 * **Backend**: FastAPI, BentoML
 * **Frontend**: Streamlit
 * **Model**: UNet (PyTorch)
-* **Dataset**: Food103Seg (104 classes)
-* **MLOps**: Cookie-cutter template, Docker, GitHub Actions, **DVC**, GCP
+* **Dataset**: [Food103Seg](https://datasetninja.com/food-seg-103)
+* **MLOps**: Cookie-cutter, Docker, GitHub Actions, **DVC**, GCP, WandB
 * **Docs**: MkDocs
 
 ---
 
 ## ✅ CI/CD & Versioning
 
-* **GitHub Actions** for automated testing and deployment
-* **DVC** for tracking datasets and model files
-* **Docker** for consistent environments across development and production
-* **Pre-commit** hooks for code quality
+* **GitHub Actions** for automated testing and building of docker containers
+* **DVC** for tracking datasets and model weights and biases
+* **Docker** to ensure reproducibility and scalability of our work.
+* **Pre-commit** hooks for code quality and consistency.
 * **W\&B** for experiment tracking and sweeping
+* **GCP** for building & deploying our docker containers
 
 ---
-
-## 🛂 Project Architecture
-
-*To be added soon: a visual overview of our backend, API, model, and frontend interaction.*
-
-
-
-
-
-
-
-
-
