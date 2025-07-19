@@ -81,7 +81,7 @@ will check the repositories and the code to verify your answers.
 * [✅] Add a continues workflow that triggers when changes to the model registry is made (M19)
 * [✅] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
 * [✅] Create a trigger workflow for automatically building your docker images (M21)
-* [] Get your model training in GCP using either the Engine or Vertex AI (M21) $\to$ *Not enough credits for the same.*
+* [] Get your model training in GCP using either the Engine or Vertex AI (M21) -> *Not enough credits for the same.*
 * [✅] Create a FastAPI application that can do inference using your model (M22)
 * [✅] Deploy your model in GCP using either Functions or Run as the backend (M23)
 * [✅] Write API tests for your application and setup continues integration for these (M24)
@@ -103,8 +103,8 @@ will check the repositories and the code to verify your answers.
 ### Extra
 
 * [✅] Write some documentation for your application (M32)
-* [✅] Publish the documentation to GitHub Pages (M32) $\to$ [Link](https://kkkamur07.github.io/food103seg-calories/)
-* [✅] Revisit your initial project description. Did the project turn out as you wanted? $\to$ Yes
+* [✅] Publish the documentation to GitHub Pages (M32) -> [Link](https://kkkamur07.github.io/food103seg-calories/)
+* [✅] Revisit your initial project description. Did the project turn out as you wanted? -> Yes
 * [✅] Create an architectural diagram over your MLOps pipeline
 * [✅] Make sure all group members have an understanding about all parts of the project
 * [✅] Uploaded all your code to GitHub
@@ -115,25 +115,27 @@ will check the repositories and the code to verify your answers.
 > **Enter the group number you signed up on**
 >
 > Answer:
-krrish.agarwalla@campus.lmu.de
-Alisha.Al@campus.lmu.de
+
+krrish.agarwalla@campus.lmu.de <br>
+alisha.al@campus.lmu.de <br>
 
 
 ### Question 2
 > **Enter the study number for each member in the group**
 >
 > Answer:
-Krrish Agarwalla : 12934480
-Alisha : 13023958
-Astha Gupta : 13021609
-Akshata Lokhade : 13032143
 
+Krrish Agarwalla : 12934480 <br>
+Alisha : 13023958 <br>
+Astha Gupta : 13021609 <br>
+Akshata Lokhade : 13032143 <br>
 
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
 > **did you choose to work with and did it help you complete the project?**
 >
 > Answer:
+
 We used the third-party package **uv** to optimize our Docker image building process and speed up package installation times in our project. With uv, dependency resolution and installation became significantly faster, which improved our development workflow and reduced the time needed to rebuild Docker containers. Also with **uv** we are able to make our dependency resolution much faster thus making our code more reproducible.
 
 Initially, we also planned to use the **transformers** package from Hugging Face to leverage pre-trained models for the image segmentation component of our project. However, after implementing and evaluating our own MiniUNET model, we found that it performed efficiently and met our requirements with lightweight computation. As a result, we did not end up integrating transformers.
@@ -154,19 +156,20 @@ Overall, using uv provided tangible benefits in streamlining our project’s inf
 > Recommended answer length: 100-200 words
 >
 > Answer:
+
 We managed project dependencies using both **uv** and **pip**. For uv, all core dependencies are specified in the `pyproject.toml` file, ensuring precise and reproducible installations using uv’s fast resolver. For pip users, we maintained `requirements.txt` for production dependencies and `requirements_dev.txt` for development-specific packages. This approach provided flexibility, allowing contributors to install dependencies using either tool depending on their workflow preferences.
 
 To set up an exact copy of the development environment, a new team member can:
 
-- **Option 1: Use uv**
+**Option 1: Use uv**
   - Clone the project repository.
   - Run `uv pip sync` to install dependencies as specified in `pyproject.toml`.
 
-- **Option 2: Use pip**
+**Option 2: Use pip**
   - Clone the repository.
   - Run `pip install -r requirements.txt` for core dependencies.
 
-- **Option 3: Use Docker Compose**
+**Option 3: Use Docker Compose**
   - Run the provided `docker-compose.yml` to automatically set up both the backend and frontend, with all dependencies and models pulled and configured.
 
 Full installation steps and environment setup guidance are provided in our project [Documentation](https://kkkamur07.github.io/food103seg-calories/installation/). This ensures new team members can quickly replicate the exact development environment with minimal setup overhead.
@@ -185,6 +188,7 @@ Full installation steps and environment setup guidance are provided in our proje
 > *experiments.*
 >
 > Answer:
+
 We initialized our project using a **custom Cookiecutter template**, assembled from several open-source templates (including the course-provided one) to fit our MLOps workflow. The structure largely follows standard Cookiecutter conventions introduced in the course, but we introduced key changes for better experiment management and clarity.
 
 Most notably, we added a **saved/** directory to store important model outputs—such as weights, logs, and visualizations—which makes tracking experiments and results straightforward. In the **src/** folder, we created an **app/** subfolder to house API (`service.py`) and frontend (`frontend.py`) code, keeping them separate from core modeling and training logic (**segmentation/**) and from tests.
@@ -292,7 +296,7 @@ To speed up builds, we cache Python dependencies using **pip**. **DVC** is integ
 
 Additionally, we use [cloudbuild.yaml](https://github.com/kkkamur07/food103seg-calories/blob/main/cloudbuild.yaml) for automated Docker deployments. Whenever there are changes to the data or a push to the main branch, Google Cloud Build builds new Docker images for our app ( which takes quite sometime to build on local ), which can be deployed to Cloud Run seamlessly
 
-This CI/CD pipeline ensures our code is consistently tested, styled, and deployable across platforms, making the development process faster, more reliable, and production-ready.
+This CI/CD pipeline ensures our code is consistently tested, styled, and deployable across platforms, making the development process faster.
 
 
 ## Running code and tracking experiments
@@ -411,7 +415,7 @@ We utilized several Google Cloud Platform (GCP) services to streamline and autom
 	•	**Cloud Run:** Used for deploying and running our containerized backend and frontend services.
 	•	**Monitoring and Alerts:** Implemented system monitoring & service level objectives for our deployed services. We recieved real time updates about our SLOs
 
-[RealTime-Updates](reports/figures/realtime.jpeg)
+![RealTime-Updates](reports/figures/realtime.jpeg)
 
 ### Question 18
 
@@ -441,6 +445,7 @@ We relied on **standard E2 machine types** and adjusted resource allocations as 
 > Answer:
 
 ![GCP Bucket](figures/Bucket1.png)
+
 ![GCP Bucket](figures/Bucket2.png)
 
 ### Question 20
@@ -451,10 +456,11 @@ We relied on **standard E2 machine types** and adjusted resource allocations as 
 > Answer:
 
 ![Artifact Image](figures/artifact_image1.png)
+
 ![Artifact Image](figures/artifact_image2.png)
+
 ![Artifact Image](figures/artifact_image3.png)
 
---- question 20 fill here ---
 
 ### Question 21
 
@@ -465,7 +471,6 @@ We relied on **standard E2 machine types** and adjusted resource allocations as 
 
 ![Build History](figures/History.png)
 
---- question 21 fill here ---
 
 ### Question 22
 
@@ -506,8 +511,6 @@ We added a `/metrics` endpoint using a custom *Prometheus registry* to monitor A
 
 To ensure robustness, we wrote unit tests using pytest, performed load testing using Locust, and deployed the final API using docker to Google Cloud Run for scalability and ease of access.
 
-
---- question 23 fill here ---
 
 ### Question 24
 
@@ -571,10 +574,10 @@ We successfully implemented monitoring for our deployed model using Prometheus. 
 
 Some of the key metrics we track include:
 
-	•	*Total API requests:* Counts every request made to our service, helping us monitor usage patterns.
-	•	*API errors:* Logs the number of errors encountered, allowing us to catch spikes in failures or investigate specific problem cases.
-	•	*Latency (inference time):* Measures how long the model takes to process each request. Latency is also tracked as an SLO.
-	•	*Input image size:* Monitors the size of uploaded images, which helps in identifying unusually large requests that might need special handling or could lead to performance issues.
+**Total API requests:** Counts every request made to our service, helping us monitor usage patterns.
+**API errors:** Logs the number of errors encountered, allowing us to catch spikes in failures or investigate specific problem cases.
+**Latency (inference time):** Measures how long the model takes to process each request. Latency is also tracked as an SLO.
+**Input image size:** Monitors the size of uploaded images, which helps in identifying unusually large requests that might need special handling or could lead to performance issues.
 
 By collecting these metrics, we gain visibility into the health and performance of our model and API in production. For example, we can quickly spot if latency increases, error rates spike, or input trends change over time. This monitoring approach supports proactive maintenance, helps in scaling decisions, and makes it easier to ensure a reliable, responsive service as usage grows or shifts.
 
