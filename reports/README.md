@@ -81,7 +81,7 @@ will check the repositories and the code to verify your answers.
 * [✅] Add a continues workflow that triggers when changes to the model registry is made (M19)
 * [✅] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
 * [✅] Create a trigger workflow for automatically building your docker images (M21)
-* [] Get your model training in GCP using either the Engine or Vertex AI (M21) $\to$ Not enough credits for the same.
+* [] Get your model training in GCP using either the Engine or Vertex AI (M21) $\to$ *Not enough credits for the same.*
 * [✅] Create a FastAPI application that can do inference using your model (M22)
 * [✅] Deploy your model in GCP using either Functions or Run as the backend (M23)
 * [✅] Write API tests for your application and setup continues integration for these (M24)
@@ -104,7 +104,7 @@ will check the repositories and the code to verify your answers.
 
 * [✅] Write some documentation for your application (M32)
 * [✅] Publish the documentation to GitHub Pages (M32) $\to$ [Link](https://kkkamur07.github.io/food103seg-calories/)
-* [✅] Revisit your initial project description. Did the project turn out as you wanted?
+* [✅] Revisit your initial project description. Did the project turn out as you wanted? $\to$ Yes
 * [✅] Create an architectural diagram over your MLOps pipeline
 * [✅] Make sure all group members have an understanding about all parts of the project
 * [✅] Uploaded all your code to GitHub
@@ -125,6 +125,8 @@ Alisha.Al@campus.lmu.de
 > Answer:
 Krrish Agarwalla : 12934480
 Alisha : 13023958
+Astha Gupta : 13021609
+Akshata Lokhade : 13032143
 
 
 ### Question 3
@@ -132,9 +134,9 @@ Alisha : 13023958
 > **did you choose to work with and did it help you complete the project?**
 >
 > Answer:
-We used the third-party package **uv** to optimize our Docker image building process and speed up package installation times in our project. With uv, dependency resolution and installation became significantly faster, which improved our development workflow and reduced the time needed to rebuild Docker containers. This allowed us to iterate more quickly and keep our development environment consistent across different setups.
+We used the third-party package **uv** to optimize our Docker image building process and speed up package installation times in our project. With uv, dependency resolution and installation became significantly faster, which improved our development workflow and reduced the time needed to rebuild Docker containers. Also with **uv** we are able to make our dependency resolution much faster thus making our code more reproducible.
 
-Initially, we also planned to use the **transformers** package from Hugging Face to leverage pre-trained models for the image segmentation component of our project. However, after implementing and evaluating our own MiniUNET model, we found that it performed efficiently and met our requirements with lightweight computation. As a result, we did not end up integrating transformers, since the added complexity and resource demand were not necessary.
+Initially, we also planned to use the **transformers** package from Hugging Face to leverage pre-trained models for the image segmentation component of our project. However, after implementing and evaluating our own MiniUNET model, we found that it performed efficiently and met our requirements with lightweight computation. As a result, we did not end up integrating transformers.
 
 Overall, using uv provided tangible benefits in streamlining our project’s infrastructure, even though our primary modeling objectives were achieved with a custom, lighter approach.
 
@@ -163,12 +165,11 @@ To set up an exact copy of the development environment, a new team member can:
 - **Option 2: Use pip**
   - Clone the repository.
   - Run `pip install -r requirements.txt` for core dependencies.
-  - Optionally, use `pip install -r requirements_dev.txt` for development tools.
 
 - **Option 3: Use Docker Compose**
   - Run the provided `docker-compose.yml` to automatically set up both the backend and frontend, with all dependencies and models pulled and configured.
 
-Full installation steps and environment setup guidance are provided in our project documentation. This ensures new team members can quickly replicate the exact development environment with minimal setup overhead.
+Full installation steps and environment setup guidance are provided in our project [Documentation](https://kkkamur07.github.io/food103seg-calories/installation/). This ensures new team members can quickly replicate the exact development environment with minimal setup overhead.
 
 
 ### Question 5
@@ -184,9 +185,13 @@ Full installation steps and environment setup guidance are provided in our proje
 > *experiments.*
 >
 > Answer:
-We initialized our project using a custom cookiecutter template that we built by combining elements from several templates found on GitHub. The overall structure follows the standard cookiecutter approach but with a few key changes. One major addition is the **saved/** folder, which we use to store all important outputs from our model, such as visualizations, model weights, and logs, making it easy to track experiment results. Inside the **src/** folder, we created an **app/** folder where we keep files related to the API (**service.py**) and the frontend (**frontend.py**), keeping them separate from the training and modeling code. We found the existing cookiecutter template very helpful for setting up a clear project structure, but we customized it to better fit our workflow. Our custom template can be found at [https://github.com/kkkamur07/cookie-cutter/tree/main/mlops/]. These few changes made our project easier to manage and collaborate on.
+We initialized our project using a **custom Cookiecutter template**, assembled from several open-source templates (including the course-provided one) to fit our MLOps workflow. The structure largely follows standard Cookiecutter conventions introduced in the course, but we introduced key changes for better experiment management and clarity.
 
+Most notably, we added a **saved/** directory to store important model outputs—such as weights, logs, and visualizations—which makes tracking experiments and results straightforward. In the **src/** folder, we created an **app/** subfolder to house API (`service.py`) and frontend (`frontend.py`) code, keeping them separate from core modeling and training logic (**segmentation/**) and from tests.
 
+Other files include DVC and cloud build configs, Dockerfiles for both the backend and frontend, automation scripts, and well-organized configuration in **configs/**. CI/CD pipelines and pre-commit checks are set up via GitHub Actions.
+
+These modifications make the project easier to manage, modular, and collaborative. Our customized template is available at [https://github.com/kkkamur07/cookie-cutter/tree/main/mlops/].
 
 
 ### Question 6
@@ -200,9 +205,6 @@ We initialized our project using a custom cookiecutter template that we built by
 > Answer:
 
 We implemented **pre-commit hooks** and used **ruff** for linting to ensure our code followed consistent style and quality guidelines. At first, adapting to these rules was a challenge, but we realized that maintaining formatting and linting standards helps keep our codebase organized and easier to read as the project grows. We also used **type hints** in our Python code, which made the functions and modules clearer to understand and enabled type checking tools to catch mistakes early. For documentation, we made sure to write docstrings for key functions and modules, helping both current and future team members understand the code’s purpose and usage.
-
-These practices matter even more in larger projects because they reduce confusion, make collaboration easier, and help prevent bugs. Consistent code formatting and good documentation mean new contributors can quickly understand and work with the codebase. Typing improves reliability by catching errors before runtime, which is especially important as projects get more complex and teams grow.
-
 
 
 ## Version control
@@ -252,10 +254,7 @@ These practices matter even more in larger projects because they reduce confusio
 >
 > Answer:
 
-We used **Git extensively** throughout our workflow. Each team member worked on their own **feature/teammate_branch**, which allowed everyone to develop and test new features separately without affecting the main codebase. Even small changes were committed regularly to these individual branches. When ready, we would create a **pull request (PR)** and all team members would review the proposed changes. Only after everyone had reviewed, discussed, and understood the updates was the PR merged into the main branch.
-
-This approach made collaboration smoother and minimized the risk of conflicts or bugs being introduced. Whenever someone started working, they made sure to first **pull the latest changes from the main branch** to stay up to date and avoid unnecessary merge conflicts. While we occasionally ran into fatal errors, using branches and PRs significantly helped us maintain code quality, shared understanding, and allowed us to easily manage version control as a team.
-
+We used **Git extensively** throughout our workflow. Each team member worked on their own **feature/teammate_branch**, which allowed everyone to develop and test new features separately without affecting the main codebase. Even small changes were committed regularly to these individual branches. When ready, we would create a **pull request (PR)** and all team members would review the proposed changes. Only after everyone had reviewed, discussed, and understood the updates was the PR merged into the main branch. Whenever someone started working, they made sure to first **pull the latest changes from the main branch** to stay up to date and avoid unnecessary merge conflicts. While we occasionally ran into fatal errors, using branches and PRs significantly helped us maintain code quality, shared understanding, and allowed us to easily manage version control as a team.
 
 
 ### Question 10
@@ -271,11 +270,10 @@ This approach made collaboration smoother and minimized the risk of conflicts or
 >
 > Answer:
 
-We used DVC (Data Version Control) extensively in our project to manage both data and model weights. DVC was especially valuable for sharing large datasets among team members and keeping everyone synchronized on data preprocessing steps—when one teammate processed and updated the dataset (e.g., converted images to tensors), DVC made it easy for others to pull the exact same version. We also used DVC to track model weights as they evolved, which helped us manage different model checkpoints and ensure full reproducibility without relying on external tools like wandb. Integrating DVC with GitHub Actions further automated our workflow, supporting continuous integration and deployment for our machine learning pipeline.
+We leveraged **DVC (Data Version Control)** extensively to manage both our datasets and model weights throughout the project. DVC streamlined collaboration by enabling team members to easily share and stay synchronized on large datasets and data preprocessing steps—any updates, such as converting images to tensors, could be versioned and seamlessly pulled by others. We also used DVC to track evolving model weights, which helped us manage different checkpoints and ensure full reproducibility independently of external experiment tracking platforms.
 
-While we did encounter some hurdles, we documented fixes and solutions thoroughly to help future contributors. Overall, DVC gave us granular control over data and model versioning, streamlining team collaboration and experiment management across development environments.
+While DVC can be integrated with GitHub workflows to automate retraining when data changes, this level of automation wasn’t essential for our current use case. Instead, our CI/CD setup focused on **automatic Docker deployments** that included the latest updated models. Our entire approach and lessons learned with DVC are thoroughly documented in our [project documentation](https://kkkamur07.github.io/food103seg-calories/source/data/).
 
-https://kkkamur07.github.io/food103seg-calories/source/data/
 
 ### Question 11
 
@@ -288,19 +286,13 @@ https://kkkamur07.github.io/food103seg-calories/source/data/
 >
 > Answer:
 
-Our project uses a continuous integration (CI) setup built around **GitHub Actions** to automate code quality checks, testing, and deployment. The main workflow file, [`ci.yml`](https://github.com/kkkamur07/food103seg-calories/blob/main/.github/workflows/ci.yml), handles several key steps to keep our code robust and our team productive.
+Our project uses  **continuous integration (CI)** setup built around **GitHub Actions**, & **Cloud Build** for automated code quality checks, testing, and deployment. The main workflow—[`ci.yml`](https://github.com/kkkamur07/food103seg-calories/blob/main/.github/workflows/ci.yml)—runs **unit tests with pytest** and uses **ruff** for linting to maintain style consistency and catch errors early. We test across multiple operating systems (Ubuntu, macOS) and Python versions to ensure cross-platform compatibility.
 
-First, every time we push changes or create a pull request, the CI pipeline runs **unit tests with pytest** to catch errors early. We also use **ruff** for linting to enforce style consistency and catch common issues automatically. Our workflow is set up to test on multiple operating systems (like Ubuntu and MacOS) and with different versions of Python, so we know the codebase will work reliably in various environments.
+To speed up builds, we cache Python dependencies using **pip**. **DVC** is integrated with CI: whenever data or model files tracked by DVC (`data.dvc`, `models.dvc`) are updated, the workflow can detect these changes and trigger rebuilds or redeployments, we didn't find the workflow around tracking data changes here to be relevant because in our case data was not changing.
 
-To speed up our builds, we use **caching** for Python dependencies. This means common libraries don’t need to be downloaded and installed from scratch each time, which saves time on every run.
+Additionally, we use [cloudbuild.yaml](https://github.com/kkkamur07/food103seg-calories/blob/main/cloudbuild.yaml) for automated Docker deployments. Whenever there are changes to the data or a push to the main branch, Google Cloud Build builds new Docker images for our app ( which takes quite sometime to build on local ), which can be deployed to Cloud Run seamlessly
 
-For versioning data and models, we integrated **DVC** with our CI. If any data or model files tracked by DVC (`data.dvc` or `models.dvc`) are updated, the CI workflow detects this and can trigger rebuilding or redeploying relevant parts of the project, making sure everyone is always working with the latest versions.
-
-Additionally, we connected our GitHub repository to **Google Cloud Build**. When we push to the main branch, this trigger automatically builds Docker images for our app. These images can then be deployed on Cloud Run, so our updates go live smoothly without manual steps.
-
-You can find our main workflow here: [ci.yml on GitHub](https://github.com/kkkamur07/food103seg-calories/blob/main/.github/workflows/ci.yml).
-This setup keeps our development process efficient, reliable, and collaborative for all team members.
-
+This CI/CD pipeline ensures our code is consistently tested, styled, and deployable across platforms, making the development process faster, more reliable, and production-ready.
 
 
 ## Running code and tracking experiments
@@ -353,6 +345,8 @@ This setup keeps our development process efficient, reliable, and collaborative 
 > Answer:
 
 
+
+
 ### Question 15
 
 > **Docker is an important tool for creating containerized applications. Explain how you used docker in your**
@@ -366,9 +360,9 @@ This setup keeps our development process efficient, reliable, and collaborative 
 >
 > Answer:
 
-We used **Docker** extensively to containerize our project's frontend, backend, and, in the initial phases, the training environment. This approach allowed us to isolate dependencies for each component and avoid conflicts, making development and debugging far more manageable. It also enabled us to work on the backend and frontend independently, fixing issues in one without affecting the other. Another practical reason for this separation was that cloud deployment options sometimes restrict exposing multiple ports, so having distinct, self-contained containers for each service made deployment more flexible.
+We used **Docker** extensively to containerize our project's *frontend*, *backend*, and, in the initial phases, the *training* environment. This enabled us to work on the backend and frontend independently, fixing issues in one without affecting the other. Another practical reason for this separation was that cloud deployment options restricts exposing multiple ports, so having distinct, self-contained containers for each service made deployment more flexible.
 
-To streamline running both services together, we created a **docker-compose file**. With this setup, you can build and launch both the frontend and backend simultaneously using:
+To streamline running both services together in the local, we created a [**docker-compose file**](https://github.com/kkkamur07/food103seg-calories/blob/main/docker-compose.yml). With this setup, you can build and launch both the frontend and backend simultaneously using:
 
 ```bash
 docker-compose up --build
@@ -378,8 +372,6 @@ This command will build the images for both the frontend and backend based on th
 
 For those interested in our Docker setup, you can find an example Dockerfile here:
 [Dockerfile (backend) on GitHub](https://github.com/kkkamur07/food103seg-calories/blob/main/Dockerfile.backend)
-
-This approach made experimenting, development, and deployment much smoother and more reproducible for all team members.
 
 
 ### Question 16
@@ -413,12 +405,14 @@ This approach made experimenting, development, and deployment much smoother and 
 > Answer:
 
 We utilized several Google Cloud Platform (GCP) services to streamline and automate various stages of our project:
-	•	Cloud Storage Buckets: Used in combination with DVC for storing and sharing model weights, datasets, and other large files. The bucket allowed team members to access the latest data and ensure everyone worked with the same versioned assets.
-	•	Cloud Build Triggers: Set up to automatically initiate builds when code is pushed to our repository. This ensured that our Docker images and deployments were always up-to-date with the latest changes.
-	•	Artifact Registry: Employed to securely store and manage our Docker container images. This made it easy to organize and retrieve images for deployment and testing.
-	•	Cloud Run: Used for deploying and running our containerized backend and frontend services. Cloud Run automatically managed scaling, provided secure HTTPS endpoints, and simplified deployment.
-	•	Monitoring and Alerts: Implemented system monitoring for our deployed services. This allowed us to track resource usage, identify issues quickly, and receive alerts for any problems in real time.
-Each of these GCP services played a specific role in making our workflow efficient, reliable, and highly collaborative.
+	•	**Cloud Storage Buckets:** Used in combination with DVC for storing, sharing & versioning model weights & datasets.
+	•	**Cloud Build Triggers:** Set up to automatically initiate builds when code is pushed to our repository. This ensured we didn't have to build the large docker file on our local.
+	•	**Artifact Registry:** Employed to store and manage our Docker container images. This made it easy to organize and retrieve images for deployment and testing.
+	•	**Cloud Run:** Used for deploying and running our containerized backend and frontend services.
+	•	**Monitoring and Alerts:** Implemented system monitoring & service level objectives for our deployed services. We recieved real time updates about our SLOs
+
+[RealTime-Updates](reports/figures/realtime.jpeg)
+
 ### Question 18
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
@@ -436,7 +430,7 @@ We used **Google Compute Engine (GCE)** primarily for building, hosting, and tes
 
 For our **backend**, we provisioned virtual machines with **8 GB of RAM and 2 CPU cores**, ensuring ample resources for running inference services and handling multiple API requests efficiently. For the **frontend**, we used lighter VM instances with **2 GB of RAM and 1 CPU core**, which was sufficient to serve the Streamlit-based interface to users without unnecessary overhead.
 
-We relied on **standard E2 machine types** and adjusted resource allocations as needed for development, testing, and deployment. This approach gave us flexibility and control, while keeping cloud resource costs manageable. Docker containers were built and deployed on these VMs to maintain a consistent and reproducible environment from development to production.
+We relied on **standard E2 machine types** and adjusted resource allocations as needed for development, testing, and deployment. Docker containers were built and deployed on these VMs to maintain a consistent and reproducible environment from development to production.
 
 
 ### Question 19
@@ -479,12 +473,9 @@ We relied on **standard E2 machine types** and adjusted resource allocations as 
 >
 > Answer:
 
-We were not able to train our model in the cloud using either Google Compute Engine or Vertex AI due to restrictions associated with our $300 cloud credits—most notably, we did not have access to GPU resources required for effective deep learning model training. As a result, we conducted all model training locally on a high-performance workstation equipped with an RTX 4090 GPU (24 GB VRAM).
+We were not able to train our model in the cloud using either Google Compute Engine or Vertex AI due to restrictions associated with our $300 cloud credits—most notably and we did not have access to GPU resources required for effective deep learning model training on the cloud. As a result, we conducted all model training locally on a high-performance workstation equipped with an RTX 4090 GPU (24 GB VRAM) provided by our university.
 
-Our main model was trained for approximately 20 minutes on this local setup, which provided the computational power and memory needed for fast experimentation and solid model performance. For hyperparameter tuning, we utilized wandb sweeps, running additional experiments on the same GPU for about an hour to optimize our results efficiently.
-
-This RTX 4090 machine was provided by our university, enabling us to achieve our project goals despite the limitations of our cloud environment. While cloud training would have been ideal for collaboration and scalability, our local setup allowed us to iterate quickly without incurring prohibitive costs or hardware limitations.
-
+Our main model was trained for approximately 20 minutes on this local setup. For hyperparameter tuning, we utilized wandb sweeps, running additional experiments on the same GPU for about an hour to optimize our results efficiently.
 
 
 ## Deployment
@@ -502,13 +493,11 @@ This RTX 4090 machine was provided by our university, enabling us to achieve our
 >
 > Answer:
 
-Yes, we successfully wrote an API for our model using both FastAPI and BentoML. The main API, built with FastAPI, serves a food segmentation model (MiniUNet) with endpoints for health checks and image segmentation. Users can upload images and receive segmented outputs. We implemented preprocessing and postprocessing steps around model inference and enabled GPU support when available.
+We successfully wrote an API for our model using both FastAPI and BentoML. The main API, built with FastAPI, serves a food segmentation model (MiniUNet) with endpoints for health checks and image segmentation. Users can upload images and receive segmented outputs. We implemented preprocessing and postprocessing steps around model inference and enabled GPU support when available in the FastAPI
 
-We added a /metrics endpoint using a custom Prometheus registry to monitor API usage, latency, and errors. Additionally, we integrated a favicon for a more polished browser experience, and served static files where needed.
+We added a `/metrics` endpoint using a custom *Prometheus registry* to monitor API usage, latency, and errors. Additionally, we integrated a favicon for a more polished browser experience, and served static files where needed.
 
-To ensure robustness, we wrote unit tests using pytest, performed load testing using Locust, and deployed the final API to Google Cloud Run for scalability and ease of access.
-
-Overall, the API is production-ready, well-monitored, and easy to use, with a focus on performance, observability, and user experience.
+To ensure robustness, we wrote unit tests using pytest, performed load testing using Locust, and deployed the final API using docker to Google Cloud Run for scalability and ease of access.
 
 
 --- question 23 fill here ---
@@ -527,16 +516,17 @@ Overall, the API is production-ready, well-monitored, and easy to use, with a fo
 >
 > Answer:
 
-We successfully deployed our API both locally and in the cloud. For local deployment, we wrapped our model and prediction logic in a FastAPI application, serving it via a Docker container and a Uvicorn server. This allowed us to thoroughly test the API on our own machines, using tools like Locust for load testing and FastAPI’s `/docs` endpoint for real-time interaction and debugging.
+We successfully deployed our API both locally and in the cloud. For local deployment, we wrapped our model and prediction logic in a FastAPI application, serving it via a Uvicorn server. We extensively used tools like Locust for load testing and FastAPI’s `/docs` endpoint for real-time interaction and debugging.
 
-For cloud deployment, we chose to build and ship our backend as a Docker image and run it using Google Cloud Run. We decided against using Cloud Functions, as we wanted to avoid the extra code re-writing and restrictions of their runtime environment. Instead, by containerizing our `service.py` (API logic) and model weights, we gained flexibility and reproducibility, deploying a portable image directly to the cloud.
+For cloud deployment, we chose to build and ship our backend as a Docker image and run it using Google Cloud Run. We decided against using Cloud Functions, as we wanted to avoid the extra code re-writing. Instead, by containerizing our `service.py` (API logic) and model weights, we gained flexibility and reproducibility, deploying a portable container directly to the cloud. The API has a `/segment` endpoint which users can invoke to get segmentation of their food images.
 
-To invoke the deployed service, users can make a POST request to the endpoint with their data. For example:
+To invoke the deployed service, users can use the following command or simply type the url mentioned below in their browser :
+
 ```bash
-curl -X POST -F "file=@test_image.jpg" https://segmentation-backend-289925381630.us-central1.run.app/predict
+curl https://segmentation-backend-289925381630.us-central1.run.app/status
 ```
 
-We made extensive use of the automatic API documentation at `/docs` provided by FastAPI, which streamlined our testing and reduced errors compared to manual terminal inputs.
+The `/status` endpoint gives us the health status of the system.
 
 You can view and test our deployed API at:
 [https://segmentation-backend-289925381630.us-central1.run.app](https://segmentation-backend-289925381630.us-central1.run.app)
@@ -571,11 +561,14 @@ You can view and test our deployed API at:
 > Answer:
 
 We successfully implemented monitoring for our deployed model using Prometheus. We extended our FastAPI backend (service.py) to expose a `/metrics` endpoint, which Prometheus can scrape to collect real-time performance metrics and service-level data. This was achieved by integrating the `prometheus_client` library directly into our API code.
+
 Some of the key metrics we track include:
-	•	Total API requests: Counts every request made to our service, helping us monitor usage patterns.
-	•	API errors: Logs the number of errors encountered, allowing us to catch spikes in failures or investigate specific problem cases.
-	•	Latency (inference time): Measures how long the model takes to process each request, both as an overall summary and with a histogram for distribution insights.
-	•	Input image size: Monitors the size of uploaded images, which helps in identifying unusually large requests that might need special handling or could lead to performance issues.
+
+	•	*Total API requests:* Counts every request made to our service, helping us monitor usage patterns.
+	•	*API errors:* Logs the number of errors encountered, allowing us to catch spikes in failures or investigate specific problem cases.
+	•	*Latency (inference time):* Measures how long the model takes to process each request. Latency is also tracked as an SLO.
+	•	*Input image size:* Monitors the size of uploaded images, which helps in identifying unusually large requests that might need special handling or could lead to performance issues.
+
 By collecting these metrics, we gain visibility into the health and performance of our model and API in production. For example, we can quickly spot if latency increases, error rates spike, or input trends change over time. This monitoring approach supports proactive maintenance, helps in scaling decisions, and makes it easier to ensure a reliable, responsive service as usage grows or shifts.
 
 ## Overall discussion of project
@@ -595,9 +588,11 @@ By collecting these metrics, we gain visibility into the health and performance 
 >
 > Answer:
 
-During the project, we used approximately $50 worth of Google Cloud credits. The majority of these credits (about 80%) were consumed by Cloud Run, since we relied on it extensively to deploy and run our API and frontend services. Cloud Build accounted for roughly 10% of our credit usage, with the remaining 10% split between Artifact Registry and Cloud Storage buckets for storing Docker images and datasets.
-Everyone in our group contributed to the cloud development, and we believe the credits were used equally among team members. We were able to save a significant amount on compute costs by running all heavy model training and hyperparameter tuning locally on an RTX 4090 GPU. If we had used Vertex AI for cloud training, our spending would have likely reached $90–100 or more due to the higher costs of GPU usage.
-Overall, working in the cloud was flexible and convenient. It made collaboration easier, enabled fast and reproducible deployments, and streamlined service sharing. However, careful resource management and local training were important to keep costs under control.
+During the project, we used approximately $60 worth of Google Cloud credits. The majority of these credits (about 80%) were consumed by Cloud Run, since we relied on it extensively to deploy and run our API and frontend services. Cloud Build accounted for roughly 10% of our credit usage, with the remaining 10% split between Artifact Registry and Cloud Storage buckets for storing Docker images and datasets.
+
+We were able to save a significant amount on compute costs by running all heavy model training and hyperparameter tuning locally on an RTX 4090 GPU. If we had used Vertex AI for cloud training, our spending would have likely reached $90–100 or more due to the higher costs of GPU usage.
+
+Overall, Working in the cloud was initially challenging as we learned to navigate the tools, but it ultimately proved invaluable for collaboration and scalability. The cloud made it much easier to share services, deploy consistently, and work together as a team.
 
 ### Question 28
 
@@ -613,9 +608,13 @@ Overall, working in the cloud was flexible and convenient. It made collaboration
 >
 > Answer:
 
-Yes, we implemented a frontend using Streamlit to interact with our API, making it much more engaging and intuitive for users and stakeholders to try out the segmentation model and visualize results. Having a user-friendly frontend was important for demonstrating our project in a clear and interactive way.
-Additionally, we used DVC for model weights and data versioning. This allowed us to track model and data changes without relying on paid services like wandb premium, providing reproducibility and easy sharing of model checkpoints and datasets within the team. We also set up CI pipelines in GitHub Actions that could detect and respond to changes in data or models tracked by DVC, even though such triggers weren’t critical for our specific workflow.
-These extra steps improved collaboration, reproducibility, and accessibility for both technical and non-technical users involved in the project.
+We implemented a **[Streamlit]**(https://github.com/kkkamur07/food103seg-calories/blob/main/src/app/frontend.py) to make our segmentation model easily accessible and interactive for users and documented the installation in [document](https://kkkamur07.github.io/food103seg-calories/installation/)
+
+For model and data management, we used **DVC** to version model checkpoints, avoiding the need for paid platforms like wandb premium. This ensured reproducibility, simplified sharing within the team, and allowed our CI pipelines on GitHub Actions to detect and react to updates to tracked model files.
+
+Additionally, we introduced **model quantization and pruning**, enabling us to significantly reduce model size and improve efficiency. Our quantized models performed closely to our original versions, offering near equivalent but at a lower cost & suitable for edge deployments.
+
+
 
 ### Question 29
 
@@ -648,11 +647,15 @@ These extra steps improved collaboration, reproducibility, and accessibility for
 > Answer:
 
 *Krrish *: The biggest struggle in our project was getting the CI/CD pipelines to work reliably. The process was much more difficult than we expected—if a single task or dependency failed in the GitHub Actions workflow, the whole pipeline would stop, leaving us to sift through logs and test different fixes. This resulted in a lot of trial and error and took up a significant amount of our time. We also had to constantly monitor how many build minutes we were using, spending around $20 of our GitHub Actions credits and always worrying about going over budget.
-Another challenge was with Docker containerization—setting up and connecting the backend and frontend services, especially with cloud deployments, was not straightforward. Even small mistakes in configuration could result in services not communicating properly.
-To overcome these issues, we broke tasks down into smaller steps, relied heavily on documentation, and worked closely together as a team to isolate and solve problems quickly. Careful resource management and frequent small tests were key to making progress without running into excessive costs or major delays.
+
+Another challenge was with Docker containerization—setting up and connecting the backend and frontend services, especially with cloud deployments, was not straightforward because of the GCP not exposing multiple ports. Even small mistakes in configuration could result in services not communicating properly.
+
+To overcome these issues, we broke *tasks down into smaller steps*, relied heavily on documentation, and worked closely together as a team to isolate and solve problems quickly.
 
 *Alisha* : One of the biggest challenges I faced during the project was deploying the API I created using BentoML. Although BentoML is designed to simplify model serving, I ran into persistent issues when trying to build the Docker container. The container consistently failed due to missing dependencies—especially PyTorch, which is essential for running the segmentation model.
-I attempted several fixes: manually installing torch inside the container, adding it explicitly to bento.yaml and requirements.txt, and tweaking the Docker setup. Despite all these efforts, the container kept failing, and the model could not be served reliably through BentoML in the cloud environment.
+
+I attempted several fixes: manually installing torch inside the container, adding it explicitly to `bento.yaml` and `requirements.txt`, and tweaking the Docker setup. Despite all these efforts, the container kept failing, and the model could not be served reliably through BentoML in the cloud environment.
+
 After spending significant time troubleshooting, I decided to pivot and deploy the API using FastAPI instead. FastAPI was already implemented as part of the project, and it provided a much smoother deployment experience. I deployed the FastAPI-based service to Google Cloud Run, where it ran without any issues. The deployment was fast, dependencies were resolved correctly, and the service scaled well.
 
 ### Question 31
@@ -671,6 +674,8 @@ After spending significant time troubleshooting, I decided to pivot and deploy t
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
 
-*Krrish :* CI pipelines, DVC, pre-commits, cloud build, Dockerization, project structure, documentation, and GitHub workflows with active part in model development and minor edits to everything.
+**Krrish (12934480):** Led CI/CD pipelines, DVC, GCP deployment, Dockerization, Cookie-Cutter templating, and documentation, while actively contributing to model development and providing project oversight.
 
-*Alisha :* Designed and implemented the API using both FastAPI and BentoML, integrated unit tests for the API endpoints using pytest, and performed load testing with Locust, deployed the API to Cloud Run. Created the main README, and contributed to documentation and project structure.
+**Alisha (13023958):** Designed and implemented the API using both FastAPI and BentoML, integrated unit tests for the API endpoints using pytest, and performed load testing with Locust, deployed the API to Cloud Run. Created the main README, and contributed to documentation and project structure.
+
+We all used the Claude family of models for coding and debugging, frequently referring to *Stack Overflow* for various issues.
