@@ -89,13 +89,13 @@ We have also used `bentoML` for optimized API for ML models specially, this can 
         ├── bentoml_setup.py  # For setting up BentoML
 
 ```
-To serve the model using BentoML:
 
-   **Serve the API locally using BentoML**
 
-   ```bash
-   bentoml serve src/segmentation/bentoml:latest
-   ```
+**Serve the API locally using BentoML**
+
+```bash
+bentoml serve src/segmentation/bentoml:latest
+```
    
 
 ## Getting Started

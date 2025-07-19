@@ -86,8 +86,6 @@ If DVC setup encounters persistent issues, you can:
 ### Data Module Integration
 
 
-::: src.segmentation.loss
-
 The data module integrates with DVC by:
 - Automatically checking for DVC-tracked files
 - Handling both local and remote data sources
