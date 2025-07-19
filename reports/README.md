@@ -118,7 +118,8 @@ will check the repositories and the code to verify your answers.
 
 krrish.agarwalla@campus.lmu.de <br>
 alisha.al@campus.lmu.de <br>
-
+astha.gupta@campus.lmu.de <br>
+akshata.lokhade@campus.lmu.de <br>
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -243,7 +244,21 @@ We implemented **pre-commit hooks** and used **ruff** for linting to ensure our 
 >
 > Answer:
 
---- question 8 fill here ---
+The overall code coverage of our project is around 61%.Below is the code coverage breakdown for each module:
+(foodenv) krrish@LMMISTA-gpu1:~/home/desktop/sarengeyo/food103seg-calories$ coverage report
+Name                           Stmts   Miss  Cover
+--------------------------------------------------
+src/segmentation/__init__.py       0      0   100%
+src/segmentation/data.py          38      0   100%
+src/segmentation/main.py          50     30    40%
+src/segmentation/model.py         36      0   100%
+src/segmentation/train.py        255    115    55%
+--------------------------------------------------
+TOTAL                            379    145    61%
+
+Even if the code coverage were 100%, we still cannot ensure that the code is free from logical or mathematical errors.Code coverage reflects the percentage of code run by tests but does not guarantee that the implementation is correct or that all edge cases are handled properly. Bugs may still exist due to incorrect logic, faulty assumptions, or unexpected data inputs.
+
+To improve the reliability of our code beyond, we have implemented assert statements throughout our test cases. These assertions help us verify the shape and size of tensors.
 
 ### Question 9
 
@@ -316,7 +331,12 @@ This CI/CD pipeline ensures our code is consistently tested, styled, and deploya
 >
 > Answer:
 
---- question 12 fill here ---
+We used Hydra for configuration management in our experiments. All key settings—including hyperparameters, WandB sweep parameters, and profiling options—are defined in a central config.yaml file. This makes it easy to manage and modify configurations without changing the main training or model code, promoting a clean, modular, and reproducible setup.
+
+If we need to override any parameter for a specific run, we can do so directly from the command line using Hydra’s syntax. For instance:
+```bash
+python src/segmentation/main.py model.hyperparameters.lr=0.005 profiling.enabled=true
+```
 
 ### Question 13
 
@@ -331,7 +351,12 @@ This CI/CD pipeline ensures our code is consistently tested, styled, and deploya
 >
 > Answer:
 
---- question 13 fill here ---
+We have implemented Weights & Biases (WandB) to log all experiment hyperparameters such as the number of epochs, learning rate, and batch size. This ensures that configurations are consistently tracked and easily reproducible across runs. Using WandB also enables team members to access experiment details and reproduce results on their own machines. While we considered making the learning rate scheduler a tunable hyperparameter, we chose not to, in order to keep the model simple and focused.
+
+For local development and debugging, we used loguru to log all important parameters and runtime information—such as model hyperparameters, training progress, loss, accuracy, and runtime warnings or errors. These logs are stored in the saved/logs/ directory for each specific run, allowing us to trace back any configuration or issue later.
+
+To further ensure robust reproducibility, we explicitly set and fixed the random seed in all key modules (NumPy, PyTorch, and Python random) so that results remain consistent across different runs and environments. This combination of local and remote logging, along with controlled randomness, helps ensure that our experiments are traceable, reproducible, and collaborative.
+
 
 ### Question 14
 
@@ -348,13 +373,20 @@ This CI/CD pipeline ensures our code is consistently tested, styled, and deploya
 >
 > Answer:
 
-![Wandb Image 1](figures/wandb1.png)
-![Wandb Image 2](figures/wandb2.png)
-![Wandb Image 3](figures/wandb3.png)
-![Wandb Image 4](figures/wandb4.png)
+![Wandb Image 5](figures/wandb5.png) <br>
+we conducted a Bayesian hyperparameter sweep to find the best configuration that minimizes test loss. Among the 20 runs visualized, the run labeled lively-sweep-12 achieved the lowest test loss of 2.065 with:
 
+batch_size = 16
+epochs = 5
+learning rate = 0.00148
+Another interesting thing which we feel was the parameter importance chart that reveals that the learning rate had the strongest correlation with test loss, followed by batch size and runtime. This insight is critical for prioritizing which hyperparameters to tune in future iterations.
 
+![Wandb Image 4](figures/wandb4.png) <br>
+![Wandb Image 2](figures/wandb2.png) <br>
+In the second and third figures, multiple WandB runs are shown, comprising both manual runs (with individually set hyperparameters) and automated sweeps using Bayesian optimization. Initially, beforewe tuned hyperparameters like learning_rate and batch_size manually, resulting in inconsistent experimentation. We later adopted WandB Sweeps for systematic and reproducible exploration of the search space.
 
+![Wandb Image 1](figures/wandb1.png) <br>
+in the above image we have used two types of accuracy one specific to image segmentation(iou) and accuracy which comapraes the normal accuracy of the pixels.
 
 ### Question 15
 
@@ -396,7 +428,12 @@ For those interested in our Docker setup, you can find an example Dockerfile her
 >
 > Answer:
 
---- question 16 fill here ---
+
+![Profling](figures/profiling.png) <br>
+We used TensorBoard Profiler to profile our code, with a key focus on effective memory utilization of cuda(91%) in our case. As expected, most of the time was consumed by kernel operations, due to the computational cost of convolutions. To optimize further, we applied quantization and pruning, which helped reduce memory allocation, although we feel we were not able to leverage full potential of these techniques in  our current model.
+
+In terms of debugging, we didn’t face major device-related or tensor shape bugs. However, we did encounter training and logical bugs. During the initial training experiments, we kept getting an "Assertion CUDA out of memory" error. While debugging, we discovered that the issue was caused by the data itself — although the masks were supposed to contain values up to 103 (the number of classes), some of them had values greater than 104. This inconsistency in the labels was causing unexpected behavior during training. To fix the issue, we clipped all class values greater than 103 to 0, which resolved the error and allowed training to proceed smoothly.
+
 
 ## Working in the cloud
 
@@ -667,11 +704,26 @@ Another challenge was with Docker containerization—setting up and connecting t
 
 To overcome these issues, we broke *tasks down into smaller steps*, relied heavily on documentation, and worked closely together as a team to isolate and solve problems quickly.
 
+___
+
 *Alisha* : One of the biggest challenges I faced during the project was deploying the API I created using BentoML. Although BentoML is designed to simplify model serving, I ran into persistent issues when trying to build the Docker container. The container consistently failed due to missing dependencies—especially PyTorch, which is essential for running the segmentation model.
 
 I attempted several fixes: manually installing torch inside the container, adding it explicitly to `bento.yaml` and `requirements.txt`, and tweaking the Docker setup. Despite all these efforts, the container kept failing, and the model could not be served reliably through BentoML in the cloud environment.
 
 After spending significant time troubleshooting, I decided to pivot and deploy the API using FastAPI instead. FastAPI was already implemented as part of the project, and it provided a much smoother deployment experience. I deployed the FastAPI-based service to Google Cloud Run, where it ran without any issues. The deployment was fast, dependencies were resolved correctly, and the service scaled well.
+
+___
+
+*Astha* : One of the major challenges I faced was integrating Weights & Biases (WandB) configuration with the Hydra pipeline. While running a WandB sweep, WandB was not able to detect and override parameters from the Hydra config files. I kept running into configuration mismatches, which made setting up WandB sweeps problematic.
+
+To overcome this, I created a script called wandb_runner.py, which acts as a wrapper to translate WandB sweep arguments into Hydra-compatible overrides. And a seperate wandb_sweep.yaml file which contains the wandb sweep configuration.
+
+Another challenge was integrating profiling with the WandB run. Ideally, profiling should be done only for the first few batches and after implementing profiling, my WandB runner stopped after 10 batches. To fix this, I added two arguments: init_wandb (defaulted to True) and enable_profile (defaulted to False), and created a separate pipeline for profiling.
+
+Now, when profiling is disabled, WandB runs smoothly for the entire epoch, and when profiling is enabled, it only runs for the first 10 batches.
+
+___
+
 
 ### Question 31
 
@@ -692,5 +744,7 @@ After spending significant time troubleshooting, I decided to pivot and deploy t
 **Krrish (12934480):** Led CI/CD pipelines, DVC, GCP deployment, Dockerization, Cookie-Cutter templating, and documentation, while actively contributing to model development and providing project oversight.
 
 **Alisha (13023958):** Designed and implemented the API using both FastAPI and BentoML, integrated unit tests for the API endpoints using pytest, and performed load testing with Locust, deployed the API to Cloud Run. Created the main README, and contributed to documentation and project structure.
+
+**Astha (13021609):**  Set up the complete model pipeline from design and training to implementation, including debugging, profiling, WandB setup, quantization, pruning, Hydra configuration management, and logging, while actively contributing to model deployment.
 
 We all used the Claude family of models for coding and debugging, frequently referring to *Stack Overflow* for various issues.
