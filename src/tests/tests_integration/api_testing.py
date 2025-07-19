@@ -7,7 +7,7 @@ client = TestClient(app)
 def test_read_root():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Welcome to the Food Segmentation API!"}
+    assert response.json() == {"message": "Food Segmentation API is running"}
 
 
 def test_segment_image():

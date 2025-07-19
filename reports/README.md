@@ -313,14 +313,10 @@ While DVC can be integrated with GitHub workflows to automate retraining when da
 >
 > Answer:
 
-Our project uses  **continuous integration (CI)** setup built around **GitHub Actions**, & **Cloud Build** for automated code quality checks, testing, and deployment. The main workflow—[`ci.yml`](https://github.com/kkkamur07/food103seg-calories/blob/main/.github/workflows/ci.yml)—runs **unit tests with pytest** and uses **ruff** for linting to maintain style consistency and catch errors early. We test across multiple operating systems (Ubuntu, macOS) and Python versions to ensure cross-platform compatibility.
+Our project employs a decent CI/CD pipeline leveraging GitHub Actions and Google Cloud Build to streamline testing, linting, and deployment. The core CI workflow automatically runs unit tests using pytest and code linting with ruff on every commit or pull request. This helps maintain code quality and consistency while catching issues early, we have around 14 tests covering everything from data to training. We test across multiple operating systems (Ubuntu, macOS) and Python versions to ensure cross-platform compatibility. To speed up build times, pip caching is used for Python dependencies in the github workflows though locally & in cloud we are using uv to speed up the dependency resolution process. Although DVC is integrated into the pipeline to track data and model file changes (e.g., data.dvc, models.dvc), we found it unnecessary in our case, as the dataset remained static throughout development, but we used DVC extensively to build docker containers on cloud if there is change in model weights and biases. For deployments, we use with Google Cloud Build, which automatically builds Docker images when data updates or new commits land on the main branch. These images are deployed to Cloud Run, eliminating the need for time-consuming local builds and ensuring production readiness.
 
-To speed up builds, we cache Python dependencies using **pip**. **DVC** is integrated with CI: whenever data or model files tracked by DVC (`data.dvc`, `models.dvc`) are updated, the workflow can detect these changes and trigger rebuilds or redeployments, we didn't find the workflow around tracking data changes here to be relevant because in our case data was not changing.
-
-Additionally, we use [cloudbuild.yaml](https://github.com/kkkamur07/food103seg-calories/blob/main/cloudbuild.yaml) for automated Docker deployments. Whenever there are changes to the data or a push to the main branch, Google Cloud Build builds new Docker images for our app ( which takes quite sometime to build on local ), which can be deployed to Cloud Run seamlessly
-
-This CI/CD pipeline ensures our code is consistently tested, styled, and deployable across platforms, making the development process faster.
-
+[ci.yml](https://github.com/kkkamur07/food103seg-calories/blob/main/.github/workflows/ci.yml)
+[cloudbuild.yaml](https://github.com/kkkamur07/food103seg-calories/blob/main/cloudbuild.yaml)
 
 ## Running code and tracking experiments
 
@@ -382,19 +378,30 @@ To further ensure robust reproducibility, we explicitly set and fixed the random
 > Answer:
 
 ![Wandb Image 5](figures/wandb5.png) <br>
-we conducted a Bayesian hyperparameter sweep to find the best configuration that minimizes test loss. Among the 20 runs visualized, the run labeled lively-sweep-12 achieved the lowest test loss of 2.065 with:
 
-batch_size = 16
-epochs = 5
-learning rate = 0.00148
-Another interesting thing which we feel was the parameter importance chart that reveals that the learning rate had the strongest correlation with test loss, followed by batch size and runtime. This insight is critical for prioritizing which hyperparameters to tune in future iterations.
-
-![Wandb Image 4](figures/wandb4.png) <br>
 ![Wandb Image 2](figures/wandb2.png) <br>
-In the second and third figures, multiple WandB runs are shown, comprising both manual runs (with individually set hyperparameters) and automated sweeps using Bayesian optimization. Initially, beforewe tuned hyperparameters like learning_rate and batch_size manually, resulting in inconsistent experimentation. We later adopted WandB Sweeps for systematic and reproducible exploration of the search space.
 
 ![Wandb Image 1](figures/wandb1.png) <br>
-in the above image we have used two types of accuracy one specific to image segmentation(iou) and accuracy which comapraes the normal accuracy of the pixels.
+
+We conducted a Bayesian hyperparameter sweep using Weights & Biases (WandB) to optimize our model configuration and minimize test loss. Out of 20 runs, the run labeled lively-sweep-12 achieved the lowest test loss of 2.065, with the following configuration:
+
+Batch size: 16
+
+Epochs: 5
+
+Learning rate: 0.00148
+
+This sweep was visualized in the first figure (WandB Image 5), where we could clearly identify which runs performed best. A particularly insightful outcome was the parameter importance chart, which revealed that the learning rate had the most significant impact on test loss, followed by batch size and runtime. This kind of analysis is invaluable for future optimization since it helps us focus our tuning efforts on the most influential hyperparameters.
+
+In the second and third images (WandB Image 2), we show a combination of manual runs and runs performed through WandB Sweeps. Initially, we manually adjusted values like learning_rate and batch_size, but this approach led to inconsistent and non-reproducible results. By switching to Bayesian Sweeps, we enabled a more structured and automated exploration of the search space, improving both reproducibility and experimental coverage.
+
+Finally, the last image (WandB Image 1) presents two types of accuracy metrics we used during evaluation:
+
+IoU (Intersection over Union), which is tailored to image segmentation tasks
+
+Pixel-wise accuracy, which measures how many individual pixels are correctly predicted
+
+Using both metrics allowed us to gain a more comprehensive understanding of model performance across different evaluation dimensions.
 
 ### Question 15
 
@@ -509,9 +516,6 @@ We relied on **standard E2 machine types** and adjusted resource allocations as 
 
 ![Artifact Image](figures/artifact_image2.png)
 
-![Artifact Image](figures/artifact_image3.png)
-
-
 ### Question 21
 
 > **Upload 1-2 images of your GCP cloud build history, so we can see the history of the images that have been build in**
@@ -605,6 +609,10 @@ You can view and test our deployed API at:
 >
 > Answer:
 
+Yes, we performed both unit testing and load testing for our API. For unit testing, we used Pytest along with FastAPI’s TestClient to simulate requests and validate responses. For example, we tested the root endpoint to ensure it returned the correct message and status code. We also tested the /segment endpoint by sending an image file and verifying that the API returned a valid PNG image with non-empty content.
+
+For load testing, we used Locust, a Python-based tool for simulating concurrent users. We defined user behavior to repeatedly send requests to the /segment endpoint and monitored how the API handled different levels of traffic. The load test revealed that our API could handle up to 25 concurrent users without significant latency or errors. Beyond that, response times started increasing, indicating potential bottlenecks in image processing or I/O handling. These results helped us identify performance limits and consider optimization strategies for future scaling.
+
 --- question 25 fill here ---
 
 ### Question 26
@@ -693,6 +701,16 @@ Additionally, we introduced **model quantization and pruning**, enabling us to s
 
 ![Model Architechture](figures/Architecture.jpeg)
 
+Local Environment:
+Development begins in the local environment using tools like Hydra (for configuration management), Typer (CLI interface), and Wandb (for experiment logging). The core ML logic is encapsulated in a PyTorch application, managed with reusable boilerplate templates generated via Cookiecutter. Dependencies are handled using Conda, and Docker is used for containerization. The Profiler and Debugger tools assist in performance tuning, while local data storage allows for data consumption during experimentation.
+
+Version control is maintained using Git, while DVC handles versioning of large data and model files, enabling seamless syncing with remote storage (GCP Bucket). Code quality and stability are ensured through linting and unit tests (e.g., using pytest) integrated into GitHub Actions for continuous integration.
+
+Cloud Environment:
+Once tested, the pipeline transitions to the cloud via GitHub Actions, triggering Google Cloud Build to compile the application and store artifacts in Artifact Registry. These artifacts are deployed using Cloud Run, which automatically scales based on incoming traffic. Logs, errors, and metrics are captured using GCP Logging.
+
+Users interact with the model through a FastAPI service hosted on Cloud Run. Prediction outputs are stored in the GCP Bucket. To validate the performance and stability of the deployed API under stress, Locust is used for load testing.
+
 
 ### Question 30
 
@@ -706,35 +724,24 @@ Additionally, we introduced **model quantization and pruning**, enabling us to s
 >
 > Answer:
 
-*Krrish *: The biggest struggle in our project was getting the CI/CD pipelines to work reliably. The process was much more difficult than we expected—if a single task or dependency failed in the GitHub Actions workflow, the whole pipeline would stop, leaving us to sift through logs and test different fixes. This resulted in a lot of trial and error and took up a significant amount of our time. We also had to constantly monitor how many build minutes we were using, spending around $20 of our GitHub Actions credits and always worrying about going over budget.
+*Krrish*: One of our biggest struggles was making the CI/CD pipelines work reliably. The GitHub Actions workflow often failed due to a single task or dependency, forcing us to sift through logs and try multiple fixes. This trial-and-error process consumed significant time. We also had to monitor our build minutes closely—spending around $20 of GitHub Actions credits and constantly worrying about going over budget.
 
-Another challenge was with Docker containerization—setting up and connecting the backend and frontend services, especially with cloud deployments, was not straightforward because of the GCP not exposing multiple ports. Even small mistakes in configuration could result in services not communicating properly.
-
-To overcome these issues, we broke *tasks down into smaller steps*, relied heavily on documentation, and worked closely together as a team to isolate and solve problems quickly.
-
+Another issue was Docker containerization. Connecting backend and frontend services during cloud deployment was challenging, especially since GCP didn’t expose multiple ports. Minor config errors broke communication between services. We resolved these problems by breaking tasks into smaller steps, relying on documentation, and collaborating to debug issues quickly.
 ___
 
-*Alisha* : One of the biggest challenges I faced during the project was deploying the API I created using BentoML. Although BentoML is designed to simplify model serving, I ran into persistent issues when trying to build the Docker container. The container consistently failed due to missing dependencies—especially PyTorch, which is essential for running the segmentation model.
+*Alisha* : Deploying the API with BentoML was unexpectedly difficult. The Docker container failed repeatedly due to missing dependencies—especially PyTorch. I tried multiple fixes: manually installing torch, updating bento.yaml and requirements.txt, and tweaking Docker settings, but the container still failed.
 
-I attempted several fixes: manually installing torch inside the container, adding it explicitly to `bento.yaml` and `requirements.txt`, and tweaking the Docker setup. Despite all these efforts, the container kept failing, and the model could not be served reliably through BentoML in the cloud environment.
-
-After spending significant time troubleshooting, I decided to pivot and deploy the API using FastAPI instead. FastAPI was already implemented as part of the project, and it provided a much smoother deployment experience. I deployed the FastAPI-based service to Google Cloud Run, where it ran without any issues. The deployment was fast, dependencies were resolved correctly, and the service scaled well.
-
-
-#Akshata*: One of the biggest challenges I faced during the project was writing effective unit tests for the data pipeline, model architecture, and training process. Initially, many of the tests I wrote would fail with various errors, and debugging each one was time-consuming. A major difficulty was managing extensive mocking—particularly for external interfaces like wandb, logging, and visualization libraries. In some cases, I encountered a SyntaxError due to a large number of patch calls nested within a single test fixture. To resolve this, I refactored the code by moving some patches into individual test functions to reduce nesting complexity.Another early issue was that I hadn’t properly mocked the wandb interface, which could have led to unintended logging of values to our Weights & Biases workspace during test runs. Once I identified this, I implemented complete mocking of all wandb components across the test suite to prevent such side effects.
-On the frontend side, the main challenge was ensuring that images (e.g., input and predicted output) were displayed side by side with consistent size and alignment. Achieving this required several iterations of layout and styling adjustments to maintain a clean and structured presentation.
+Eventually, I switched to FastAPI, which was already part of our stack. Deploying to Google Cloud Run with FastAPI worked smoothly—dependencies resolved correctly and the service scaled well.
 ___
 
-*Astha* : One of the major challenges I faced was integrating Weights & Biases (WandB) configuration with the Hydra pipeline. While running a WandB sweep, WandB was not able to detect and override parameters from the Hydra config files. I kept running into configuration mismatches, which made setting up WandB sweeps problematic.
+*Akshata* : Writing effective unit tests for the data pipeline and model training was tough. Many tests failed initially, and debugging was slow—especially when mocking tools like wandb, logging, and visualization libraries. I eventually implemented full mocking for wandb to prevent unintended logging.
 
-To overcome this, I created a script called wandb_runner.py, which acts as a wrapper to translate WandB sweep arguments into Hydra-compatible overrides. And a seperate wandb_sweep.yaml file which contains the wandb sweep configuration.
-
-Another challenge was integrating profiling with the WandB run. Ideally, profiling should be done only for the first few batches and after implementing profiling, my WandB runner stopped after 10 batches. To fix this, I added two arguments: init_wandb (defaulted to True) and enable_profile (defaulted to False), and created a separate pipeline for profiling.
-
-Now, when profiling is disabled, WandB runs smoothly for the entire epoch, and when profiling is enabled, it only runs for the first 10 batches.
-
+On the frontend, displaying input and predicted images side by side was another challenge. It required several layout and styling iterations to ensure clean, consistent alignment.
 ___
 
+*Astha* : I faced issues integrating Weights & Biases (WandB) with Hydra. During sweeps, WandB couldn't override parameters from Hydra config files. To fix this, I wrote a wandb_runner.py script to map WandB sweep arguments to Hydra-compatible overrides, along with a separate wandb_sweep.yaml config.
+
+Another issue was integrating profiling. When enabled, WandB would stop after 10 batches. I added flags init_wandb and enable_profile, allowing profiling for just the first few batches without affecting full training runs.
 
 ### Question 31
 
