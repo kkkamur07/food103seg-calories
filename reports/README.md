@@ -768,4 +768,3 @@ Another issue was integrating profiling. When enabled, WandB would stop after 10
 **Akshata(13032143):** Developed and implemented  unit tests for ML model, data loading, and training modules.Designed and built the frontend using Streamlit.Prepared Machine Learning Architecture Diagram and contributed to the documentation.
 
 We all used the Claude family of models for coding and debugging, frequently referring to *Stack Overflow* for various issues.
-

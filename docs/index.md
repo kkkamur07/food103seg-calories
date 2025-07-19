@@ -96,7 +96,7 @@ We have also used `bentoML` for optimized API for ML models specially, this can 
 ```bash
 bentoml serve src/segmentation/bentoml:latest
 ```
-   
+
 
 ## Getting Started
 

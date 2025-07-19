@@ -1,11 +1,8 @@
 import pytest
 import torch
 import torchvision.transforms as transforms
-import os
 import numpy as np
-from unittest.mock import MagicMock, patch, mock_open
 from PIL import Image
-
 from src.segmentation.data import FoodSegDataset, data_loaders
 
 

@@ -2,7 +2,6 @@ import streamlit as st
 from PIL import Image as PILImage
 import io
 import requests
-import time
 import os
 
 # Configuration
@@ -28,8 +27,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# FastAPI service configuration
-import os
 
 # For cloud compatibility.
 FASTAPI_SERVICE_URL = os.getenv("FASTAPI_SERVICE_URL", "http://localhost:8080")
@@ -86,7 +83,7 @@ def call_fastapi_segmentation(image_bytes: bytes, image_format: str):
             st.error(f"Segmentation failed: Status {response.status_code}")
             try:
                 st.json(response.json())
-            except:
+            except ValueError:
                 st.write(f"Response: {response.text}")
             return None
 

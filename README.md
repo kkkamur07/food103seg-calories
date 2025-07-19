@@ -36,8 +36,8 @@ This project is a production-ready, MLOps-enabled food segmentation model built 
 * Serves predictions on a Streamlit frontend
 
  📄 **Here is our report for the exam:** [View Report](https://github.com/kkkamur07/food103seg-calories/blob/main/reports/README.md)
- 
- 🌐 **HTML version of the report:** [View HTML Report](https://github.com/kkkamur07/food103seg-calories/blob/main/reports/report.html)  
+
+ 🌐 **HTML version of the report:** [View HTML Report](https://github.com/kkkamur07/food103seg-calories/blob/main/reports/report.html)
 
 ---
 
