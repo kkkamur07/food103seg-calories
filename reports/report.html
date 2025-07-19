@@ -95,19 +95,21 @@ will check the repositories and the code to verify your answers.</p>
 <h3>Question 1</h3>
 <blockquote>
 <p><strong>Enter the group number you signed up on</strong></p>
-<p>Answer:
-krrish.agarwalla@campus.lmu.de <br>
-alisha.al@campus.lmu.de <br></p>
+<p>Answer:</p>
 </blockquote>
+<p>krrish.agarwalla@campus.lmu.de <br>
+alisha.al@campus.lmu.de <br>
+astha.gupta@campus.lmu.de <br>
+akshata.lokhade@campus.lmu.de <br></p>
 <h3>Question 2</h3>
 <blockquote>
 <p><strong>Enter the study number for each member in the group</strong></p>
-<p>Answer:
-Krrish Agarwalla : 12934480 <br>
+<p>Answer:</p>
+</blockquote>
+<p>Krrish Agarwalla : 12934480 <br>
 Alisha : 13023958 <br>
 Astha Gupta : 13021609 <br>
 Akshata Lokhade : 13032143 <br></p>
-</blockquote>
 <h3>Question 3</h3>
 <blockquote>
 <p><strong>A requirement to the project is that you include a third-party package not covered in the course. What framework</strong>
@@ -175,9 +177,14 @@ corporate and increase the quality of your code.</p>
 <p>Example:
 <em>In total we have implemented X tests. Primarily we are testing ... and ... as these the most critical parts of our</em>
 <em>application but also ... .</em></p>
-<p>Answer:</p>
+<p>Answer:
+In total, we have implemented 12 tests. We are primarily testing three critical aspects of the application:</p>
 </blockquote>
-<p>--- question 7 fill here ---</p>
+<p>Data Pipeline: Ensuring correct loading and batching of data.</p>
+<p>Model Architecture: Verifying the neural network's structure, initialization, and forward pass output.</p>
+<p>Training Process: Confirming the end-to-end training loop's execution, logging with Weights &amp; Biases, model saving, and visualization of metrics and predictions.</p>
+<p>These tests collectively ensure the robustness and correctness of our machine learning pipeline's core components.
+--- question 7 fill here ---</p>
 <h3>Question 8</h3>
 <blockquote>
 <p><strong>What is the total code coverage (in percentage) of your code? If your code had a code coverage of 100% (or close</strong>
@@ -188,7 +195,19 @@ corporate and increase the quality of your code.</p>
 </em>code and even if we were then...*</p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 8 fill here ---</p>
+<p>The overall code coverage of our project is around 61%.Below is the code coverage breakdown for each module:
+(foodenv) krrish@LMMISTA-gpu1:~/home/desktop/sarengeyo/food103seg-calories$ coverage report
+Name                           Stmts   Miss  Cover</p>
+<hr />
+<p>src/segmentation/<strong>init</strong>.py       0      0   100%
+src/segmentation/data.py          38      0   100%
+src/segmentation/main.py          50     30    40%
+src/segmentation/model.py         36      0   100%
+src/segmentation/train.py        255    115    55%</p>
+<hr />
+<p>TOTAL                            379    145    61%</p>
+<p>Even if the code coverage were 100%, we still cannot ensure that the code is free from logical or mathematical errors.Code coverage reflects the percentage of code run by tests but does not guarantee that the implementation is correct or that all edge cases are handled properly. Bugs may still exist due to incorrect logic, faulty assumptions, or unexpected data inputs.</p>
+<p>To improve the reliability of our code beyond, we have implemented assert statements throughout our test cases. These assertions help us verify the shape and size of tensors.</p>
 <h3>Question 9</h3>
 <blockquote>
 <p><strong>Did you workflow include using branches and pull requests? If yes, explain how. If not, explain how branches and</strong>
@@ -223,7 +242,7 @@ corporate and increase the quality of your code.</p>
 <p>Our project uses  <strong>continuous integration (CI)</strong> setup built around <strong>GitHub Actions</strong>, &amp; <strong>Cloud Build</strong> for automated code quality checks, testing, and deployment. The main workflow—<a href="https://github.com/kkkamur07/food103seg-calories/blob/main/.github/workflows/ci.yml"><code>ci.yml</code></a>—runs <strong>unit tests with pytest</strong> and uses <strong>ruff</strong> for linting to maintain style consistency and catch errors early. We test across multiple operating systems (Ubuntu, macOS) and Python versions to ensure cross-platform compatibility.</p>
 <p>To speed up builds, we cache Python dependencies using <strong>pip</strong>. <strong>DVC</strong> is integrated with CI: whenever data or model files tracked by DVC (<code>data.dvc</code>, <code>models.dvc</code>) are updated, the workflow can detect these changes and trigger rebuilds or redeployments, we didn't find the workflow around tracking data changes here to be relevant because in our case data was not changing.</p>
 <p>Additionally, we use <a href="https://github.com/kkkamur07/food103seg-calories/blob/main/cloudbuild.yaml">cloudbuild.yaml</a> for automated Docker deployments. Whenever there are changes to the data or a push to the main branch, Google Cloud Build builds new Docker images for our app ( which takes quite sometime to build on local ), which can be deployed to Cloud Run seamlessly</p>
-<p>This CI/CD pipeline ensures our code is consistently tested, styled, and deployable across platforms, making the development process faster. </p>
+<p>This CI/CD pipeline ensures our code is consistently tested, styled, and deployable across platforms, making the development process faster.</p>
 <h2>Running code and tracking experiments</h2>
 <blockquote>
 <p>In the following section we are interested in learning more about the experimental setup for running your code and
@@ -238,7 +257,10 @@ especially the reproducibility of your experiments.</p>
 <em>We used a simple argparser, that worked in the following way: Python  my_script.py --lr 1e-3 --batch_size 25</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 12 fill here ---</p>
+<p>We used Hydra for configuration management in our experiments. All key settings—including hyperparameters, WandB sweep parameters, and profiling options—are defined in a central config.yaml file. This makes it easy to manage and modify configurations without changing the main training or model code, promoting a clean, modular, and reproducible setup.</p>
+<p>If we need to override any parameter for a specific run, we can do so directly from the command line using Hydra’s syntax. For instance:
+<code>bash
+python src/segmentation/main.py model.hyperparameters.lr=0.005 profiling.enabled=true</code></p>
 <h3>Question 13</h3>
 <blockquote>
 <p><strong>Reproducibility of experiments are important. Related to the last question, how did you secure that no information</strong>
@@ -249,7 +271,9 @@ especially the reproducibility of your experiments.</p>
 <em>one would have to do ...</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 13 fill here ---</p>
+<p>We have implemented Weights &amp; Biases (WandB) to log all experiment hyperparameters such as the number of epochs, learning rate, and batch size. This ensures that configurations are consistently tracked and easily reproducible across runs. Using WandB also enables team members to access experiment details and reproduce results on their own machines. While we considered making the learning rate scheduler a tunable hyperparameter, we chose not to, in order to keep the model simple and focused.</p>
+<p>For local development and debugging, we used loguru to log all important parameters and runtime information—such as model hyperparameters, training progress, loss, accuracy, and runtime warnings or errors. These logs are stored in the saved/logs/ directory for each specific run, allowing us to trace back any configuration or issue later.</p>
+<p>To further ensure robust reproducibility, we explicitly set and fixed the random seed in all key modules (NumPy, PyTorch, and Python random) so that results remain consistent across different runs and environments. This combination of local and remote logging, along with controlled randomness, helps ensure that our experiments are traceable, reproducible, and collaborative.</p>
 <h3>Question 14</h3>
 <blockquote>
 <p><strong>Upload 1 to 3 screenshots that show the experiments that you have done in W&amp;B (or another experiment tracking</strong>
@@ -262,6 +286,17 @@ especially the reproducibility of your experiments.</p>
 <em>As seen in the second image we are also tracking ... and ...</em></p>
 <p>Answer:</p>
 </blockquote>
+<p><img alt="Wandb Image 5" src="figures/wandb5.png" /> <br>
+we conducted a Bayesian hyperparameter sweep to find the best configuration that minimizes test loss. Among the 20 runs visualized, the run labeled lively-sweep-12 achieved the lowest test loss of 2.065 with:</p>
+<p>batch_size = 16
+epochs = 5
+learning rate = 0.00148
+Another interesting thing which we feel was the parameter importance chart that reveals that the learning rate had the strongest correlation with test loss, followed by batch size and runtime. This insight is critical for prioritizing which hyperparameters to tune in future iterations.</p>
+<p><img alt="Wandb Image 4" src="figures/wandb4.png" /> <br>
+<img alt="Wandb Image 2" src="figures/wandb2.png" /> <br>
+In the second and third figures, multiple WandB runs are shown, comprising both manual runs (with individually set hyperparameters) and automated sweeps using Bayesian optimization. Initially, beforewe tuned hyperparameters like learning_rate and batch_size manually, resulting in inconsistent experimentation. We later adopted WandB Sweeps for systematic and reproducible exploration of the search space.</p>
+<p><img alt="Wandb Image 1" src="figures/wandb1.png" /> <br>
+in the above image we have used two types of accuracy one specific to image segmentation(iou) and accuracy which comapraes the normal accuracy of the pixels.</p>
 <h3>Question 15</h3>
 <blockquote>
 <p><strong>Docker is an important tool for creating containerized applications. Explain how you used docker in your</strong>
@@ -289,7 +324,9 @@ docker-compose up --build</code></p>
 <em>run of our main code at some point that showed ...</em></p>
 <p>Answer:</p>
 </blockquote>
-<p>--- question 16 fill here ---</p>
+<p><img alt="Profling" src="figures/profiling.png" /> <br>
+We used TensorBoard Profiler to profile our code, with a key focus on effective memory utilization of cuda(91%) in our case. As expected, most of the time was consumed by kernel operations, due to the computational cost of convolutions. To optimize further, we applied quantization and pruning, which helped reduce memory allocation, although we feel we were not able to leverage full potential of these techniques in  our current model.</p>
+<p>In terms of debugging, we didn’t face major device-related or tensor shape bugs. However, we did encounter training and logical bugs. During the initial training experiments, we kept getting an "Assertion CUDA out of memory" error. While debugging, we discovered that the issue was caused by the data itself — although the masks were supposed to contain values up to 103 (the number of classes), some of them had values greater than 104. This inconsistency in the labels was causing unexpected behavior during training. To fix the issue, we clipped all class values greater than 103 to 0, which resolved the error and allowed training to proceed smoothly.</p>
 <h2>Working in the cloud</h2>
 <blockquote>
 <p>In the following section we would like to know more about your experience when developing in the cloud.</p>
@@ -474,9 +511,18 @@ curl https://segmentation-backend-289925381630.us-central1.run.app/status</code>
 <p><em>Krrish </em>: The biggest struggle in our project was getting the CI/CD pipelines to work reliably. The process was much more difficult than we expected—if a single task or dependency failed in the GitHub Actions workflow, the whole pipeline would stop, leaving us to sift through logs and test different fixes. This resulted in a lot of trial and error and took up a significant amount of our time. We also had to constantly monitor how many build minutes we were using, spending around $20 of our GitHub Actions credits and always worrying about going over budget.</p>
 <p>Another challenge was with Docker containerization—setting up and connecting the backend and frontend services, especially with cloud deployments, was not straightforward because of the GCP not exposing multiple ports. Even small mistakes in configuration could result in services not communicating properly.</p>
 <p>To overcome these issues, we broke <em>tasks down into smaller steps</em>, relied heavily on documentation, and worked closely together as a team to isolate and solve problems quickly.</p>
+<hr />
 <p><em>Alisha</em> : One of the biggest challenges I faced during the project was deploying the API I created using BentoML. Although BentoML is designed to simplify model serving, I ran into persistent issues when trying to build the Docker container. The container consistently failed due to missing dependencies—especially PyTorch, which is essential for running the segmentation model.</p>
 <p>I attempted several fixes: manually installing torch inside the container, adding it explicitly to <code>bento.yaml</code> and <code>requirements.txt</code>, and tweaking the Docker setup. Despite all these efforts, the container kept failing, and the model could not be served reliably through BentoML in the cloud environment.</p>
 <p>After spending significant time troubleshooting, I decided to pivot and deploy the API using FastAPI instead. FastAPI was already implemented as part of the project, and it provided a much smoother deployment experience. I deployed the FastAPI-based service to Google Cloud Run, where it ran without any issues. The deployment was fast, dependencies were resolved correctly, and the service scaled well.</p>
+<h1>Akshata*: One of the biggest challenges I faced during the project was writing effective unit tests for the data pipeline, model architecture, and training process. Initially, many of the tests I wrote would fail with various errors, and debugging each one was time-consuming. A major difficulty was managing extensive mocking—particularly for external interfaces like wandb, logging, and visualization libraries. In some cases, I encountered a SyntaxError due to a large number of patch calls nested within a single test fixture. To resolve this, I refactored the code by moving some patches into individual test functions to reduce nesting complexity.Another early issue was that I hadn’t properly mocked the wandb interface, which could have led to unintended logging of values to our Weights &amp; Biases workspace during test runs. Once I identified this, I implemented complete mocking of all wandb components across the test suite to prevent such side effects.</h1>
+<p>On the frontend side, the main challenge was ensuring that images (e.g., input and predicted output) were displayed side by side with consistent size and alignment. Achieving this required several iterations of layout and styling adjustments to maintain a clean and structured presentation.</p>
+<hr />
+<p><em>Astha</em> : One of the major challenges I faced was integrating Weights &amp; Biases (WandB) configuration with the Hydra pipeline. While running a WandB sweep, WandB was not able to detect and override parameters from the Hydra config files. I kept running into configuration mismatches, which made setting up WandB sweeps problematic.</p>
+<p>To overcome this, I created a script called wandb_runner.py, which acts as a wrapper to translate WandB sweep arguments into Hydra-compatible overrides. And a seperate wandb_sweep.yaml file which contains the wandb sweep configuration.</p>
+<p>Another challenge was integrating profiling with the WandB run. Ideally, profiling should be done only for the first few batches and after implementing profiling, my WandB runner stopped after 10 batches. To fix this, I added two arguments: init_wandb (defaulted to True) and enable_profile (defaulted to False), and created a separate pipeline for profiling.</p>
+<p>Now, when profiling is disabled, WandB runs smoothly for the entire epoch, and when profiling is enabled, it only runs for the first 10 batches.</p>
+<hr />
 <h3>Question 31</h3>
 <blockquote>
 <p><strong>State the individual contributions of each team member. This is required information from DTU, because we need to</strong>
@@ -493,4 +539,6 @@ Answer:</p>
 </blockquote>
 <p><strong>Krrish (12934480):</strong> Led CI/CD pipelines, DVC, GCP deployment, Dockerization, Cookie-Cutter templating, and documentation, while actively contributing to model development and providing project oversight.</p>
 <p><strong>Alisha (13023958):</strong> Designed and implemented the API using both FastAPI and BentoML, integrated unit tests for the API endpoints using pytest, and performed load testing with Locust, deployed the API to Cloud Run. Created the main README, and contributed to documentation and project structure.</p>
+<p><strong>Astha (13021609):</strong>  Set up the complete model pipeline from design and training to implementation, including debugging, profiling, WandB setup, quantization, pruning, Hydra configuration management, and logging, while actively contributing to model deployment.</p>
+<p><strong>Akshata(13032143):</strong> Developed and implemented  unit tests for ML model, data loading, and training modules.Designed and built the frontend using Streamlit.Prepared Machine Learning Architecture Diagram and contributed to the documentation.</p>
 <p>We all used the Claude family of models for coding and debugging, frequently referring to <em>Stack Overflow</em> for various issues.</p>
