@@ -6,13 +6,6 @@ from rich.panel import Panel
 import os
 import sys
 from pathlib import Path
-
-# Get absolute path to configs
-project_root = Path(__file__).parent.parent.parent
-config_dir = str(project_root / "configs")
-sys.path.insert(0, str(project_root))
-
-# Custom Module Imports
 from src.segmentation.train import Trainer
 from src.segmentation.data import data_loaders
 
@@ -20,6 +13,11 @@ console = Console()
 os.environ["WANDB_SILENT"] = "true"
 os.environ["WANDB_QUIET"] = "true"
 os.environ["WANDB_CONSOLE"] = "off"
+
+# Config file location
+project_root = Path(__file__).parent.parent.parent
+config_dir = str(project_root / "configs")
+sys.path.insert(0, str(project_root))
 
 
 def print_hyperparameters_table(cfg: DictConfig):
