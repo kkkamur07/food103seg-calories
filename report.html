@@ -1,0 +1,137 @@
+<p><img alt="Demo" src="reports/figures/demo.gif" /></p>
+<blockquote>
+<p><strong>Delicious pixels, smartly segmented!</strong> Welcome to the lively repository of our Food Segmentation project! This end-to-end machine learning project segments food items from images with precision, offers an interactive API, and a frontend to boot.</p>
+</blockquote>
+<p>Try out the live app: <a href="https://segmentation-frontend-289925381630.us-central1.run.app/">Streamlit App 🔗</a></p>
+<hr />
+<h2>🛂 Project Architecture</h2>
+<p><img alt="Model Architecture" src="reports/figures/Architecture.jpeg" /></p>
+<p>This architecture represents the full pipeline:</p>
+<ul>
+<li>
+<p><strong>Local Side</strong>: Code versioning (Git), data/model tracking (DVC), PyTorch app orchestration via Hydra &amp; Typer, debugging/profiling, and W\&amp;B logging.</p>
+</li>
+<li>
+<p><strong>Cloud Side</strong>: CI/CD via GitHub Actions → GCP Build → Docker artifact → Cloud Run hosting.</p>
+</li>
+<li>
+<p><strong>API &amp; Load Test</strong>: FastAPI app is hosted on Cloud Run, exposed to the end-user. Locust performs load testing.</p>
+</li>
+<li>
+<p><strong>Monitoring</strong>: GCP Logging tracks logs, errors, and performance.</p>
+</li>
+<li>
+<p><strong>Prediction Flow</strong>: End-user hits API → Prediction → Stored in GCP Bucket.</p>
+</li>
+</ul>
+<hr />
+<h2>🚀 Project Overview</h2>
+<p>This project is a production-ready, MLOps-enabled food segmentation model built using a <a href="https://github.com/kkkamur07/cookie-cutter">cookie-cutter MLOps template</a>. It:</p>
+<ul>
+<li>Segments food items from images using deep learning</li>
+<li>Deploys a FastAPI / BentoML backend</li>
+<li>Serves predictions on a Streamlit frontend</li>
+</ul>
+<p>📄 <strong>Here is our report for the exam:</strong> <a href="https://github.com/kkkamur07/food103seg-calories/blob/main/reports/README.md">View Report</a></p>
+<p>🌐 <strong>HTML version of the report:</strong> <a href="https://github.com/kkkamur07/food103seg-calories/blob/main/reports/report.html">View HTML Report</a>  </p>
+<hr />
+<h2>Project Structure</h2>
+<p><code>root/
+├── configs/              # Configs for models, datasets, sweeps
+├── src/
+│   ├── app/              # FastAPI, BentoML, Streamlit
+│   ├── segmentation/     # Core training logic
+│   └── tests/            # Unit &amp; integration tests
+├── saved/                # Model weights, logs and figures.
+├── notebooks/            # Jupyter notebooks for experiments
+├── report/               # Report, figures, results
+├── .github/              # CI/CD pipelines (GitHub Actions)
+├── Dockerfile.*, docker-compose.yml  # Containerization
+├── data.dvc              # Data versioning and tracking
+├── wandb_runner.py       # W&amp;B hyperparameter sweeping.
+├── tasks.py              # Automation of CLI using invoke
+├── pyproject.toml        # Python project metadata + build system
+└── README.md             # You're here</code></p>
+<hr />
+<h2>🧵 How It Works</h2>
+<ol>
+<li>
+<p><strong>Model Training</strong></p>
+</li>
+<li>
+<p>We trained a <strong>UNet</strong> model using our <code>Food103Seg</code> dataset</p>
+</li>
+<li>The dataset contains <strong>104 food classes</strong></li>
+<li>Images are preprocessed and fed into the UNet model</li>
+<li>
+<p>Trained model W&amp;B is versioned using <strong>DVC</strong> and exported via FastAPI</p>
+</li>
+<li>
+<p><strong>API Development</strong></p>
+</li>
+<li>
+<p>FastAPI / BentoML serves the model</p>
+</li>
+<li>
+<p><code>\segment</code> endpoint handles image uploads and returns segmentation masks</p>
+</li>
+<li>
+<p><strong>Frontend</strong></p>
+</li>
+<li>
+<p>Streamlit UI lets users upload images and see segmented output in real time</p>
+</li>
+<li>
+<p><strong>Docs &amp; CI/CD</strong></p>
+</li>
+<li>
+<p>MkDocs for documentation.</p>
+</li>
+<li>GitHub Actions handle CI/CD workflows</li>
+<li>DVC handles data and model versioning across development cycles</li>
+</ol>
+<hr />
+<h2>🚧 Installation</h2>
+<p><code>bash
+git clone https://github.com/kkkamur07/food103seg-calories
+cd food103seg-calories</code></p>
+<p>To run API:
+<code>bash
+uvicorn src.app.service:app --host 0.0.0.0 --port 8000 --reload</code></p>
+<p>To run frontend:
+<code>bash
+streamlit run src/app/frontend.py</code></p>
+<p><strong>Alternatively you can build the docker containers using</strong></p>
+<p><code>bash
+docker-compose up --build</code></p>
+<hr />
+<h2>📊 Model Results</h2>
+<p>| Metric         | Value          |
+| -------------- | -------------- |
+| Accuracy       | 65%            |
+| Inference Time | 100ms/image    |
+| Classes        | 104 food items |</p>
+<hr />
+<h2>📑 Documentation</h2>
+<p>Full API and usage documentation available at: <a href="https://kkkamur07.github.io/food103seg-calories/">Documentation</a></p>
+<hr />
+<h2>🛠️ Tech Stack</h2>
+<ul>
+<li><strong>Backend</strong>: FastAPI, BentoML</li>
+<li><strong>Frontend</strong>: Streamlit</li>
+<li><strong>Model</strong>: UNet (PyTorch)</li>
+<li><strong>Dataset</strong>: <a href="https://datasetninja.com/food-seg-103">Food103Seg</a></li>
+<li><strong>MLOps</strong>: Cookie-cutter, Docker, GitHub Actions, <strong>DVC</strong>, GCP, WandB</li>
+<li><strong>Docs</strong>: MkDocs</li>
+</ul>
+<hr />
+<h2>✅ CI/CD &amp; Versioning</h2>
+<ul>
+<li><strong>GitHub Actions</strong> for automated testing and building of docker containers</li>
+<li><strong>DVC</strong> for tracking datasets and model weights and biases</li>
+<li><strong>Docker</strong> to ensure reproducibility and scalability of our work.</li>
+<li><strong>Pre-commit</strong> hooks for code quality and consistency.</li>
+<li><strong>W\&amp;B</strong> for experiment tracking and sweeping</li>
+<li><strong>GCP</strong> for building &amp; deploying our docker containers</li>
+</ul>
+<hr />
