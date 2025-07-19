@@ -221,7 +221,15 @@ These practices matter even more in larger projects because they reduce confusio
 > *application but also ... .*
 >
 > Answer:
+In total, we have implemented 12 tests. We are primarily testing three critical aspects of the application:
 
+Data Pipeline: Ensuring correct loading and batching of data.
+
+Model Architecture: Verifying the neural network's structure, initialization, and forward pass output.
+
+Training Process: Confirming the end-to-end training loop's execution, logging with Weights & Biases, model saving, and visualization of metrics and predictions.
+
+These tests collectively ensure the robustness and correctness of our machine learning pipeline's core components.
 --- question 7 fill here ---
 
 ### Question 8
@@ -674,3 +682,5 @@ After spending significant time troubleshooting, I decided to pivot and deploy t
 *Krrish :* CI pipelines, DVC, pre-commits, cloud build, Dockerization, project structure, documentation, and GitHub workflows with active part in model development and minor edits to everything.
 
 *Alisha :* Designed and implemented the API using both FastAPI and BentoML, integrated unit tests for the API endpoints using pytest, and performed load testing with Locust, deployed the API to Cloud Run. Created the main README, and contributed to documentation and project structure.
+
+*Akshata:* Developed and implemented  unit tests for ML model, data loading, and training modules.Designed and built the frontend using Streamlit.Prepared Machine Learning Architecture Diagram and contributed to the documentation.
