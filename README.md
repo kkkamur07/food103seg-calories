@@ -35,6 +35,8 @@ This project is a production-ready, MLOps-enabled food segmentation model built 
 * Deploys a FastAPI / BentoML backend
 * Serves predictions on a Streamlit frontend
 
+ 📄 Here is our report for the exam: [View Report](https://github.com/kkkamur07/food103seg-calories/blob/main/reports/README.md)
+
 ---
 
 ##  Project Structure
