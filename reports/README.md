@@ -228,7 +228,15 @@ We implemented **pre-commit hooks** and used **ruff** for linting to ensure our 
 > *application but also ... .*
 >
 > Answer:
+In total, we have implemented 12 tests. We are primarily testing three critical aspects of the application:
 
+Data Pipeline: Ensuring correct loading and batching of data.
+
+Model Architecture: Verifying the neural network's structure, initialization, and forward pass output.
+
+Training Process: Confirming the end-to-end training loop's execution, logging with Weights & Biases, model saving, and visualization of metrics and predictions.
+
+These tests collectively ensure the robustness and correctness of our machine learning pipeline's core components.
 --- question 7 fill here ---
 
 ### Question 8
@@ -712,6 +720,9 @@ I attempted several fixes: manually installing torch inside the container, addin
 
 After spending significant time troubleshooting, I decided to pivot and deploy the API using FastAPI instead. FastAPI was already implemented as part of the project, and it provided a much smoother deployment experience. I deployed the FastAPI-based service to Google Cloud Run, where it ran without any issues. The deployment was fast, dependencies were resolved correctly, and the service scaled well.
 
+
+#Akshata*: One of the biggest challenges I faced during the project was writing effective unit tests for the data pipeline, model architecture, and training process. Initially, many of the tests I wrote would fail with various errors, and debugging each one was time-consuming. A major difficulty was managing extensive mocking—particularly for external interfaces like wandb, logging, and visualization libraries. In some cases, I encountered a SyntaxError due to a large number of patch calls nested within a single test fixture. To resolve this, I refactored the code by moving some patches into individual test functions to reduce nesting complexity.Another early issue was that I hadn’t properly mocked the wandb interface, which could have led to unintended logging of values to our Weights & Biases workspace during test runs. Once I identified this, I implemented complete mocking of all wandb components across the test suite to prevent such side effects.
+On the frontend side, the main challenge was ensuring that images (e.g., input and predicted output) were displayed side by side with consistent size and alignment. Achieving this required several iterations of layout and styling adjustments to maintain a clean and structured presentation.
 ___
 
 *Astha* : One of the major challenges I faced was integrating Weights & Biases (WandB) configuration with the Hydra pipeline. While running a WandB sweep, WandB was not able to detect and override parameters from the Hydra config files. I kept running into configuration mismatches, which made setting up WandB sweeps problematic.
@@ -747,4 +758,7 @@ ___
 
 **Astha (13021609):**  Set up the complete model pipeline from design and training to implementation, including debugging, profiling, WandB setup, quantization, pruning, Hydra configuration management, and logging, while actively contributing to model deployment.
 
+**Akshata(13032143):** Developed and implemented  unit tests for ML model, data loading, and training modules.Designed and built the frontend using Streamlit.Prepared Machine Learning Architecture Diagram and contributed to the documentation.
+
 We all used the Claude family of models for coding and debugging, frequently referring to *Stack Overflow* for various issues.
+
