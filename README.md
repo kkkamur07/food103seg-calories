@@ -1,9 +1,29 @@
 # 🍔 Food Segmentation Model
 
+## Live Demo 💻
 ![Demo](reports/figures/demo.gif)
 
 
 > **Delicious pixels, smartly segmented!** Welcome to the lively repository of our Food Segmentation project! This end-to-end machine learning project segments food items from images with precision, offers an interactive API, and a frontend to boot.
+
+Try out the live app: [Streamlit App 🔗](https://segmentation-frontend-289925381630.us-central1.run.app/)
+
+---
+## 🛂 Project Architecture
+
+![Model Architecture](reports/figures/Architecture.jpeg)
+
+This architecture represents the full pipeline:
+
+* **Local Side**: Code versioning (Git), data/model tracking (DVC), PyTorch app orchestration via Hydra & Typer, debugging/profiling, and W\&B logging.
+
+* **Cloud Side**: CI/CD via GitHub Actions → GCP Build → Docker artifact → Cloud Run hosting.
+
+* **API & Load Test**: FastAPI app is hosted on Cloud Run, exposed to the end-user. Locust performs load testing.
+
+* **Monitoring**: GCP Logging tracks logs, errors, and performance.
+
+* **Prediction Flow**: End-user hits API → Prediction → Stored in GCP Bucket.
 
 ---
 
@@ -38,13 +58,6 @@ root/
 └── README.md             # You're here
 ```
 
----
-
-## 🌐 Live Demo
-
-> Try out the live app: [Streamlit App 🔗](https://segmentation-frontend-289925381630.us-central1.run.app/)
-
-Upload your favorite food pic and see it segmented live!
 
 ---
 
@@ -134,23 +147,5 @@ Full API and usage documentation available at: [Documentation](https://kkkamur07
 * **Pre-commit** hooks for code quality and consistency.
 * **W\&B** for experiment tracking and sweeping
 * **GCP** for building & deploying our docker containers
-
----
-
-## 🛂 Project Architecture
-
-![Model Architecture](reports/figures/architecture.jpeg)
-
-This architecture represents the full pipeline:
-
-* **Local Side**: Code versioning (Git), data/model tracking (DVC), PyTorch app orchestration via Hydra & Typer, debugging/profiling, and W\&B logging.
-
-* **Cloud Side**: CI/CD via GitHub Actions → GCP Build → Docker artifact → Cloud Run hosting.
-
-* **API & Load Test**: FastAPI app is hosted on Cloud Run, exposed to the end-user. Locust performs load testing.
-
-* **Monitoring**: GCP Logging tracks logs, errors, and performance.
-
-* **Prediction Flow**: End-user hits API → Prediction → Stored in GCP Bucket.
 
 ---
