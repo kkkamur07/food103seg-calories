@@ -352,6 +352,11 @@ This setup keeps our development process efficient, reliable, and collaborative 
 >
 > Answer:
 
+![Wandb Image 1](figures/wandb1.png)
+![Wandb Image 2](figures/wandb2.png)
+![Wandb Image 3](figures/wandb3.png)
+![Wandb Image 4](figures/wandb4.png)
+
 
 ### Question 15
 
