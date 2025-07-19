@@ -581,29 +581,6 @@
   
   
     <li class="md-nav__item">
-      <a href="source/loss/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Loss Functions
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="source/main/" class="md-nav__link">
         
   
@@ -795,7 +772,7 @@ uv pip install -r requirements.txt
 python -m src.segmentation.main
 
 # Launch API Server
-uvicorn src.app.api:app --host 0.0.0.0 --port 8000 --reload
+uvicorn src.app.service:app --host 0.0.0.0 --port 8000 --reload
 
 # Launch Web App
 streamlit run src/app/frontend.py
@@ -833,6 +810,10 @@ cookiecutter https://github.com/kkkamur07/cookie-cutter --directory=mlops
         ├── bentoml_setup.py  # For setting up BentoML
 
 </code></pre>
+<p>To serve the model using BentoML:</p>
+<p><strong>Serve the API locally using BentoML</strong></p>
+<p><code>bash
+   bentoml serve src/segmentation/bentoml:latest</code></p>
 <h2 id="getting-started">Getting Started</h2>
 <ol>
 <li><strong><a href="installation/">Installation</a></strong> - Set up the project</li>
