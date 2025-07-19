@@ -228,7 +228,7 @@ We implemented **pre-commit hooks** and used **ruff** for linting to ensure our 
 > *application but also ... .*
 >
 > Answer:
-In total, we have implemented 12 tests. We are primarily testing three critical aspects of the application:
+In total, we have implemented 14 tests. We are primarily testing three critical aspects of the application:
 
 Data Pipeline: Ensuring correct loading and batching of data.
 
