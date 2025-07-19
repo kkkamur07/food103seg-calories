@@ -38,7 +38,7 @@ uv pip install -r requirements.txt
 python -m src.segmentation.main
 
 # Launch API Server
-uvicorn src.app.api:app --host 0.0.0.0 --port 8000 --reload
+uvicorn src.app.service:app --host 0.0.0.0 --port 8000 --reload
 
 # Launch Web App
 streamlit run src/app/frontend.py
@@ -89,6 +89,15 @@ We have also used `bentoML` for optimized API for ML models specially, this can 
         ├── bentoml_setup.py  # For setting up BentoML
 
 ```
+To serve the model using BentoML:
+
+   **Serve the API locally using BentoML**
+
+   ```bash
+   bentoml serve src/segmentation/bentoml:latest
+   ```
+   
+
 ## Getting Started
 
 1. **[Installation](installation.md)** - Set up the project
