@@ -440,7 +440,8 @@ We relied on **standard E2 machine types** and adjusted resource allocations as 
 >
 > Answer:
 
---- question 19 fill here ---
+![GCP Bucket](figures/Bucket1.png)
+![GCP Bucket](figures/Bucket2.png)
 
 ### Question 20
 
@@ -448,6 +449,10 @@ We relied on **standard E2 machine types** and adjusted resource allocations as 
 > **stored. You can take inspiration from [this figure](figures/registry.png).**
 >
 > Answer:
+
+![Artifact Image](figures/artifact_image1.png)
+![Artifact Image](figures/artifact_image2.png)
+![Artifact Image](figures/artifact_image3.png)
 
 --- question 20 fill here ---
 
@@ -457,6 +462,8 @@ We relied on **standard E2 machine types** and adjusted resource allocations as 
 > **your project. You can take inspiration from [this figure](figures/build.png).**
 >
 > Answer:
+
+![Build History](figures/History.png)
 
 --- question 21 fill here ---
 
