@@ -348,6 +348,11 @@ This CI/CD pipeline ensures our code is consistently tested, styled, and deploya
 >
 > Answer:
 
+![Wandb Image 1](figures/wandb1.png)
+![Wandb Image 2](figures/wandb2.png)
+![Wandb Image 3](figures/wandb3.png)
+![Wandb Image 4](figures/wandb4.png)
+
 
 
 
