@@ -254,8 +254,7 @@ These tests collectively ensure the robustness and correctness of our machine le
 
 The overall code coverage of our project is around 61%. Below is the code coverage breakdown for each module:
 
-```bash
-(foodenv) krrish@LMMISTA-gpu1:~/home/desktop/sarengeyo/food103seg-calories$ coverage report
+```text
 Name                           Stmts   Miss  Cover
 --------------------------------------------------
 src/segmentation/__init__.py       0      0   100%
@@ -266,6 +265,7 @@ src/segmentation/train.py        255    115    55%
 --------------------------------------------------
 TOTAL                            379    145    61%
 ```
+
 
 Even if the code coverage were 100%, we still cannot ensure that the code is free from logical or mathematical errors. Code coverage reflects the percentage of code run by tests but does not guarantee that the implementation is correct or that all edge cases are handled properly. Bugs may still exist due to incorrect logic, faulty assumptions, or unexpected data inputs.
 
@@ -728,22 +728,22 @@ Users interact with the model through a FastAPI service hosted on Cloud Run. Pre
 >
 > Answer:
 
-*Krrish*: One of our biggest struggles was making the CI/CD pipelines work reliably. The GitHub Actions workflow often failed due to a single task or dependency, forcing us to sift through logs and try multiple fixes. This trial-and-error process consumed significant time. We also had to monitor our build minutes closely—spending around $20 of GitHub Actions credits and constantly worrying about going over budget.
+**Krrish (12934480):** One of our biggest struggles was making the CI/CD pipelines work reliably. The GitHub Actions workflow often failed due to a single task or dependency, forcing us to sift through logs and try multiple fixes. This trial-and-error process consumed significant time. We also had to monitor our build minutes closely—spending around $20 of GitHub Actions credits and constantly worrying about going over budget.
 
 Another issue was Docker containerization. Connecting backend and frontend services during cloud deployment was challenging, especially since GCP didn’t expose multiple ports. Minor config errors broke communication between services. We resolved these problems by breaking tasks into smaller steps, relying on documentation, and collaborating to debug issues quickly.
 ___
 
-*Alisha* : Deploying the API with BentoML was unexpectedly difficult. The Docker container failed repeatedly due to missing dependencies—especially PyTorch. I tried multiple fixes: manually installing torch, updating bento.yaml and requirements.txt, and tweaking Docker settings, but the container still failed.
+**Alisha (13023958):** Deploying the API with BentoML was unexpectedly difficult. The Docker container failed repeatedly due to missing dependencies—especially PyTorch. I tried multiple fixes: manually installing torch, updating bento.yaml and requirements.txt, and tweaking Docker settings, but the container still failed.
 
 Eventually, I switched to FastAPI, which was already part of our stack. Deploying to Google Cloud Run with FastAPI worked smoothly—dependencies resolved correctly and the service scaled well.
 ___
 
-*Akshata* : Writing effective unit tests for the data pipeline and model training was tough. Many tests failed initially, and debugging was slow—especially when mocking tools like wandb, logging, and visualization libraries. I eventually implemented full mocking for wandb to prevent unintended logging.
+**Akshata(13032143):** Writing effective unit tests for the data pipeline and model training was tough. Many tests failed initially, and debugging was time consumer due to mocking like wandb, logging, and visualization libraries & sheer number of files to debug. I eventually implemented full mocking for wandb to prevent unintended logging.
 
 On the frontend, displaying input and predicted images side by side was another challenge. It required several layout and styling iterations to ensure clean, consistent alignment.
 ___
 
-*Astha* : I faced issues integrating Weights & Biases (WandB) with Hydra. During sweeps, WandB couldn't override parameters from Hydra config files. To fix this, I wrote a wandb_runner.py script to map WandB sweep arguments to Hydra-compatible overrides, along with a separate wandb_sweep.yaml config.
+**Astha (13021609):** I faced issues integrating Weights & Biases (WandB) with Hydra. During sweeps, WandB couldn't override parameters from Hydra config files. To fix this, I wrote a wandb_runner.py script to map WandB sweep arguments to Hydra-compatible overrides, along with a separate wandb_sweep.yaml config.
 
 Another issue was integrating profiling. When enabled, WandB would stop after 10 batches. I added flags init_wandb and enable_profile, allowing profiling for just the first few batches without affecting full training runs.
 
