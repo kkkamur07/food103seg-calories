@@ -55,9 +55,12 @@ frontend = [
 ]
 
 dev = [
-    "ruff==0.11.13",
-    "pre_commit==4.2.0",
-    "pytest==8.4.1",
-    "invoke==2.2.0",
-    "loguru==0.7.3",
+    # Your dev dependencies
 ]
+docker = [
+    "supervisor>=4.2.0",
+]
+
+[tool.coverage.run]
+source = ["src.segmentation"]
+omit = ["src/tests/**/*"]
