@@ -67,7 +67,7 @@ class MiniUNet(nn.Module):
             nn.Conv2d(64, 104, kernel_size=1),
         )
 
-        # ✅ Initialize weights
+        #  Initialize weights
         self._initialize_weights()
 
     def _initialize_weights(self):

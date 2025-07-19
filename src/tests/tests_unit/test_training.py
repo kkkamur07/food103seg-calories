@@ -7,9 +7,7 @@ import os
 import numpy as np
 from unittest.mock import patch, MagicMock
 from PIL import Image
-
-from src.segmentation.model import MiniUNet
-from src.segmentation.data import FoodSegDataset, data_loaders
+from src.segmentation.data import FoodSegDataset
 
 
 @pytest.fixture()
@@ -116,7 +114,7 @@ def mock_interfaces():
             "mock_savefig": mock_savefig,
             "mock_show": mock_show,
             "mock_close": mock_close,
-            "mock_tqdm_instance": mock_tqdm_instance,  # Use a mock instance for tqdm
+            "mock_tqdm_instance": mock_tqdm_instance,
             "mock_tqdm_class": mock_tqdm_class,
             "mock_torch_save": mock_torch_save,
             "mock_logger_info": mock_logger_info,

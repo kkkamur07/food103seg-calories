@@ -1,9 +1,8 @@
 import pytest
 import torch
 import torch.nn as nn
-from unittest.mock import patch, MagicMock
-
 from src.segmentation.model import MiniUNet
+from unittest.mock import patch
 
 
 @pytest.fixture

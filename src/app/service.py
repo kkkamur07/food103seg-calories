@@ -9,7 +9,6 @@ from PIL import Image
 import torch
 from contextlib import asynccontextmanager
 from loguru import logger
-import os
 import time
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
