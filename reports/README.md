@@ -456,9 +456,9 @@ We relied on **standard E2 machine types** and adjusted resource allocations as 
 >
 > Answer:
 
-![Artifact Image](figures/Artifact%20Image%201.png)
-![Artifact Image](figures/Artifact%20Image%202.png)
-![Artifact Image](figures/Artifact%20Image%203.png)
+![Artifact Image](figures/artifact_image1.png)
+![Artifact Image](figures/artifact_image2.png)
+![Artifact Image](figures/artifact_image3.png)
 
 --- question 20 fill here ---
 
