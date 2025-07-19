@@ -37,9 +37,11 @@ class MockMiniUNet(torch.nn.Module):
         self.dummy_param = torch.nn.Parameter(torch.randn(1))
 
     def forward(self, x):
+        # Ensure the generated tensor is on the same device as the input tensor
+        dummy_param = self.dummy_param.to(x.device)
         return (
-            torch.randn(x.shape[0], 104, 224, 224) + self.dummy_param * 0.0
-        )  # Output shape should match CrossEntropyLoss.
+            torch.randn(x.shape[0], 104, 224, 224, device=x.device) + dummy_param * 0.0
+        )
 
 
 # Mock external dependencies

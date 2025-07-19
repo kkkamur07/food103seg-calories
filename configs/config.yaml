@@ -17,13 +17,14 @@ model:
   hyperparameters:
 
     lr: 0.001
-    epochs: 25
+    epochs: 1
     batch_size: 32
 
 
 # experiment paths
 paths:
-  base_dir: /home/krrish/home/desktop/sensor-behaviour
+  base_dir: /home/krrish/home/desktop/sarengeyo/food103seg-calories
+
 
 # simple profiling
 profiling:
