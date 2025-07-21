@@ -16,7 +16,7 @@ uvicorn==0.34.2               # ASGI server for FastAPI
 google-cloud-storage==3.1.0   # Cloud storage for model artifacts :cite[3]:cite[6]
 
 # Data Handling & Cloud Integration
-gcsfs==2025.5.1               # GCP file system interface
+gcsfs==2025.7.0               # GCP file system interface
 gdown==5.2.0                  # Google Drive downloader
 
 # ML Frameworks & Math
