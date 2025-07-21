@@ -23,7 +23,7 @@ packages = ["src.app"]
 [project.optional-dependencies]
 backend = [
     "fastapi==0.115.12",
-    "uvicorn==0.34.2",
+    "uvicorn==0.35.0",
     "python-multipart>=0.0.20",
     "torch==2.7.0",
     "torchvision==0.22.0",
