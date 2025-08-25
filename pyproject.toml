@@ -35,7 +35,7 @@ backend = [
     "annotated-types==0.7.0",
     "celery==5.5.2",
     "dvc==3.59.1",
-    "dvc-data==3.16.10",
+    "dvc-data==3.16.12",
     "dvc-task==0.40.2",
     "dvc-gs==3.0.2",
     "wandb==0.19.11",
